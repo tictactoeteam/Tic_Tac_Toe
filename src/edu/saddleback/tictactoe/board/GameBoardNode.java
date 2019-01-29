@@ -1,12 +1,15 @@
 package edu.saddleback.tictactoe.board;
 
 import javafx.geometry.Pos;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class GameBoardNode extends GridPane {
+
 
     public GameBoardNode(){
 
@@ -21,12 +24,17 @@ public class GameBoardNode extends GridPane {
             for( int j = 0; j < 3; j++){
 
                 Pane tmpPane = new Pane();
-                Rectangle tmpRec = new Rectangle();
-                tmpRec.setHeight(150);
-                tmpRec.setWidth(150);
-                tmpRec.setFill(Color.GRAY);
-                tmpPane.getChildren().add(tmpRec);
-                boardGPane.add(tmpRec, i % 3, j % 3);
+                tmpPane.setMaxHeight(150);
+                tmpPane.setMaxWidth(150);
+                ImageView background = new ImageView(new Image("images/blank.png"));
+                background.fitHeightProperty().bind(tmpPane.heightProperty());
+                background.fitWidthProperty().bind(tmpPane.heightProperty());
+
+                tmpPane.getChildren().add(background);
+                //tmpPane.setOnMouseClicked(e->{
+
+                //});
+                boardGPane.add(tmpPane, i % 3, j % 3);
 
             }
 
