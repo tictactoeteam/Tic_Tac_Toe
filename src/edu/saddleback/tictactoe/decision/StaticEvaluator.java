@@ -1,5 +1,6 @@
 package edu.saddleback.tictactoe.decision;
+import edu.saddleback.tictactoe.Board;
 
 public interface StaticEvaluator {
-    int evaluate(Node n);
+    int evaluate(Board b);
 }

@@ -1,6 +1,13 @@
-package board;
+
+package edu.saddleback.tictactoe;
+
 
 import java.io.Serializable;
+import edu.saddleback.tictactoe.decision.StaticEvaluator;
+
+
+
+
 
 public class Board implements Serializable {
     public enum Piece{
@@ -9,7 +16,6 @@ public class Board implements Serializable {
 
 
     private Piece[][] boardItself;
-    private Evaluator evaluator;
 
 
     public Board(){
@@ -33,29 +39,9 @@ public class Board implements Serializable {
         }
     }
 
-    public void setEvaluator(Evaluator ev){
-        evaluator = ev;
+    public Piece getPiece(int row, int column){
+        return boardItself[row][column];
     }
-
-    public void setEvaluator(int difficulty){
-
-    }
-
-
-    public int evaluate(){
-        return evaluator.evaluate(boardItself);
-    }
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
