@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -18,9 +19,11 @@ public class Main extends Application {
 
         //Holds the entire scene, the game and the login screen
         StackPane gameStack = new StackPane();
+        gameStack.setAlignment(Pos.CENTER);
 
         //Holds the user's name(s) on top, then the board, then space to display the winner
         VBox gameUIVBox = new VBox();
+        gameUIVBox.setAlignment(Pos.CENTER);
 
         //Shows the player(s) and who's turn it is.
         Text playerNamesText = new Text();
@@ -28,6 +31,7 @@ public class Main extends Application {
 
         //Holds the entire board ui
         GameBoardNode gameBoardNode = new GameBoardNode();
+        gameBoardNode.setAlignment(Pos.CENTER);
 
 
         //Shows the winner or tie when the game reaches end state.
@@ -35,7 +39,7 @@ public class Main extends Application {
         winnerText.setVisible(false);
 
         gameUIVBox.getChildren().addAll(playerNamesText, gameBoardNode, winnerText);
-        gameUIVBox.setAlignment(Pos.CENTER);
+
 
 
         gameStack.getChildren().add(gameUIVBox);
@@ -46,5 +50,9 @@ public class Main extends Application {
         primaryStage.show();
 
 
+
+
+
     }
+
 }
