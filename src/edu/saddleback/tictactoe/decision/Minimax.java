@@ -28,6 +28,8 @@ public class Minimax {
                 int score = minimax(child, depth - 1, alpha, beta, true);
                 bestScore = Math.min(bestScore, score);
                 beta = Math.min(beta, score);
+                if (beta <= alpha)
+                    break;
             }
             return bestScore;
         }
