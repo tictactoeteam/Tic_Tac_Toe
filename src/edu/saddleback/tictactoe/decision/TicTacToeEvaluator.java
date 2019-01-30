@@ -6,6 +6,7 @@ import edu.saddleback.tictactoe.board.GamePiece;
 public class TicTacToeEvaluator implements StaticEvaluator {
 
     private int calcRowStreaks(int r, GamePiece[][] a){
+
         int sumX = 0;
         int sumO = 0;
         for (int i=0; i<3; ++i){
@@ -41,6 +42,7 @@ public class TicTacToeEvaluator implements StaticEvaluator {
     }
 
     private int calcColumnStreaks(int c, GamePiece[][] a){
+
         int sumX = 0;
         int sumO = 0;
         for (int i=0; i<3; ++i){
@@ -76,6 +78,7 @@ public class TicTacToeEvaluator implements StaticEvaluator {
     }
 
     private int calcDiagonalStreaks(GamePiece[][] a){
+
         int sumX = 0;
         int sumO = 0;
         for (int i=0; i<3; ++i){
@@ -107,7 +110,7 @@ public class TicTacToeEvaluator implements StaticEvaluator {
 
 
         if (a[2][0] ==  a[0][2]){
-            if (a[1][1] ==  a[2][0] && a[1][1] != GamePiece.EmptySpace)
+            if (a[1][1] ==  a[2][0] && a[1][1] != null)
                 throw(new WinException(a[1][1]));
 
             if (a[2][0] == GamePiece.O)
@@ -141,11 +144,14 @@ public class TicTacToeEvaluator implements StaticEvaluator {
             sumStreaks += calcDiagonalStreaks(array);
 
 
+            return sumStreaks;
             
 
         }
         catch(WinException e){
+
             if(e.player == GamePiece.X)
+
                 return 100;
             else
                 return -100;
