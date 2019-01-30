@@ -1,14 +1,14 @@
 package edu.saddleback.tictactoe.decision;
-import edu.saddleback.tictactoe.Board;
+import edu.saddleback.tictactoe.board.BoardController;
 
 public class Node {
-    private Board board;
+    private BoardController boardController;
 
     private Node[] children;
 
 
-    public Board getBoard(){
-        return board;
+    public BoardController getBoardController(){
+        return boardController;
     }
 
     public Node[] getChildren() {

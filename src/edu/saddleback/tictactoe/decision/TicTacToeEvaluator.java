@@ -1,10 +1,10 @@
 package edu.saddleback.tictactoe.decision;
 
-import edu.saddleback.tictactoe.Board;
+import edu.saddleback.tictactoe.board.BoardController;
 
 public class TicTacToeEvaluator implements StaticEvaluator {
     @Override
-    public int evaluate(Board b) {
+    public int evaluate(BoardController b) {
         return -1;
     }
 }

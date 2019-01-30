@@ -1,4 +1,4 @@
-import edu.saddleback.tictactoe.board.*;
+import edu.saddleback.tictactoe.board.GameBoardNode;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -7,6 +7,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+/**
+ * Launches and initializes the game board, as well as the login page
+ */
 public class Main extends Application {
 
 
@@ -40,7 +43,9 @@ public class Main extends Application {
 
         gameUIVBox.getChildren().addAll(playerNamesText, gameBoardNode, winnerText);
 
-
+        /***************************************************************************************************************
+         * THIS IS WHERE THE LOGIN PAGE NODE WILL BE ADDED TO THE gameStack, ON TOP OF THE gameUIVBox NODE
+         **************************************************************************************************************/
 
         gameStack.getChildren().add(gameUIVBox);
         //Sets up scene and stage
@@ -48,10 +53,6 @@ public class Main extends Application {
         primaryStage.setTitle("Tic Tac Toe");
         primaryStage.setScene(scene);
         primaryStage.show();
-
-
-
-
 
     }
 
