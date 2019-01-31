@@ -7,12 +7,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
 /**
- * This class represents the actual tic tac toe board being displayed in the center of the Main UI. It holds the
+ * This class represents the actual tic tac toe board being displayed in the center of the edu.saddleback.tictactoe.Main UI. It holds the
  * controller class that handles all game data, ui controls, and data read and write capabilities.
  */
 public class GameBoardNode extends GridPane {
 
-    private BoardController boardController;
+    private Board board;
     static int gridBoxIndex;
 
     /**
@@ -23,7 +23,7 @@ public class GameBoardNode extends GridPane {
 
         //Initializes static integer for gridBox indices and the board controller.
         gridBoxIndex = 0;
-        boardController = new BoardController();
+        board = new Board();
 
         GridPane boardGPane = new GridPane();
         boardGPane.setAlignment(Pos.CENTER);
@@ -41,8 +41,8 @@ public class GameBoardNode extends GridPane {
                 gridBox.setOnMouseClicked(e->{
 
                     GridBox tmpGB = (GridBox)e.getSource();
-                    boardController.gridBoxClicked(tmpGB);
-                    boardController.updateUI(tmpGB, boardGPane);
+                    board.gridBoxClicked(tmpGB);
+                    board.updateUi(tmpGB, boardGPane);
 
                 });
 
