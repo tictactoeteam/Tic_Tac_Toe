@@ -1,6 +1,5 @@
 package edu.saddleback.tictactoe.board;
 
-
 /**
  * Custom exception that is triggered if either player tries to click a grid box that has already been chosen.
  */
