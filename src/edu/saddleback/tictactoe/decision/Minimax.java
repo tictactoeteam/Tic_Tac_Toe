@@ -9,7 +9,7 @@ public class Minimax {
 
     public int minimax(Node n, int depth, int alpha, int beta, boolean max) {
         if (depth == 0 || n.getChildren().length == 0) {
-            return staticEvaluator.evaluate(n.getBoardController());
+            return staticEvaluator.evaluate(n.getBoard());
         }
 
         if (max) {

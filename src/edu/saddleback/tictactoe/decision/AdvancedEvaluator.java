@@ -1,12 +1,10 @@
 package edu.saddleback.tictactoe.decision;
 
-import edu.saddleback.tictactoe.board.BoardController;
+import edu.saddleback.tictactoe.board.Board;
 
 public class AdvancedEvaluator implements StaticEvaluator {
-
-
     @Override
-    public int evaluate(BoardController b){
+    public int evaluate(Board b){
         return 0;
 
     }

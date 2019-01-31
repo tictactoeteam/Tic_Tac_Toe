@@ -1,3 +1,5 @@
+package edu.saddleback.tictactoe;
+
 import edu.saddleback.tictactoe.board.GameBoardNode;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -11,15 +13,12 @@ import javafx.stage.Stage;
  * Launches and initializes the game board, as well as the login page
  */
 public class Main extends Application {
-
-
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) {
-
         //Holds the entire scene, the game and the login screen
         StackPane gameStack = new StackPane();
         gameStack.setAlignment(Pos.CENTER);
@@ -53,7 +52,5 @@ public class Main extends Application {
         primaryStage.setTitle("Tic Tac Toe");
         primaryStage.setScene(scene);
         primaryStage.show();
-
     }
-
 }
