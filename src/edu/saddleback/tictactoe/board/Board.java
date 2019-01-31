@@ -65,6 +65,10 @@ public class Board implements Serializable {
         }
     }
 
+    public GamePiece[][] getBoardCopy(){
+        return (GamePiece[][])pieces.clone();
+    }
+
     //Getter
     public GamePiece getPiece(int row, int column){
         return pieces[row][column];
