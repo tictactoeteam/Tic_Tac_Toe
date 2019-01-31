@@ -21,7 +21,7 @@ public class GridBox extends Pane {
         //Sets up grid box and its image
         setMaxHeight(GRID_BOX_SIZE);
         setMaxWidth(GRID_BOX_SIZE);
-        background = new ImageView(new Image("images/blank.png"));
+        background = new ImageView(new Image("file:src/images/blank.png"));
         background.fitHeightProperty().bind(heightProperty());
         background.fitWidthProperty().bind(heightProperty());
 

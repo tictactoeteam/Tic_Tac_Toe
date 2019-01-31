@@ -41,7 +41,7 @@ public class Board implements Serializable {
      * @throws GridAlreadyChosenException
      */
     private void placePiece(GamePiece piece, int row, int column) throws GridAlreadyChosenException{
-        if (pieces[row][column] != null){
+        if (pieces[row][column] == null){
             pieces[row][column] = piece;
             roundNumber++;
         } else {
@@ -79,11 +79,11 @@ public class Board implements Serializable {
         int gridBoxColumnIndex = gridBox.getGridColumnIndex();
 
         if(getPiece(gridBoxRowIndex, gridBoxColumnIndex) == GamePiece.X)
-            path = "images/x.png";
+            path = "file:src/images/x.png";
         else if(getPiece(gridBoxRowIndex, gridBoxColumnIndex) == GamePiece.O)
-            path = "images/o.png";
+            path = "file:src/images/o.png";
         else
-            path = "images/blank.png";
+            path = "file:src/images/blank.png";
 
         gridBox.getBackgroundImageView().setImage(new Image(path));
     }
