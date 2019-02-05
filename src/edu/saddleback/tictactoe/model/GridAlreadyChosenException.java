@@ -1,12 +1,12 @@
-package edu.saddleback.tictactoe.board;
+package edu.saddleback.tictactoe.model;
 
 /**
  * Custom exception that is triggered if either player tries to click a grid box that has already been chosen.
  */
 public class GridAlreadyChosenException extends Exception {
     private int row, col;
-    public GridAlreadyChosenException(int row, int col, String errorMessage){
-        super(errorMessage);
+    public GridAlreadyChosenException(int row, int col){
+        super("Position " + row + ", " + col + " already has a GamePiece.");
         this.row = row;
         this.col = col;
     }
