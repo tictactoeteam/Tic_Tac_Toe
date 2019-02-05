@@ -1,6 +1,7 @@
 package edu.saddleback.tictactoe.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Tracks the current state of the controller as an array of GamePieces and the current turnNumber
@@ -77,5 +78,26 @@ public class Board implements Serializable {
         } else {
             throw new GridAlreadyChosenException(row, col);
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Turn #" + turnNumber + '\n');
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                char piece = board[i][j] == GamePiece.X ? 'X' : board[i][j] == GamePiece.O ? 'O' : ' ';
+                sb.append(piece);
+            }
+            sb.append('\n');
+        }
+
+        return sb.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        // no need to handle turn number, as that will always be the same for two equivalent arrangements of pieces
+        return Arrays.deepHashCode(board);
     }
 }
