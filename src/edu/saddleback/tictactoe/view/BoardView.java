@@ -1,7 +1,10 @@
 package edu.saddleback.tictactoe.view;
 
 import edu.saddleback.tictactoe.controller.GameController;
+import edu.saddleback.tictactoe.model.Board;
+import edu.saddleback.tictactoe.model.GamePiece;
 import javafx.geometry.Pos;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 
 /**
@@ -10,16 +13,19 @@ import javafx.scene.layout.GridPane;
  */
 public class BoardView extends GridPane {
     private GameController controller;
+
+    private GridBox[][] grid;
     static int gridBoxIndex;
 
     /**
      * Constructor
      * Populates the grid pane controller with the default spaces, and initializes all data for a new game.
      */
-    public BoardView() {
+    public BoardView(GameController controller) {
         //Initializes static integer for gridBox indices and the controller controller.
         gridBoxIndex = 0;
-        controller = new GameController();
+        this.grid = new GridBox[3][3];
+        this.controller = controller;
 
         GridPane boardGPane = new GridPane();
         boardGPane.setAlignment(Pos.CENTER);
@@ -35,13 +41,32 @@ public class BoardView extends GridPane {
                 gridBox.setOnMouseClicked(e->{
                     GridBox tmpGB = (GridBox)e.getSource();
                     controller.onGridClicked(tmpGB);
-                    controller.updateUi(gridBox);
                 });
 
                 boardGPane.add(gridBox, j, i);
+                this.grid[i][j] = gridBox; //todo what
             }
         }
 
         this.getChildren().add(boardGPane);
+        controller.addBoardListener(this::onUpdate);
+    }
+
+    public void onUpdate(Board board) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                String path;
+
+                if(board.get(i, j) == GamePiece.X)
+                    path = "file:src/images/x.png";
+                else if(board.get(i, j) == GamePiece.O)
+                    path = "file:src/images/o.png";
+                else
+                    path = "file:src/images/blank.png";
+
+                grid[i][j].getBackgroundImageView().setImage(new Image(path));
+            }
+        }
+
     }
 }

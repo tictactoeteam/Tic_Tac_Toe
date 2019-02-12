@@ -1,13 +1,7 @@
 package edu.saddleback.tictactoe;
 
-import edu.saddleback.tictactoe.view.BoardView;
-import edu.saddleback.tictactoe.view.LoginScene;
+import edu.saddleback.tictactoe.view.MainApplication;
 import javafx.application.Application;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -19,15 +13,13 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        // Create the Scene
-        Scene scene = new Scene(new LoginScene(), 800, 600);
+    public void start(Stage stage) {
+        MainApplication.start(stage);
+    }
 
-        primaryStage.setScene(scene);
-
-        primaryStage.setTitle("Tic-Tac-Toe");
-
-        primaryStage.show();
+    @Override
+    public void stop() {
+        MainApplication.stop();
     }
 }
 
