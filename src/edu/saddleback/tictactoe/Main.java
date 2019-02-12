@@ -20,8 +20,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-
         // Create the Scene
         Scene scene = new Scene(new LoginScene(), 800, 600);
 
@@ -30,29 +28,6 @@ public class Main extends Application {
         primaryStage.setTitle("Tic-Tac-Toe");
 
         primaryStage.show();
-
-        StackPane gameStack = new StackPane();
-        gameStack.setAlignment(Pos.CENTER);
-
-        //Holds the user's name(s) on top, then the controller, then space to display the winner
-        VBox gameUIVBox = new VBox();
-        gameUIVBox.setAlignment(Pos.CENTER);
-
-        //Shows the player(s) and who's turn it is.
-        Text playerNamesText = new Text();
-
-
-        //Holds the entire controller ui
-        BoardView boardView = new BoardView();
-        boardView.setAlignment(Pos.CENTER);
-
-
-        //Shows the winner or tie when the game reaches end state.
-        Text winnerText = new Text();
-        winnerText.setVisible(false);
-
-        gameUIVBox.getChildren().addAll(playerNamesText, boardView, winnerText);
-
     }
 }
 
