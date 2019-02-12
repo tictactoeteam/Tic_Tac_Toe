@@ -11,9 +11,7 @@ import javafx.scene.image.Image;
  */
 public class GameController {
     private Board board;
-    private String player1;
-    private String player2;
-
+    
     public GameController() {
         this.board = new Board();
     }
