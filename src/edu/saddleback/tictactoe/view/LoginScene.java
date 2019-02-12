@@ -10,12 +10,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import edu.saddleback.tictactoe.controller.GameController;
 
 public class LoginScene extends Pane {
 
     public LoginScene(){
+
+        GameController gameController = new GameController();
 
         VBox loginVBox = new VBox();
         loginVBox.setAlignment(Pos.CENTER);
@@ -61,19 +66,47 @@ public class LoginScene extends Pane {
 
         Button nextButton = new Button("Next");
         nextButton.setOnMouseClicked(e->{
-            BoardView boardView = new BoardView();
-            boardView.setAlignment(Pos.CENTER);
-            Scene scene = new Scene(boardView, 600, 600);
 
-            //Where are we putting the player names?
-            if(player2TextField.isVisible()){
-                player2TextField.getText();
+            if(!player1TextField.getText().trim().isEmpty()){
+
+                VBox gameBoardVBox = new VBox();
+                gameBoardVBox.setSpacing(20);
+                gameBoardVBox.setAlignment(Pos.CENTER);
+
+                Text gameTitleText = new Text();
+                gameTitleText.setFont(new Font("Arial", 40));
+                gameTitleText.setStyle("-fx-font-weight: bold");
+                gameTitleText.setFill(Color.RED);
+                if(player2TextField.getText().trim().isEmpty())
+                    gameTitleText.setText(player1TextField.getText() + " vs. Mr. Bill AI");
+                else
+                    gameTitleText.setText(player1TextField.getText() + " vs. " + player2TextField.getText());
+
+
+                BoardView boardView = new BoardView();
+                boardView.setAlignment(Pos.CENTER);
+                Text gameWinnerText = new Text();
+                gameWinnerText.setVisible(false);
+
+                gameBoardVBox.getChildren().addAll(gameTitleText, boardView, gameWinnerText);
+                Scene scene = new Scene(gameBoardVBox, 600, 600);
+
+                //Where are we putting the player names?
+                if(player2TextField.isVisible()){
+                    player2TextField.getText();
+                }
+                player1TextField.getText();
+
+                Stage appStage = (Stage) ((Node)e.getSource()).getScene().getWindow();
+                appStage.setScene(scene);
+                appStage.show();
+
+            }else{
+
+                //GIVE ALERT MESSAGE TO LOGIN UI
+
             }
-            player1TextField.getText();
 
-            Stage appStage = (Stage) ((Node)e.getSource()).getScene().getWindow();
-            appStage.setScene(scene);
-            appStage.show();
         });
 
         nextButton.setAlignment(Pos.BOTTOM_RIGHT);

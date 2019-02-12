@@ -11,13 +11,16 @@ import javafx.scene.image.Image;
  */
 public class GameController {
     private Board board;
+    private String player1;
+    private String player2;
 
-    public GameController(){
+    public GameController() {
         this.board = new Board();
     }
 
     /**
      * Updates the Piece[][] with the current move.
+     *
      * @param gridBox
      */
     public void onGridClicked(GridBox gridBox) {
@@ -33,18 +36,19 @@ public class GameController {
     /**
      * Updates the controller's ui to show the current player(s) move(s) based on the Piece[][].
      */
-    public void updateUi(GridBox gridBox){
+    public void updateUi(GridBox gridBox) {
         String path;
         int gridBoxRowIndex = gridBox.getGridRowIndex();
         int gridBoxColumnIndex = gridBox.getGridColumnIndex();
 
-        if(board.get(gridBoxRowIndex, gridBoxColumnIndex) == GamePiece.X)
+        if (board.get(gridBoxRowIndex, gridBoxColumnIndex) == GamePiece.X)
             path = "file:src/images/x.png";
-        else if(board.get(gridBoxRowIndex, gridBoxColumnIndex) == GamePiece.O)
+        else if (board.get(gridBoxRowIndex, gridBoxColumnIndex) == GamePiece.O)
             path = "file:src/images/o.png";
         else
             path = "file:src/images/blank.png";
 
         gridBox.getBackgroundImageView().setImage(new Image(path));
     }
+
 }
