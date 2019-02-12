@@ -6,7 +6,7 @@ import java.util.Arrays;
 /**
  * Tracks the current state of the controller as an array of GamePieces and the current turnNumber
  */
-public class Board implements Serializable {
+public class Board implements Serializable, Cloneable {
     private GamePiece[][] board;
     private int turnNumber;
 
@@ -99,5 +99,23 @@ public class Board implements Serializable {
     public int hashCode() {
         // no need to handle turn number, as that will always be the same for two equivalent arrangements of pieces
         return Arrays.deepHashCode(board);
+    }
+
+    @Override
+    public Object clone(){
+        Board copy = new Board();
+        copy.turnNumber = getTurnNumber();
+
+        for (int i=0; i<3; ++i){
+            for (int j=0; j<3; ++j){
+                try {
+                    copy.set(i, j, get(i, j));
+                }catch(GridAlreadyChosenException ex){
+                    // do absolutely nothing
+                }
+            }
+        }
+
+        return (Object)copy;
     }
 }
