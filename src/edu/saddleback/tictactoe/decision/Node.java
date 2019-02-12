@@ -17,12 +17,11 @@ public class Node{
         board = new Board();
         children = new Node[numberChildren];
     }
-
-
+    
     public static void generateTree(Node root){
 
-        // If we hit the winning position, stop generating (Exit condition)
-        if (defaultEvaluator.evaluate(root.getBoard()) != 0 && root.getBoard().getTurnNumber() == 9)
+        // If we hit the winning position or a draw, stop generating (Exit condition)
+        if (defaultEvaluator.evaluate(root.getBoard()) != 0 || root.getBoard().getTurnNumber() == 9)
             return;
 
         // Else, keep generating recursively
@@ -41,6 +40,7 @@ public class Node{
         int childrenBranches = parentalBranches - 1;
         for (int i=0; i<parentalBranches; ++i){
             root.getChildren()[i] = new Node(childrenBranches);
+            root.getChildren()[i].setBoard((Board)(root.getBoard().clone()));
         }
 
         // Step2-Place the pieces

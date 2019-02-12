@@ -74,7 +74,7 @@ public class Board implements Serializable, Cloneable {
     public void set(int row, int col, GamePiece piece) throws GridAlreadyChosenException {
         if (board[row][col] == null) {
             board[row][col] = piece;
-            turnNumber++;
+            turnNumber+= 1;
         } else {
             throw new GridAlreadyChosenException(row, col);
         }
@@ -104,12 +104,12 @@ public class Board implements Serializable, Cloneable {
     @Override
     public Object clone(){
         Board copy = new Board();
-        copy.turnNumber = getTurnNumber();
 
         for (int i=0; i<3; ++i){
             for (int j=0; j<3; ++j){
                 try {
-                    copy.set(i, j, get(i, j));
+                    if(get(i, j) != null)
+                        copy.set(i, j, get(i, j));
                 }catch(GridAlreadyChosenException ex){
                     // do absolutely nothing
                 }
