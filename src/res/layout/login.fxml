@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.tictactoe.fxml.Login">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.tictactoe.view.LoginController">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -16,24 +16,24 @@
                <children>
                   <ImageView fitHeight="300.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../images/tictactoe2.png" />
+                        <Image url="@../images/tictactoe2.png" />
                      </image>
                   </ImageView>
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="8.0">
                <children>
-                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Singleplayer" />
-                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Multiplayer" />
+                  <Button fx:id="singleplayerButton" mnemonicParsing="false" onMouseClicked="#onSingleplayerClicked" text="Singleplayer" />
+                  <Button fx:id="multiplayerButton" mnemonicParsing="false" onMouseClicked="#onMultiplayerClicked" text="Multiplayer" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="24.0">
+            <HBox fx:id="playerNamesBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="24.0" visible="false">
                <children>
                   <TextField alignment="CENTER" promptText="Player One" />
                   <TextField alignment="CENTER" promptText="Player Two" />
                </children>
             </HBox>
-            <Button mnemonicParsing="false" text="Play!" />
+            <Button fx:id="playButton" mnemonicParsing="false" onMouseClicked="#onPlayClicked" text="Play!" />
          </children></VBox>
    </children>
 </AnchorPane>

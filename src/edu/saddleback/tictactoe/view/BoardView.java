@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 
 /**
- * This class represents the actual tic tac toe controller being displayed in the center of the edu.saddleback.tictactoe.Main UI. It holds the
+ * This class represents the actual tic tac toe controller being displayed in the center of the Main UI. It holds the
  * controller class that handles all game data, ui controls, and data read and write capabilities.
  */
 public class BoardView extends GridPane {
