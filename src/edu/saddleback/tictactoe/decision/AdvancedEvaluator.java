@@ -19,9 +19,9 @@ public class AdvancedEvaluator implements StaticEvaluator {
                     sumO ++;
             }
             if (sumX == 3)
-                return 10;
+                return 20;
             if (sumO == 3)
-                return -10;
+                return -20;
         }
 
         for (int i=0; i<3; ++i){
@@ -34,9 +34,9 @@ public class AdvancedEvaluator implements StaticEvaluator {
                     sumO ++;
             }
             if (sumX == 3)
-                return 10;
+                return 20;
             if (sumO == 3)
-                return -10;
+                return -20;
         }
 
 
@@ -49,9 +49,9 @@ public class AdvancedEvaluator implements StaticEvaluator {
                 sumO ++;
         }
         if (sumX == 3)
-            return 10;
+            return 20;
         if (sumO == 3)
-            return -10;
+            return -20;
 
         sumO = 0;
         sumX = 0;
@@ -62,9 +62,9 @@ public class AdvancedEvaluator implements StaticEvaluator {
                 sumO ++;
         }
         if (sumX == 3)
-            return 10;
+            return 20;
         if (sumO == 3)
-            return -10;
+            return -20;
 
 
 
@@ -88,7 +88,7 @@ public class AdvancedEvaluator implements StaticEvaluator {
     /**
      * Function evaluates every non-winning position to 0, and a winning position to +-(10-depth) depending on whether
      * X or O is winning
-     * @param Board board
+     * @param board
      * @return int score
      */
     @Override
@@ -100,6 +100,6 @@ public class AdvancedEvaluator implements StaticEvaluator {
         if (S >0)
             return S-depth(board);
         else
-            return depth(board)-S;
+            return depth(board)+S;
     }
 }
