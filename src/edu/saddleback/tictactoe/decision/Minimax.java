@@ -1,5 +1,7 @@
 package edu.saddleback.tictactoe.decision;
 
+import edu.saddleback.tictactoe.model.Board;
+
 public class Minimax {
     private StaticEvaluator staticEvaluator;
 
@@ -33,5 +35,42 @@ public class Minimax {
             }
             return bestScore;
         }
+    }
+
+    public void setEvaluator(StaticEvaluator ev){
+        this.staticEvaluator = ev;
+    }
+
+
+
+    public Board bestMove(Node parent){
+        int bestScore;
+        int bestIndex = 0;
+        int temp;
+
+        if (parent.getBoard().isXTurn()){
+           bestScore = Integer.MIN_VALUE;
+
+           for (int i=0; i<parent.getChildren().length; ++i){
+               temp = (minimax(parent.getChildren()[i], 9, Integer.MIN_VALUE, Integer.MAX_VALUE, parent.getBoard().isXTurn()));
+               if(temp > bestScore) {
+                   bestIndex = i;
+                   bestScore = temp;
+               }
+           }
+        }
+        else{
+            bestScore = Integer.MAX_VALUE;
+
+            for (int i=0; i<parent.getChildren().length; ++i){
+                temp = (minimax(parent.getChildren()[i], 9, Integer.MIN_VALUE, Integer.MAX_VALUE, parent.getBoard().isXTurn()));
+                if(temp < bestScore) {
+                    bestIndex = i;
+                    bestScore = temp;
+                }
+            }
+        }
+
+        return (Board)(parent.getChildren()[bestIndex].getBoard().clone());
     }
 }
