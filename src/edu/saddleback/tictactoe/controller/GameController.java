@@ -24,6 +24,7 @@ public class GameController {
 
     private boolean isMultiplayer;
     private String player1Name, player2Name;
+    private String difficultyString;
 
     public GameController() {
         this.boardListeners = new ArrayList<>();
@@ -108,6 +109,15 @@ public class GameController {
 
     }
 
+    public boolean isHard(){
+        if(difficultyString == "Easy Mode"){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
     public void removeBoardListener(BoardUpdatedListener listener) {
         boardListeners.remove(listener);
     }
@@ -127,6 +137,8 @@ public class GameController {
     public void setPlayer2Name(String player2Name) {
         this.player2Name = player2Name;
     }
+
+    public void setDifficulty(String difficulty) { this.difficultyString = difficulty; }
 
     public boolean isMultiplayer() {
         return isMultiplayer;
