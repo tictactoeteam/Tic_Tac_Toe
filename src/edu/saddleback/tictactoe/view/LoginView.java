@@ -34,7 +34,7 @@ public class LoginView {
         playerNamesBox.setVisible(multiplayer);
         singlePlayerNameBox.setVisible(!multiplayer);
 
-        controller.setMultiplayer(true);
+        controller.setMultiplayer(multiplayer);
     }
 
     public void onSingleplayerClicked() {
@@ -47,11 +47,11 @@ public class LoginView {
 
     public void onPlayClicked() throws Exception {
         if (controller.isMultiplayer()) {
-            controller.setPlayer1Name(playerName.getText());
-            controller.setPlayer2Name("Mr. Bill");
-        } else {
             controller.setPlayer1Name(player1Name.getText());
             controller.setPlayer2Name(player2Name.getText());
+        } else {
+            controller.setPlayer1Name(playerName.getText());
+            controller.setPlayer2Name("Mr. Bill");
         }
 
         MainApplication.getCoordinator().showGameScene();
