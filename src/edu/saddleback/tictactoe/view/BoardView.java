@@ -1,5 +1,6 @@
 package edu.saddleback.tictactoe.view;
 
+import edu.saddleback.tictactoe.MainApplication;
 import edu.saddleback.tictactoe.controller.GameController;
 import edu.saddleback.tictactoe.model.Board;
 import edu.saddleback.tictactoe.model.GamePiece;
@@ -21,11 +22,11 @@ public class BoardView extends GridPane {
      * Constructor
      * Populates the grid pane controller with the default spaces, and initializes all data for a new game.
      */
-    public BoardView(GameController controller) {
+    public BoardView() {
+        this.controller = MainApplication.getController();
         //Initializes static integer for gridBox indices and the controller controller.
         gridBoxIndex = 0;
         this.grid = new GridBox[3][3];
-        this.controller = controller;
 
         GridPane boardGPane = new GridPane();
         boardGPane.setAlignment(Pos.CENTER);
@@ -57,12 +58,13 @@ public class BoardView extends GridPane {
             for (int j = 0; j < 3; j++) {
                 String path;
 
+
                 if(board.get(i, j) == GamePiece.X)
-                    path = "file:src/images/x.png";
+                    path = getClass().getResource("/res/images/x.png").toString();
                 else if(board.get(i, j) == GamePiece.O)
-                    path = "file:src/images/o.png";
+                    path = getClass().getResource("/res/images/o.png").toString();
                 else
-                    path = "file:src/images/blank.png";
+                    path = getClass().getResource("/res/images/blank.png").toString();
 
                 grid[i][j].getBackgroundImageView().setImage(new Image(path));
             }

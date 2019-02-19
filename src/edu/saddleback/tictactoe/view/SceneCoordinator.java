@@ -25,9 +25,9 @@ public class SceneCoordinator {
         this.window.setScene(new Scene(layout));
     }
 
-    public void showGameScene() {
-        GameScene gameScene = new GameScene(controller);
-        this.window.setScene(new Scene(gameScene.getRoot(), 600, 400));
+    public void showGameScene() throws Exception {
+        Parent layout = FXMLLoader.load(getClass().getResource("/res/layout/game.fxml"));
+        this.window.setScene(new Scene(layout));
     }
 
     public void onExitRequested() {
