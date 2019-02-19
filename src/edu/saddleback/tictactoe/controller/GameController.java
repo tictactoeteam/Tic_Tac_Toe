@@ -34,6 +34,9 @@ public class GameController {
                 FileInputStream fileStream = new FileInputStream(SAVE_LOCATION);
                 ObjectInputStream objectStream = new ObjectInputStream(fileStream);
 
+                isMultiplayer = objectStream.readBoolean();
+                player1Name = objectStream.readUTF();
+                player2Name = objectStream.readUTF();
                 this.board = (Board) objectStream.readObject();
             } catch (IOException e) {
                 System.out.println("Failed to read existing savegame - making a new game");
@@ -55,6 +58,9 @@ public class GameController {
             try {
                 FileOutputStream fileStream = new FileOutputStream(SAVE_LOCATION);
                 ObjectOutputStream objectStream = new ObjectOutputStream(fileStream);
+                objectStream.writeBoolean(isMultiplayer);
+                objectStream.writeUTF(player1Name);
+                objectStream.writeUTF(player2Name);
                 objectStream.writeObject(board);
                 objectStream.close();
             } catch (IOException e) {
@@ -83,6 +89,23 @@ public class GameController {
     public void addBoardListener(BoardUpdatedListener listener) {
         boardListeners.add(listener);
         listener.update(board);
+    }
+
+    public void deleteSaveFile(){
+
+        File saveFile = new File(SAVE_LOCATION);
+        saveFile.delete();
+
+    }
+
+    public boolean gameStateExists(){
+
+        File saveFile = new File(SAVE_LOCATION);
+        if(saveFile.exists())
+            return true;
+        else
+            return false;
+
     }
 
     public void removeBoardListener(BoardUpdatedListener listener) {

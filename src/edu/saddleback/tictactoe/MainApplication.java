@@ -22,7 +22,13 @@ public class MainApplication extends Application {
         window.show();
 
         coordinator = new SceneCoordinator(window);
-        coordinator.showLoginScene();
+
+        if(coordinator.getController().gameStateExists())
+            coordinator.showGameScene();
+        else
+            coordinator.showLoginScene();
+
+
     }
 
     @Override
