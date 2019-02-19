@@ -37,18 +37,13 @@ public class Minimax {
         }
     }
 
-    private int[] findDifference(Board parent, Board child){
-        for(int i=0; i<3; ++i){
-            for (int j=0; j<3; ++j){
-                if (parent.get(i, j) == null && child.get(i, j) != null){
-                    return new int[]{i, j};
-                }
-            }
-        }
-        return null;
+    public void setEvaluator(StaticEvaluator ev){
+        this.staticEvaluator = ev;
     }
 
-    public int[] bestMove(Node parent){
+
+
+    public Board bestMove(Node parent){
         int bestScore;
         int bestIndex = 0;
         int temp;
@@ -63,7 +58,6 @@ public class Minimax {
                    bestScore = temp;
                }
            }
-           return findDifference(parent.getBoard(), parent.getChildren()[bestIndex].getBoard());
         }
         else{
             bestScore = Integer.MAX_VALUE;
@@ -75,8 +69,8 @@ public class Minimax {
                     bestScore = temp;
                 }
             }
-
-            return findDifference(parent.getBoard(), parent.getChildren()[bestIndex].getBoard());
         }
+
+        return (Board)(parent.getChildren()[bestIndex].getBoard().clone());
     }
 }
