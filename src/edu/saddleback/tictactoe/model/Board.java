@@ -1,12 +1,15 @@
 package edu.saddleback.tictactoe.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
  * Tracks the current state of the controller as an array of GamePieces and the current turnNumber
  */
 public class Board implements Serializable, Cloneable {
+    private static final long serialVersionUID = 1549991971L;
+
     private GamePiece[][] board;
     private int turnNumber;
 
@@ -116,6 +119,6 @@ public class Board implements Serializable, Cloneable {
             }
         }
 
-        return (Object)copy;
+        return copy;
     }
 }
