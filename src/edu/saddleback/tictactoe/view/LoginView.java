@@ -1,6 +1,7 @@
 package edu.saddleback.tictactoe.view;
 
 import edu.saddleback.tictactoe.MainApplication;
+import edu.saddleback.tictactoe.decision.Node;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -54,7 +55,7 @@ public class LoginView {
             controller.setPlayer2Name(player2Name.getText());
         } else {
             controller.setPlayer1Name(playerName.getText());
-            controller.awakenMrBill();
+            controller.awakenMrBill(new Node());
             controller.setDifficulty(difficultyCombo.getValue().toString());
             controller.setPlayer2Name("Mr. Bill");
         }

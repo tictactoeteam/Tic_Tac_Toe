@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.SocketOption;
 import java.util.ArrayList;
 
 /**
@@ -27,7 +28,9 @@ public class GameController {
     private ArrayList<BoardUpdatedListener> boardListeners;
 
     private Minimax MrBill;
+    private boolean gameDifficulty;
     private Node root;
+    private AdvancedEvaluator winnerChecker = new AdvancedEvaluator();
 
     private boolean isMultiplayer;
     private String player1Name, player2Name;
@@ -45,6 +48,19 @@ public class GameController {
                 player1Name = objectStream.readUTF();
                 player2Name = objectStream.readUTF();
                 this.board = (Board) objectStream.readObject();
+                gameDifficulty = objectStream.readBoolean();
+                if (!isMultiplayer){
+                    Node temp = new Node();
+                    Node.generateTree(temp);
+                    awakenMrBill(temp);
+                    if (gameDifficulty){
+                        MrBill.setEvaluator(new AdvancedEvaluator());
+                    }
+                    else{
+                        MrBill.setEvaluator(new RandomEvaluator());
+                    }
+
+                }
             } catch (IOException e) {
                 System.out.println("Failed to read existing savegame - making a new game");
                 saveFile.delete();
@@ -69,6 +85,8 @@ public class GameController {
                 objectStream.writeUTF(player1Name);
                 objectStream.writeUTF(player2Name);
                 objectStream.writeObject(board);
+                objectStream.writeBoolean(gameDifficulty);
+
                 objectStream.close();
             } catch (IOException e) {
                 System.out.println("Failed to save game - oh well, exiting");
@@ -83,20 +101,51 @@ public class GameController {
      * @param gridBox
      */
     public void onGridClicked(GridBox gridBox) {
+        if (checkWinner(board) != null)
+            return;
+        if (checkDraw(board))
+            return;
+
         try {
             GamePiece piece = board.isXTurn() ? GamePiece.X : GamePiece.O;
             board.set(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
+            if(checkWinner(board) == GamePiece.X){
+                System.out.println(generateWinMessage(GamePiece.X));
+                notifyListeners();
+                return;
+            }
+            if(checkWinner(board) == GamePiece.O){
+                System.out.println(generateWinMessage(GamePiece.O));
+                notifyListeners();
+                return;
+            }
+
+            if (checkDraw(board)){
+                System.out.println("DRAW!");
+                notifyListeners();
+                return;
+            }
             if(!isMultiplayer()){
                 Node temp = Node.findNode(board, root);
                 board = MrBill.bestMove(temp);
+                if(checkWinner(board) == GamePiece.O){
+                    System.out.println(generateWinMessage(GamePiece.O));
+                    notifyListeners();
+                    return;
+                }
+                if (checkDraw(board)){
+                    System.out.println("DRAW!");
+                    notifyListeners();
+                    return;
+                }
             }
-
             notifyListeners();
         } catch (GridAlreadyChosenException e) {
             // TODO: re-prompt for another position
             System.out.println(e.getMessage());
         }
     }
+
     public void addBoardListener(BoardUpdatedListener listener) {
         boardListeners.add(listener);
         listener.update(board);
@@ -115,6 +164,21 @@ public class GameController {
             return true;
         else
             return false;
+    }
+
+    public GamePiece checkWinner(Board board){
+        if (winnerChecker.evaluate(board) > 0)
+            return GamePiece.X;
+        if (winnerChecker.evaluate(board) < 0)
+            return GamePiece.O;
+
+        return null;
+    }
+
+    public boolean checkDraw(Board board){
+        if (board.getTurnNumber() == 9)
+            return true;
+        return false;
     }
 
     public void removeBoardListener(BoardUpdatedListener listener) {
@@ -138,16 +202,20 @@ public class GameController {
     }
 
     public void setDifficulty(String difficulty) {
-        if (difficulty == "Easy Mode")
+        if (difficulty.equals("Easy Mode")) {
             MrBill.setEvaluator(new RandomEvaluator());
-        else
+            gameDifficulty = false;
+        }
+        else {
             MrBill.setEvaluator(new AdvancedEvaluator());
+            gameDifficulty = true;
+        }
     }
 
-    public void awakenMrBill(){
-        this.root = new Node();
-        Node.generateTree(root);
-        this.MrBill = new Minimax(new AdvancedEvaluator(), root);
+    public void awakenMrBill(Node root){
+        this.root = root;
+        Node.generateTree(this.root);
+        this.MrBill = new Minimax(new AdvancedEvaluator(), this.root);
     }
 
     public boolean isMultiplayer() {
@@ -161,4 +229,38 @@ public class GameController {
     public String getPlayer2Name() {
         return player2Name;
     }
+
+    public String generateWinMessage(GamePiece winner){
+        String win;
+        String los;
+
+        if (winner == GamePiece.X){
+            win = getPlayer1Name();
+            los = getPlayer2Name();
+        }
+        else if (winner == GamePiece.O){
+            win = getPlayer2Name();
+            los = getPlayer1Name();
+        }
+        else{
+            return "";
+        }
+
+        String[] possibilities= new String[]{
+                los + " got spanked by " + win,
+                win + " takes it all, " + los + " standing small",
+                win + " asserted dominance over " + los,
+                win + " kicked the butt of " + los,
+                win + " wiped the floor with " + los,
+                los + " perished in a battle against " + win,
+                los + " was no match for " + win,
+                win + ": 1, " + los + ": 0",
+                los + ", bend your knee before " + win,
+                los + ", you now serve to " + win
+        };
+
+
+        return possibilities[(int)(Math.random()*possibilities.length)];
+    }
+
 }
