@@ -97,7 +97,6 @@ public class GameController {
             System.out.println(e.getMessage());
         }
     }
-
     public void addBoardListener(BoardUpdatedListener listener) {
         boardListeners.add(listener);
         listener.update(board);
@@ -107,7 +106,6 @@ public class GameController {
 
         File saveFile = new File(SAVE_LOCATION);
         saveFile.delete();
-
     }
 
     public boolean gameStateExists(){
@@ -117,9 +115,7 @@ public class GameController {
             return true;
         else
             return false;
-
     }
-
 
     public void removeBoardListener(BoardUpdatedListener listener) {
         boardListeners.remove(listener);
@@ -146,8 +142,6 @@ public class GameController {
             MrBill.setEvaluator(new RandomEvaluator());
         else
             MrBill.setEvaluator(new AdvancedEvaluator());
-
-
     }
 
     public void awakenMrBill(){
