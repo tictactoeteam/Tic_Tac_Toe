@@ -28,6 +28,7 @@ public class GameController {
 
     private Minimax MrBill;
     private Node root;
+    private AdvancedEvaluator winnerChecker = new AdvancedEvaluator();
 
     private boolean isMultiplayer;
     private String player1Name, player2Name;
@@ -83,12 +84,29 @@ public class GameController {
      * @param gridBox
      */
     public void onGridClicked(GridBox gridBox) {
+        if (checkWinner(board) != null)
+            return;
         try {
             GamePiece piece = board.isXTurn() ? GamePiece.X : GamePiece.O;
             board.set(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
+            if(checkWinner(board) == GamePiece.X){
+                System.out.println(player2Name + " got spanked by " + player1Name + "!");
+                notifyListeners();
+                return;
+            }
+            if(checkWinner(board) == GamePiece.O){
+                System.out.println(player1Name + " got spanked by " + player2Name + "!");
+                notifyListeners();
+                return;
+            }
             if(!isMultiplayer()){
                 Node temp = Node.findNode(board, root);
                 board = MrBill.bestMove(temp);
+                if(checkWinner(board) == GamePiece.O){
+                    System.out.println(player1Name + " got spanked by " + player2Name + "!");
+                    notifyListeners();
+                    return;
+                }
             }
 
             notifyListeners();
@@ -115,6 +133,15 @@ public class GameController {
             return true;
         else
             return false;
+    }
+
+    public GamePiece checkWinner(Board board){
+        if (winnerChecker.evaluate(board) > 0)
+            return GamePiece.X;
+        if (winnerChecker.evaluate(board) < 0)
+            return GamePiece.O;
+
+        return null;
     }
 
     public void removeBoardListener(BoardUpdatedListener listener) {
