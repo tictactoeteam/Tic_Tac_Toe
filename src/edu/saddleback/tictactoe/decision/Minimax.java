@@ -43,29 +43,6 @@ public class Minimax {
     }
 
 
-//    public static void main(String[] args) throws GridAlreadyChosenException {
-//        Node root = new Node();
-//        Node.generateTree(root);
-//
-//        Node problematicChild = root.getChildren()[0].getChildren()[2].getChildren()[4].getChildren()[2].getChildren()[3];
-//
-//        System.out.println(problematicChild.getBoard());
-//
-//        Board b = new Board();
-//        b.set(0, 0, GamePiece.X);
-//        b.set(0, 1, GamePiece.O);
-//        b.set(0, 2, GamePiece.X);
-//        b.set(1, 1, GamePiece.O);
-//        b.set(1, 2, GamePiece.X);
-//
-//        System.out.println(b);
-//
-//        System.out.println(b.equals(problematicChild.getBoard()));
-//        System.out.println(Node.findNode(b, root).getBoard());
-//
-//
-//    }
-
     public void setEvaluator(StaticEvaluator ev){
         this.staticEvaluator = ev;
     }

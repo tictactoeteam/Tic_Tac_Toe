@@ -62,18 +62,6 @@ public class Node{
 
     }
 
-//    public static Node findNode(Board board, Node node){
-//        if (node.getBoard()==board)
-//            return node;
-//
-//
-//        Node[] children = node.getChildren();
-//        Node res = null;
-//        for (int i = 0; res == null && i < children.length; i++) {
-//            res = findNode(board, children[i]);
-//        }
-//        return res;
-//    }
 
     public static Node findNode(Board board, Node root) {
 
