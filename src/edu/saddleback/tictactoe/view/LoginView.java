@@ -54,8 +54,8 @@ public class LoginView {
             controller.setPlayer2Name(player2Name.getText());
         } else {
             controller.setPlayer1Name(playerName.getText());
+            controller.awakenMrBill();
             controller.setDifficulty(difficultyCombo.getValue().toString());
-            System.out.println(difficultyCombo.getValue().toString());
             controller.setPlayer2Name("Mr. Bill");
         }
 

@@ -7,7 +7,7 @@ import java.util.Arrays;
 /**
  * Tracks the current state of the controller as an array of GamePieces and the current turnNumber
  */
-public class Board implements Serializable, Cloneable {
+public class Board implements Serializable, Cloneable, Comparable<Board> {
     private static final long serialVersionUID = 1549991971L;
 
     private GamePiece[][] board;
@@ -120,5 +120,21 @@ public class Board implements Serializable, Cloneable {
         }
 
         return copy;
+    }
+
+    public boolean equals(Board b){
+        return (this.compareTo(b)==0);
+    }
+
+    @Override
+    public int compareTo(Board o) {
+        for (int i=0; i<3; ++i){
+            for (int j=0; j<3; ++j){
+                if (board[i][j] != o.board[i][j])
+                    return -1;
+            }
+        }
+        return 0;
+
     }
 }

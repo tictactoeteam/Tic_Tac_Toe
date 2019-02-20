@@ -1,5 +1,9 @@
 package edu.saddleback.tictactoe.controller;
 
+import edu.saddleback.tictactoe.decision.AdvancedEvaluator;
+import edu.saddleback.tictactoe.decision.Minimax;
+import edu.saddleback.tictactoe.decision.Node;
+import edu.saddleback.tictactoe.decision.RandomEvaluator;
 import edu.saddleback.tictactoe.model.Board;
 import edu.saddleback.tictactoe.model.GamePiece;
 import edu.saddleback.tictactoe.model.GridAlreadyChosenException;
@@ -22,9 +26,11 @@ public class GameController {
     private Board board;
     private ArrayList<BoardUpdatedListener> boardListeners;
 
+    private Minimax MrBill;
+    private Node root;
+
     private boolean isMultiplayer;
     private String player1Name, player2Name;
-    private String difficultyString;
 
     public GameController() {
         this.boardListeners = new ArrayList<>();
@@ -80,6 +86,11 @@ public class GameController {
         try {
             GamePiece piece = board.isXTurn() ? GamePiece.X : GamePiece.O;
             board.set(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
+            if(!isMultiplayer()){
+                Node temp = Node.findNode(board, root);
+                board = MrBill.bestMove(temp);
+            }
+
             notifyListeners();
         } catch (GridAlreadyChosenException e) {
             // TODO: re-prompt for another position
@@ -109,14 +120,6 @@ public class GameController {
 
     }
 
-    public boolean isHard(){
-        if(difficultyString == "Easy Mode"){
-            return false;
-        }
-        else{
-            return true;
-        }
-    }
 
     public void removeBoardListener(BoardUpdatedListener listener) {
         boardListeners.remove(listener);
@@ -138,7 +141,20 @@ public class GameController {
         this.player2Name = player2Name;
     }
 
-    public void setDifficulty(String difficulty) { this.difficultyString = difficulty; }
+    public void setDifficulty(String difficulty) {
+        if (difficulty == "Easy Mode")
+            MrBill.setEvaluator(new RandomEvaluator());
+        else
+            MrBill.setEvaluator(new AdvancedEvaluator());
+
+
+    }
+
+    public void awakenMrBill(){
+        this.root = new Node();
+        Node.generateTree(root);
+        this.MrBill = new Minimax(new AdvancedEvaluator(), root);
+    }
 
     public boolean isMultiplayer() {
         return isMultiplayer;
