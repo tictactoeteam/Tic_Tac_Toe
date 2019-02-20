@@ -4,6 +4,7 @@ import edu.saddleback.tictactoe.MainApplication;
 import edu.saddleback.tictactoe.decision.Node;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 
@@ -12,6 +13,16 @@ import javafx.scene.text.Text;
 
 public class LoginView {
     private GameController controller;
+
+    private boolean mrBillGoesFirst;
+
+    @FXML
+    private HBox radioHbox;
+    @FXML
+    private RadioButton radioPlayer;
+
+    @FXML
+    private RadioButton radioBill;
 
     @FXML
     private HBox playerNamesBox;
@@ -44,20 +55,41 @@ public class LoginView {
     }
 
     public void onSingleplayerClicked() {
+        radioHbox.setVisible(true);
         setMultiplayer(false);
     }
 
-    public void onMultiplayerClicked() { setMultiplayer(true); }
+    public void onMultiplayerClicked() {
+        radioHbox.setVisible(false);
+        setMultiplayer(true);
+    }
+
+    public void handlePlayer(){
+        mrBillGoesFirst = false;
+    }
+
+    public void handleMrBill(){
+        mrBillGoesFirst = true;
+    }
 
     public void onPlayClicked() throws Exception {
         if (controller.isMultiplayer()) {
             controller.setPlayer1Name(player1Name.getText());
             controller.setPlayer2Name(player2Name.getText());
         } else {
-            controller.setPlayer1Name(playerName.getText());
+            if (mrBillGoesFirst) {
+                controller.setPlayer1Name("Mr. Bill");
+                controller.setPlayer2Name(playerName.getText());
+            }else{
+                controller.setPlayer2Name("Mr. Bill");
+                controller.setPlayer1Name(playerName.getText());
+            }
+
             controller.awakenMrBill(new Node());
             controller.setDifficulty(difficultyCombo.getValue().toString());
-            controller.setPlayer2Name("Mr. Bill");
+            if (mrBillGoesFirst){
+                controller.MakeAMove();
+            }
         }
 
         MainApplication.getCoordinator().showGameScene();

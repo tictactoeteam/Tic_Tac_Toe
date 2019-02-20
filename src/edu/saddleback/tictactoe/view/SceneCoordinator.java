@@ -30,6 +30,11 @@ public class SceneCoordinator {
         this.window.setScene(new Scene(layout));
     }
 
+    public void showWinnerScene() throws Exception {
+        Parent layout = FXMLLoader.load(getClass().getResource("/res/layout/winner.fxml"));
+        this.window.setScene(new Scene(layout));
+    }
+
     public void onExitRequested() {
         this.controller.onExitRequested();
     }

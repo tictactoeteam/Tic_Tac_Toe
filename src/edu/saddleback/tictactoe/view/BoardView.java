@@ -41,7 +41,12 @@ public class BoardView extends GridPane {
                 //Handles player 1 or player 2/computer making a choice
                 gridBox.setOnMouseClicked(e->{
                     GridBox tmpGB = (GridBox)e.getSource();
-                    controller.onGridClicked(tmpGB);
+                    try {
+                        controller.onGridClicked(tmpGB);
+                    }
+                    catch(Exception ex){
+                        System.out.println("This shouldn't happen, rethink your life");
+                    }
                 });
 
                 boardGPane.add(gridBox, j, i);

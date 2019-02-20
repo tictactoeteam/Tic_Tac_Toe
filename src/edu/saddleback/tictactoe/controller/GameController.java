@@ -1,5 +1,6 @@
 package edu.saddleback.tictactoe.controller;
 
+import edu.saddleback.tictactoe.MainApplication;
 import edu.saddleback.tictactoe.decision.AdvancedEvaluator;
 import edu.saddleback.tictactoe.decision.Minimax;
 import edu.saddleback.tictactoe.decision.Node;
@@ -77,7 +78,7 @@ public class GameController {
     }
 
     public void onExitRequested() {
-        if (board.getTurnNumber() != 0) {
+        if (board.getTurnNumber() != 0 && checkWinner() == null && !checkDraw()) {
             try {
                 FileOutputStream fileStream = new FileOutputStream(SAVE_LOCATION);
                 ObjectOutputStream objectStream = new ObjectOutputStream(fileStream);
@@ -93,6 +94,9 @@ public class GameController {
                 e.printStackTrace();
             }
         }
+        else{
+            deleteSaveFile();
+        }
     }
 
     /**
@@ -100,42 +104,53 @@ public class GameController {
      *
      * @param gridBox
      */
-    public void onGridClicked(GridBox gridBox) {
-        if (checkWinner(board) != null)
+    public void onGridClicked(GridBox gridBox) throws Exception {
+        if (checkWinner() != null)
             return;
-        if (checkDraw(board))
+        if (checkDraw())
             return;
 
         try {
             GamePiece piece = board.isXTurn() ? GamePiece.X : GamePiece.O;
             board.set(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
-            if(checkWinner(board) == GamePiece.X){
+            if(checkWinner() == GamePiece.X){
                 System.out.println(generateWinMessage(GamePiece.X));
                 notifyListeners();
+                MainApplication.getCoordinator().showWinnerScene();
                 return;
             }
-            if(checkWinner(board) == GamePiece.O){
+            if(checkWinner() == GamePiece.O){
                 System.out.println(generateWinMessage(GamePiece.O));
                 notifyListeners();
+                MainApplication.getCoordinator().showWinnerScene();
                 return;
             }
 
-            if (checkDraw(board)){
+            if (checkDraw()){
                 System.out.println("DRAW!");
                 notifyListeners();
+                MainApplication.getCoordinator().showWinnerScene();
                 return;
             }
             if(!isMultiplayer()){
                 Node temp = Node.findNode(board, root);
                 board = MrBill.bestMove(temp);
-                if(checkWinner(board) == GamePiece.O){
-                    System.out.println(generateWinMessage(GamePiece.O));
+                if(checkWinner() == GamePiece.X){
+                    System.out.println(generateWinMessage(GamePiece.X));
                     notifyListeners();
+                    MainApplication.getCoordinator().showWinnerScene();
                     return;
                 }
-                if (checkDraw(board)){
+                if(checkWinner() == GamePiece.O){
+                    System.out.println(generateWinMessage(GamePiece.O));
+                    notifyListeners();
+                    MainApplication.getCoordinator().showWinnerScene();
+                    return;
+                }
+                if (checkDraw()){
                     System.out.println("DRAW!");
                     notifyListeners();
+                    MainApplication.getCoordinator().showWinnerScene();
                     return;
                 }
             }
@@ -166,7 +181,16 @@ public class GameController {
             return false;
     }
 
-    public GamePiece checkWinner(Board board){
+//    public GamePiece checkWinner(Board board){
+//        if (winnerChecker.evaluate(board) > 0)
+//            return GamePiece.X;
+//        if (winnerChecker.evaluate(board) < 0)
+//            return GamePiece.O;
+//
+//        return null;
+//    }
+
+    public GamePiece checkWinner(){
         if (winnerChecker.evaluate(board) > 0)
             return GamePiece.X;
         if (winnerChecker.evaluate(board) < 0)
@@ -175,8 +199,8 @@ public class GameController {
         return null;
     }
 
-    public boolean checkDraw(Board board){
-        if (board.getTurnNumber() == 9)
+    public boolean checkDraw(){
+        if (board.getTurnNumber() == 9 && winnerChecker.evaluate(board) == 0)
             return true;
         return false;
     }
@@ -243,7 +267,7 @@ public class GameController {
             los = getPlayer1Name();
         }
         else{
-            return "";
+            return "DRAW!";
         }
 
         String[] possibilities= new String[]{
@@ -263,4 +287,7 @@ public class GameController {
         return possibilities[(int)(Math.random()*possibilities.length)];
     }
 
+    public void MakeAMove() {
+        board = MrBill.bestMove(root);
+    }
 }

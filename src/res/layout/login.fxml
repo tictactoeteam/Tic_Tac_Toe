@@ -12,6 +12,9 @@
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.tictactoe.view.LoginView">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -40,6 +43,22 @@
                      </FXCollections>
                   </items>
                </ComboBox>
+            </HBox>
+
+            <HBox fx:id="radioHbox" alignment="CENTER" prefHeight="25.0" prefWidth="100.0" spacing="2.0" visible="false">
+               <Text fx:id="billFirst"  text="Who will go first?      "/>
+               <fx:define>
+                  <ToggleGroup fx:id="toggleGroup" />
+               </fx:define>
+               <children>
+                  <RadioButton fx:id="radioPlayer" mnemonicParsing="false"
+                               onAction="#handlePlayer" prefHeight="30.0" prefWidth="50.0"
+                               text="Me" toggleGroup="$toggleGroup"/>
+                  <RadioButton fx:id="radioBill" mnemonicParsing="false"
+                               onAction="#handleMrBill" prefHeight="30.0" prefWidth="100.0"
+                               text="Mr. Bill" toggleGroup="$toggleGroup"/>
+               </children>
+
             </HBox>
             <HBox fx:id="singlePlayerNameBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="24.0" visible="false">
                <children>
