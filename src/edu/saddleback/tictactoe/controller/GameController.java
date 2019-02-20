@@ -86,16 +86,24 @@ public class GameController {
     public void onGridClicked(GridBox gridBox) {
         if (checkWinner(board) != null)
             return;
+        if (checkDraw(board))
+            return;
         try {
             GamePiece piece = board.isXTurn() ? GamePiece.X : GamePiece.O;
             board.set(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
             if(checkWinner(board) == GamePiece.X){
-                System.out.println(player2Name + " got spanked by " + player1Name + "!");
+                System.out.println(generateWinMessage(GamePiece.X));
                 notifyListeners();
                 return;
             }
             if(checkWinner(board) == GamePiece.O){
-                System.out.println(player1Name + " got spanked by " + player2Name + "!");
+                System.out.println(generateWinMessage(GamePiece.O));
+                notifyListeners();
+                return;
+            }
+
+            if (checkDraw(board)){
+                System.out.println("DRAW!");
                 notifyListeners();
                 return;
             }
@@ -103,18 +111,23 @@ public class GameController {
                 Node temp = Node.findNode(board, root);
                 board = MrBill.bestMove(temp);
                 if(checkWinner(board) == GamePiece.O){
-                    System.out.println(player1Name + " got spanked by " + player2Name + "!");
+                    System.out.println(generateWinMessage(GamePiece.O));
+                    notifyListeners();
+                    return;
+                }
+                if (checkDraw(board)){
+                    System.out.println("DRAW!");
                     notifyListeners();
                     return;
                 }
             }
-
             notifyListeners();
         } catch (GridAlreadyChosenException e) {
             // TODO: re-prompt for another position
             System.out.println(e.getMessage());
         }
     }
+
     public void addBoardListener(BoardUpdatedListener listener) {
         boardListeners.add(listener);
         listener.update(board);
@@ -144,6 +157,12 @@ public class GameController {
         return null;
     }
 
+    public boolean checkDraw(Board board){
+        if (board.getTurnNumber() == 9)
+            return true;
+        return false;
+    }
+
     public void removeBoardListener(BoardUpdatedListener listener) {
         boardListeners.remove(listener);
     }
@@ -165,7 +184,7 @@ public class GameController {
     }
 
     public void setDifficulty(String difficulty) {
-        if (difficulty == "Easy Mode")
+        if (difficulty.equals("Easy Mode"))
             MrBill.setEvaluator(new RandomEvaluator());
         else
             MrBill.setEvaluator(new AdvancedEvaluator());
@@ -188,4 +207,36 @@ public class GameController {
     public String getPlayer2Name() {
         return player2Name;
     }
+
+    public String generateWinMessage(GamePiece winner){
+        String win;
+        String los;
+
+        if (winner == GamePiece.X){
+            win = getPlayer1Name();
+            los = getPlayer2Name();
+        }
+        else if (winner == GamePiece.O){
+            win = getPlayer2Name();
+            los = getPlayer1Name();
+        }
+        else{
+            return "";
+        }
+
+        String[] possibilities= new String[]{
+                los + " got spanked by " + win,
+                win + " takes it all, " + los + " standing small",
+                win + " asserted dominance over " + los,
+                win + " kicked the butt of " + los,
+                win + " wiped the floor with " + los,
+                los + " perished in a battle against " + win,
+                los + " was no match for " + win,
+                win + ": 1, " + los + ": 0"
+        };
+
+
+        return possibilities[(int)(Math.random()*possibilities.length)];
+    }
+
 }
