@@ -62,6 +62,27 @@ public class Node{
 
     }
 
+
+    public static Node findNode(Board board, Node root) {
+
+        if (root != null) {
+            if (board.getTurnNumber() < root.getBoard().getTurnNumber())
+                return null;
+
+            if (board.equals(root.getBoard()))
+                return root;
+
+            for (Node child : root.getChildren()) {
+                Node temp = Node.findNode(board, child);
+                if (temp != null) {
+                    return temp;
+                }
+            }
+        }
+        return null;
+
+    }
+
     public Board getBoard(){
         return board;
     }

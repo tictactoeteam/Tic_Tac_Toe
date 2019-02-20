@@ -1,6 +1,8 @@
 package edu.saddleback.tictactoe.decision;
 
 import edu.saddleback.tictactoe.model.Board;
+import edu.saddleback.tictactoe.model.GamePiece;
+import edu.saddleback.tictactoe.model.GridAlreadyChosenException;
 
 public class Minimax {
     private StaticEvaluator staticEvaluator;
@@ -40,10 +42,10 @@ public class Minimax {
         }
     }
 
+
     public void setEvaluator(StaticEvaluator ev){
         this.staticEvaluator = ev;
     }
-
 
 
     public Board bestMove(Node parent){
