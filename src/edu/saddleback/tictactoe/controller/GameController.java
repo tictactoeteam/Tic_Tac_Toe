@@ -176,7 +176,7 @@ public class GameController {
     }
 
     public boolean checkDraw(Board board){
-        if (board.getTurnNumber() == 9)
+        if (board.getTurnNumber() == 9 && winnerChecker.evaluate(board) == 0)
             return true;
         return false;
     }
