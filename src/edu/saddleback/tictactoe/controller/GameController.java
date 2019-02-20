@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.SocketOption;
 import java.util.ArrayList;
 
 /**
@@ -27,6 +28,7 @@ public class GameController {
     private ArrayList<BoardUpdatedListener> boardListeners;
 
     private Minimax MrBill;
+    private boolean gameDifficulty;
     private Node root;
     private AdvancedEvaluator winnerChecker = new AdvancedEvaluator();
 
@@ -46,6 +48,19 @@ public class GameController {
                 player1Name = objectStream.readUTF();
                 player2Name = objectStream.readUTF();
                 this.board = (Board) objectStream.readObject();
+                gameDifficulty = objectStream.readBoolean();
+                if (!isMultiplayer){
+                    Node temp = new Node();
+                    Node.generateTree(temp);
+                    awakenMrBill(temp);
+                    if (gameDifficulty){
+                        MrBill.setEvaluator(new AdvancedEvaluator());
+                    }
+                    else{
+                        MrBill.setEvaluator(new RandomEvaluator());
+                    }
+
+                }
             } catch (IOException e) {
                 System.out.println("Failed to read existing savegame - making a new game");
                 saveFile.delete();
@@ -70,6 +85,8 @@ public class GameController {
                 objectStream.writeUTF(player1Name);
                 objectStream.writeUTF(player2Name);
                 objectStream.writeObject(board);
+                objectStream.writeBoolean(gameDifficulty);
+
                 objectStream.close();
             } catch (IOException e) {
                 System.out.println("Failed to save game - oh well, exiting");
@@ -88,6 +105,7 @@ public class GameController {
             return;
         if (checkDraw(board))
             return;
+
         try {
             GamePiece piece = board.isXTurn() ? GamePiece.X : GamePiece.O;
             board.set(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
@@ -184,16 +202,20 @@ public class GameController {
     }
 
     public void setDifficulty(String difficulty) {
-        if (difficulty.equals("Easy Mode"))
+        if (difficulty.equals("Easy Mode")) {
             MrBill.setEvaluator(new RandomEvaluator());
-        else
+            gameDifficulty = false;
+        }
+        else {
             MrBill.setEvaluator(new AdvancedEvaluator());
+            gameDifficulty = true;
+        }
     }
 
-    public void awakenMrBill(){
-        this.root = new Node();
-        Node.generateTree(root);
-        this.MrBill = new Minimax(new AdvancedEvaluator(), root);
+    public void awakenMrBill(Node root){
+        this.root = root;
+        Node.generateTree(this.root);
+        this.MrBill = new Minimax(new AdvancedEvaluator(), this.root);
     }
 
     public boolean isMultiplayer() {
@@ -232,7 +254,9 @@ public class GameController {
                 win + " wiped the floor with " + los,
                 los + " perished in a battle against " + win,
                 los + " was no match for " + win,
-                win + ": 1, " + los + ": 0"
+                win + ": 1, " + los + ": 0",
+                los + ", bend your knee before " + win,
+                los + ", you now serve to " + win
         };
 
 
