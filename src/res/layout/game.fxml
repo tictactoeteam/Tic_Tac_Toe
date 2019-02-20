@@ -3,12 +3,12 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-
 <?import edu.saddleback.tictactoe.view.BoardView?>
 <?import javafx.scene.control.Button?>
+
 <StackPane fx:id="stackPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.tictactoe.view.GameView">
    <children>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" StackPane.alignment="CENTER" spacing="24">
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" StackPane.alignment="CENTER">
          <children>
             <Text fx:id="playerNames" strokeType="OUTSIDE" strokeWidth="0.0" />
             <BoardView alignment="CENTER" prefWidth="300" prefHeight="300" maxWidth="300" />

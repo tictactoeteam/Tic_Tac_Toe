@@ -8,18 +8,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
-public class GameView {
-    private GameController controller;
+public class GameView{
 
+    GameController controller;
     @FXML
-    Text playerNames;
-
+    private Text playerNames;
     @FXML
     BoardView boardView;
-
     @FXML
     Button resetButton;
 
+    /**
+     * Deletes the same file and closes the application.
+     */
     public void onResetClicked(){
 
         controller.deleteSaveFile();
@@ -27,6 +28,9 @@ public class GameView {
 
     }
 
+    /**
+     * Initializes the game ui with the entered names and moves the controller to the gameview.
+     */
     @FXML
     protected void initialize() {
         controller = MainApplication.getController();
