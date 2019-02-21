@@ -3,6 +3,7 @@ package edu.saddleback.tictactoe.view;
 import edu.saddleback.tictactoe.MainApplication;
 import edu.saddleback.tictactoe.decision.Node;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -42,6 +43,12 @@ public class LoginView {
     @FXML
     private ComboBox difficultyCombo;
 
+    @FXML
+    private Button playButton;
+
+    @FXML
+    private Text loadingText;
+
     public void initialize() {
         controller = MainApplication.getController();
     }
@@ -73,6 +80,9 @@ public class LoginView {
     }
 
     public void onPlayClicked() throws Exception {
+        playButton.setVisible(false);
+        loadingText.setVisible(true);
+
         if (controller.isMultiplayer()) {
             controller.setPlayer1Name(player1Name.getText());
             controller.setPlayer2Name(player2Name.getText());
@@ -91,7 +101,6 @@ public class LoginView {
                 controller.MakeAMove();
             }
         }
-
         MainApplication.getCoordinator().showGameScene();
     }
 }

@@ -229,10 +229,12 @@ public class GameController {
         if (difficulty.equals("Easy Mode")) {
             MrBill.setEvaluator(new RandomEvaluator());
             gameDifficulty = false;
+            System.out.println("Now on easy mode");
         }
         else {
             MrBill.setEvaluator(new AdvancedEvaluator());
             gameDifficulty = true;
+            System.out.println("Now on hard mode");
         }
     }
 
