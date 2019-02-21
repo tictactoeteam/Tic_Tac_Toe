@@ -8,11 +8,15 @@ import javafx.scene.layout.Pane;
  * This class represents a single grid box on the tic tac toe controller.
  */
 public class GridBox extends Pane {
-    private static final int SIZE_PX = 150; //The pixel size of the GridBox object size in the tic tac toe controller.
 
+    private static final int SIZE_PX = 150; //The pixel size of the GridBox object size in the tic tac toe controller.
     private int gridIndex;                 //Keeps track of which GridBox is clicked by the user for their move.
     private ImageView background;          //Holds the image of either the 'x', 'o', or default background.
 
+    /**
+     * Constructs the grid box object.
+     * @param index
+     */
     public GridBox(int index){
         //Assigns grid box index
         gridIndex = index;
@@ -25,20 +29,26 @@ public class GridBox extends Pane {
         background.fitWidthProperty().bind(heightProperty());
 
         this.getChildren().add(background);
+
     }
 
-    //Getters
-    public ImageView getBackgroundImageView(){
-        return background;
-    }
+    /**
+     *
+     * @return the background image view.
+     */
+    public ImageView getBackgroundImageView(){ return background; }
 
-    public int getGridColumnIndex(){
-        return gridIndex % 3;
-    }
+    /**
+     *
+     * @return the grid column index.
+     */
+    public int getGridColumnIndex(){return gridIndex % 3;}
 
-    public int getGridRowIndex(){
-        return gridIndex / 3;
-    }
+    /**
+     *
+     * @return the grid row index.
+     */
+    public int getGridRowIndex(){return gridIndex / 3; }
 
     /**
      * Changes the gridBox's image displayed.

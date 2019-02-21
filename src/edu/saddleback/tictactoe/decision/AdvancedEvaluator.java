@@ -3,9 +3,16 @@ package edu.saddleback.tictactoe.decision;
 import edu.saddleback.tictactoe.model.Board;
 import edu.saddleback.tictactoe.model.GamePiece;
 
+/**
+ * Used for the hard mode AI to choose the best move given the current status of the game board.
+ */
 public class AdvancedEvaluator implements StaticEvaluator {
 
-
+    /**
+     * Used in minimax to calculate the "choice score" of each given possible move.
+     * @param board
+     * @return The
+     */
     private int score(Board board){
         int sumX;
         int sumO;
@@ -72,6 +79,11 @@ public class AdvancedEvaluator implements StaticEvaluator {
 
     }
 
+    /**
+     *
+     * @param board
+     * @return The total number of possible moves left on the current board.
+     */
     private int depth(Board board){
         int depth = 0;
         for (int i=0; i<3; ++i){

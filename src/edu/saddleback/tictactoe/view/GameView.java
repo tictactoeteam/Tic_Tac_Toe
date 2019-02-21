@@ -4,26 +4,33 @@ import edu.saddleback.tictactoe.MainApplication;
 import edu.saddleback.tictactoe.controller.GameController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
+/**
+ * This class handles all the UI controls for the game UI, including setting the game AI difficulty and reseting the
+ * game. Handles all UI data.
+ */
 public class GameView{
 
     GameController controller;
-
     @FXML
     HBox radioHBoxDiff;
-
     @FXML
-    Text playerNames;
-
+    Text player1Name;
+    @FXML
+    Text player2Name;
     @FXML
     Button resetButton;
 
+    /**
+     * Sets difficulty to easy mode.
+     */
     public void handleEasy(){ controller.setDifficulty("Easy Mode"); }
 
+    /**
+     * Sets difficulty to hard mode.
+     */
     public void handleBillMode(){ controller.setDifficulty("Mr. Bill Mode"); }
 
     /**
@@ -40,9 +47,13 @@ public class GameView{
      * Initializes the game ui with the entered names and moves the controller to the gameview.
      */
     @FXML
-    protected void initialize() {
+    protected void initialize(){
+
         controller = MainApplication.getController();
-        playerNames.setText(controller.getPlayer1Name() + " vs. " + controller.getPlayer2Name());
+        player1Name.setText(controller.getPlayer1Name());
+        player2Name.setText(controller.getPlayer2Name());
         if(controller.isMultiplayer()){ radioHBoxDiff.setVisible(false); }
+
     }
+
 }

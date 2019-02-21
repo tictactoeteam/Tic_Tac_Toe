@@ -1,7 +1,6 @@
 package edu.saddleback.tictactoe.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -13,6 +12,10 @@ public class Board implements Serializable, Cloneable, Comparable<Board> {
     private GamePiece[][] board;
     private int turnNumber;
 
+    /**
+     *
+     * Initializes the data aspect of the game board to all unchosen grid boxes.
+     */
     public Board() {
         this.board = new GamePiece[3][3];
         this.turnNumber = 0;
@@ -83,36 +86,53 @@ public class Board implements Serializable, Cloneable, Comparable<Board> {
         }
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Turn #" + turnNumber + '\n');
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
-                char piece = board[i][j] == GamePiece.X ? 'X' : board[i][j] == GamePiece.O ? 'O' : ' ';
-                sb.append(piece);
-            }
-            sb.append('\n');
-        }
+    /**
+     * Used for console testing of the evaluators.
+     * @return
+     */
+//    @Override
+//    public String toString() {
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("Turn #" + turnNumber + '\n');
+//        for (int i = 0; i < board.length; i++) {
+//            for (int j = 0; j < board[0].length; j++) {
+//                char piece = board[i][j] == GamePiece.X ? 'X' : board[i][j] == GamePiece.O ? 'O' : ' ';
+//                sb.append(piece);
+//            }
+//            sb.append('\n');
+//        }
+//
+//        return sb.toString();
+//    }
 
-        return sb.toString();
-    }
-
+    /**
+     *
+     * @return the board's hashcode.
+     */
     @Override
     public int hashCode() {
         // no need to handle turn number, as that will always be the same for two equivalent arrangements of pieces
         return Arrays.deepHashCode(board);
+
     }
 
+    /**
+     *
+     * @return a clone of the board.
+     */
     @Override
     public Object clone(){
         Board copy = new Board();
 
         for (int i=0; i<3; ++i){
+
             for (int j=0; j<3; ++j){
+
                 try {
+
                     if(get(i, j) != null)
                         copy.set(i, j, get(i, j));
+
                 }catch(GridAlreadyChosenException ex){
                     // do absolutely nothing
                 }
@@ -120,20 +140,36 @@ public class Board implements Serializable, Cloneable, Comparable<Board> {
         }
 
         return copy;
+
     }
 
+    /**
+     * True if boards are equal, false if not.
+     * @param b
+     * @return
+     */
     public boolean equals(Board b){
         return (this.compareTo(b)==0);
     }
 
+    /**
+     * Returns if the board is "bigger" or "smaller" than the other board.
+     * @param o
+     * @return the int  representation of which board is "bigger"
+     */
     @Override
-    public int compareTo(Board o) {
+    public int compareTo(Board o){
+
         for (int i=0; i<3; ++i){
+
             for (int j=0; j<3; ++j){
+
                 if (board[i][j] != o.board[i][j])
                     return -1;
             }
+
         }
+
         return 0;
 
     }

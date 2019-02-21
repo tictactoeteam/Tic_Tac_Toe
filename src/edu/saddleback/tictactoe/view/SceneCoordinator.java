@@ -6,6 +6,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * Handles how the scenes switch around the main window.
+ */
 public class SceneCoordinator {
 
     private GameController controller;
@@ -15,9 +18,11 @@ public class SceneCoordinator {
      * Initializes the game controller into the scene coordinator for use throughout the application.
      * @param window
      */
-    public SceneCoordinator(Stage window) {
+    public SceneCoordinator(Stage window){
+
         this.window = window;
         this.controller = new GameController();
+
     }
 
     /**
@@ -32,29 +37,38 @@ public class SceneCoordinator {
      * Fetches the login scene.
      * @throws Exception
      */
-    public void showLoginScene() throws Exception {
+    public void showLoginScene() throws Exception{
+
         Parent layout = FXMLLoader.load(getClass().getResource("/res/layout/login.fxml"));
         this.window.setScene(new Scene(layout));
+
     }
 
     /**
      * Fetches the game scene.
      * @throws Exception
      */
-    public void showGameScene() throws Exception {
+    public void showGameScene() throws Exception{
+
         Parent layout = FXMLLoader.load(getClass().getResource("/res/layout/game.fxml"));
         this.window.setScene(new Scene(layout));
+
     }
 
-    public void showWinnerScene() throws Exception {
+    /**
+     * Fetches the Winner scene.
+     * @throws Exception
+     */
+    public void showWinnerScene() throws Exception{
+
         Parent layout = FXMLLoader.load(getClass().getResource("/res/layout/winner.fxml"));
         this.window.setScene(new Scene(layout));
+
     }
 
     /**
      * Calls the game to be saved on an application termination.
      */
-    public void onExitRequested() {
-        this.controller.onExitRequested();
-    }
+    public void onExitRequested(){this.controller.onExitRequested();}
+
 }

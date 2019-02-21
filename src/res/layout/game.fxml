@@ -13,7 +13,13 @@
    <children>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" StackPane.alignment="CENTER">
          <children>
-            <Text fx:id="playerNames" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <HBox fx:id="playerNameHBox" alignment="CENTER" prefHeight="25" prefWidth="200" visible="true">
+
+               <Text fx:id="player1Name" strokeType="OUTSIDE" strokeWidth="0.0" />
+               <Text text=" vs "/>
+               <Text fx:id="player2Name" strokeType="OUTSIDE" strokeWidth="0"/>
+
+            </HBox>
             <HBox fx:id="radioHBoxDiff" alignment="CENTER" prefHeight="25.0" prefWidth="200.0" spacing="2.0" visible="true">
                <fx:define>
                   <ToggleGroup fx:id="toggleGroup" />
@@ -24,7 +30,7 @@
                </children>
 
             </HBox>
-            <BoardView alignment="CENTER" prefWidth="300" prefHeight="300" maxWidth="300" />
+            <BoardView alignment="CENTER" prefWidth="280" prefHeight="280" maxWidth="280" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" />
             <Button fx:id="resetButton" mnemonicParsing="false" onMouseClicked="#onResetClicked" text="Reset"/>
          </children>

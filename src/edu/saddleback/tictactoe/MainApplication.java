@@ -15,17 +15,13 @@ public class MainApplication extends Application {
      * Allows the game controller to be accessed by each scene.
      * @return
      */
-    public static GameController getController() {
-        return coordinator.getController();
-    }
+    public static GameController getController(){return coordinator.getController();}
 
     /**
      * Allows the scene controller to be called from the scene views.
      * @return
      */
-    public static SceneCoordinator getCoordinator() {
-        return coordinator;
-    }
+    public static SceneCoordinator getCoordinator(){return coordinator;}
 
     /**
      * Establishes the window and allows the scene controller to take control of all scene manipulations.
@@ -46,22 +42,18 @@ public class MainApplication extends Application {
         else
             coordinator.showLoginScene();
 
-
     }
 
     /**
      * Allows for, on application termination, saving of all board and player information.
      */
     @Override
-    public void stop() {
-        coordinator.onExitRequested();
-    }
+    public void stop(){coordinator.onExitRequested();}
 
     /**
      * Launches the application.
      * @param args
      */
-    public static void main(String[] args) {
-        launch(args);
-    }
+    public static void main(String[] args){launch(args);}
+
 }

@@ -22,7 +22,8 @@ public class BoardView extends GridPane {
      * Constructor
      * Populates the grid pane controller with the default spaces, and initializes all data for a new game.
      */
-    public BoardView() {
+    public BoardView(){
+
         this.controller = MainApplication.getController();
         //Initializes static integer for gridBox indices and the controller controller.
         gridBoxIndex = 0;
@@ -35,35 +36,44 @@ public class BoardView extends GridPane {
 
         //Fills controller with default blank images
         for(int i = 0; i < 3; i++){
+
             for(int j = 0; j < 3; j++){
+
                 GridBox gridBox = new GridBox(gridBoxIndex++);
 
                 //Handles player 1 or player 2/computer making a choice
                 gridBox.setOnMouseClicked(e->{
                     GridBox tmpGB = (GridBox)e.getSource();
                     try {
+
                         controller.onGridClicked(tmpGB);
-                    }
-                    catch(Exception ex){
+
+                    }catch(Exception ex){
                         System.out.println("This shouldn't happen, rethink your life");
                     }
+
                 });
 
                 boardGPane.add(gridBox, j, i);
                 this.grid[i][j] = gridBox; //todo what
+
             }
         }
 
         this.getChildren().add(boardGPane);
         controller.addBoardListener(this::onUpdate);
+
     }
 
+    /**
+     * Updates the board data from the given current board.
+     * @param board
+     */
     public void onUpdate(Board board) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
+
                 String path;
-
-
                 if(board.get(i, j) == GamePiece.X)
                     path = getClass().getResource("/res/images/x.png").toString();
                 else if(board.get(i, j) == GamePiece.O)
@@ -72,6 +82,7 @@ public class BoardView extends GridPane {
                     path = getClass().getResource("/res/images/blank.png").toString();
 
                 grid[i][j].getBackgroundImageView().setImage(new Image(path));
+
             }
         }
 

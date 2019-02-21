@@ -5,16 +5,24 @@ import edu.saddleback.tictactoe.controller.GameController;
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 
-public class WinnerView {
-    private GameController controller;
+/**
+ * This object interacts with the winner UI that displays the game end state message.
+ */
+public class WinnerView{
 
+    private GameController controller;
     @FXML
     Text winnerText;
 
+    /**
+     * Initializes the controller into the winner scene.
+     */
     @FXML
-    protected void initialize() {
+    protected void initialize(){
+
         controller = MainApplication.getController();
         winnerText.setText(controller.generateWinMessage(controller.checkWinner()));
+
     }
 
 }

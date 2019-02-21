@@ -88,7 +88,9 @@ public class GameController {
 
     }
 
-
+    /**
+     * Saves all game information to a file if the application is terminated, deletes the save file if the game is over.
+     */
     public void onExitRequested() {
         if (board.getTurnNumber() != 0 && checkWinner() == null && !checkDraw()) {
             try {
@@ -116,11 +118,10 @@ public class GameController {
     }
 
     /**
-     * Updates the board data with the current move.
+     * Updates the board data with the current move, and if it is in single player, the ai makes the specific move.
      *
      * @param gridBox
      */
-
     public void onGridClicked(GridBox gridBox) throws Exception {
         if (checkWinner() != null)
             return;
@@ -227,8 +228,10 @@ public class GameController {
 
     }
 
-
-
+    /**
+     * Returns the gamepiece of the winner.
+     * @return
+     */
     public GamePiece checkWinner(){
         if (winnerChecker.evaluate(board) > 0)
             return GamePiece.X;
@@ -240,6 +243,10 @@ public class GameController {
 
     }
 
+    /**
+     *
+     * @return True if there is a draw, false if there is a winner.
+     */
     public boolean checkDraw(){
         if (board.getTurnNumber() == 9 && winnerChecker.evaluate(board) == 0)
             return true;
@@ -248,26 +255,49 @@ public class GameController {
 
     }
 
+    /**
+     * Removes a board listener.
+     * @param listener
+     */
     public void removeBoardListener(BoardUpdatedListener listener) {
         boardListeners.remove(listener);
     }
 
+    /**
+     * Updates the board for each listener.
+     */
     private void notifyListeners() {
         boardListeners.forEach(listener -> listener.update(board));
     }
 
+    /**
+     * Sets the multiplayer status.
+     * @param isMultiplayer
+     */
     public void setMultiplayer(boolean isMultiplayer) {
         this.isMultiplayer = isMultiplayer;
     }
 
+    /**
+     * Sets the player1Name text.
+     * @param player1Name
+     */
     public void setPlayer1Name(String player1Name) {
         this.player1Name = player1Name;
     }
 
+    /**
+     * Sets the player2Name text.
+     * @param player2Name
+     */
     public void setPlayer2Name(String player2Name) {
         this.player2Name = player2Name;
     }
 
+    /**
+     * Assigns the evaluator for the inputted difficulty.
+     * @param difficulty
+     */
     public void setDifficulty(String difficulty) {
         if (difficulty.equals("Easy Mode")) {
             MrBill.setEvaluator(new RandomEvaluator());
@@ -281,24 +311,39 @@ public class GameController {
         }
     }
 
+    /**
+     * Generates the decision tree.
+     * @param root
+     */
     public void awakenMrBill(Node root){
         this.root = root;
         Node.generateTree(this.root);
         this.MrBill = new Minimax(new AdvancedEvaluator(), this.root);
     }
 
-    public boolean isMultiplayer() {
-        return isMultiplayer;
-    }
+    /**
+     *
+     * @return Multiplayer status.S
+     */
+    public boolean isMultiplayer(){return isMultiplayer;}
 
-    public String getPlayer1Name() {
-        return player1Name;
-    }
+    /**
+     *
+     * @return Player1Name text.
+     */
+    public String getPlayer1Name(){return player1Name;}
 
-    public String getPlayer2Name() {
-        return player2Name;
-    }
+    /**
+     *
+     * @return Player2Name text.
+     */
+    public String getPlayer2Name(){return player2Name;}
 
+    /**
+     * Generates a win message depending on who won the game, and the random message.
+     * @param winner
+     * @return
+     */
     public String generateWinMessage(GamePiece winner){
         String win;
         String los;
@@ -332,6 +377,9 @@ public class GameController {
         return possibilities[(int)(Math.random()*possibilities.length)];
     }
 
+    /**
+     * Called when the player makes their move, and it is a singleplayer game, and the ai will make their move.
+     */
     public void MakeAMove() {
         board = MrBill.bestMove(root);
     }

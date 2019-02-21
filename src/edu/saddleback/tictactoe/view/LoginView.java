@@ -12,22 +12,18 @@ import edu.saddleback.tictactoe.controller.GameController;
 
 /**
  * This object interacts with the login page, handles all error checking, and establishes which type of game is to be
- * generated.
+ * generated. handles all possible user input errors.
  */
 public class LoginView {
 
     private boolean mrBillGoesFirst;
-
     @FXML
     private HBox radioHbox;
     @FXML
     private RadioButton radioPlayer;
-
     @FXML
     private RadioButton radioBill;
-
     private GameController controller;
-
     @FXML
     private HBox playerNamesBox;
     @FXML
@@ -54,12 +50,13 @@ public class LoginView {
      * Controls which ui components should be displayed.
      * @param multiplayer
      */
-    public void setMultiplayer(boolean multiplayer) {
+    public void setMultiplayer(boolean multiplayer){
+
         playerNamesBox.setVisible(multiplayer);
         singlePlayerNameBox.setVisible(!multiplayer);
         difficultyCombo.setVisible(!multiplayer);
-
         controller.setMultiplayer(multiplayer);
+
     }
 
     /**
@@ -78,10 +75,16 @@ public class LoginView {
         setMultiplayer(true);
     }
 
+    /**
+     * Makes mrbill go second.
+     */
     public void handlePlayer(){
         mrBillGoesFirst = false;
     }
 
+    /**
+     * Makes mrbill go first.
+     */
     public void handleMrBill(){
         mrBillGoesFirst = true;
     }
@@ -140,29 +143,38 @@ public class LoginView {
 
             }
 
-        } else {
+        } else{
+
             if(!difficultyCombo.getSelectionModel().isEmpty() && !playerName.getText().trim().equals("")){
+
                 if (mrBillGoesFirst) {
+
                     controller.setPlayer1Name("Mr. Bill");
                     controller.setPlayer2Name(playerName.getText());
+
                 }else{
+
                     controller.setPlayer2Name("Mr. Bill");
                     controller.setPlayer1Name(playerName.getText());
+
                 }
 
                 controller.awakenMrBill(new Node());
                 controller.setDifficulty(difficultyCombo.getValue().toString());
-                if (mrBillGoesFirst){
+                if (mrBillGoesFirst)
                     controller.MakeAMove();
-                }
+
                 MainApplication.getCoordinator().showGameScene();
 
             }else{
 
                 errorText.setText("***error - please enter all info***");
                 errorText.setVisible(true);
+
             }
+
         }
 
     }
+
 }
