@@ -4,6 +4,7 @@ import edu.saddleback.tictactoe.MainApplication;
 import edu.saddleback.tictactoe.decision.Node;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -15,7 +16,18 @@ import edu.saddleback.tictactoe.controller.GameController;
  */
 public class LoginView {
 
+    private boolean mrBillGoesFirst;
+
+    @FXML
+    private HBox radioHbox;
+    @FXML
+    private RadioButton radioPlayer;
+
+    @FXML
+    private RadioButton radioBill;
+
     private GameController controller;
+
     @FXML
     private HBox playerNamesBox;
     @FXML
@@ -53,12 +65,26 @@ public class LoginView {
     /**
      * Sets multiplayer to false.
      */
-    public void onSingleplayerClicked(){setMultiplayer(false);}
+    public void onSingleplayerClicked() {
+        radioHbox.setVisible(true);
+        setMultiplayer(false);
+    }
 
     /**
      * Sets multiplayer to true.
      */
-    public void onMultiplayerClicked(){setMultiplayer(true);}
+    public void onMultiplayerClicked() {
+        radioHbox.setVisible(false);
+        setMultiplayer(true);
+    }
+
+    public void handlePlayer(){
+        mrBillGoesFirst = false;
+    }
+
+    public void handleMrBill(){
+        mrBillGoesFirst = true;
+    }
 
     /**
      * Places the loading screens, must be done here and not in the onPlayClicked() method because the processor is
@@ -115,27 +141,27 @@ public class LoginView {
             }
 
         } else {
-
             if(!difficultyCombo.getSelectionModel().isEmpty() && !playerName.getText().trim().equals("")){
+                if (mrBillGoesFirst) {
+                    controller.setPlayer1Name("Mr. Bill");
+                    controller.setPlayer2Name(playerName.getText());
+                }else{
+                    controller.setPlayer2Name("Mr. Bill");
+                    controller.setPlayer1Name(playerName.getText());
+                }
 
-                controller.setPlayer1Name(playerName.getText());
                 controller.awakenMrBill(new Node());
                 controller.setDifficulty(difficultyCombo.getValue().toString());
-
-                if(difficultyCombo.getValue().toString().equals("Easy Mode"))
-                    controller.setPlayer2Name("My 3-Year Old Sister");
-                else
-                    controller.setPlayer2Name("Mr. Bill");
-
+                if (mrBillGoesFirst){
+                    controller.MakeAMove();
+                }
                 MainApplication.getCoordinator().showGameScene();
 
-            }else {
+            }else{
 
                 errorText.setText("***error - please enter all info***");
                 errorText.setVisible(true);
-
             }
-
         }
 
     }

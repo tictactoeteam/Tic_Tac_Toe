@@ -46,6 +46,11 @@ public class SceneCoordinator {
         this.window.setScene(new Scene(layout));
     }
 
+    public void showWinnerScene() throws Exception {
+        Parent layout = FXMLLoader.load(getClass().getResource("/res/layout/winner.fxml"));
+        this.window.setScene(new Scene(layout));
+    }
+
     /**
      * Calls the game to be saved on an application termination.
      */
