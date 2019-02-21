@@ -40,7 +40,7 @@
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="10.0">
-               <ComboBox fx:id="difficultyCombo" layoutX="15.0" layoutY="33.0" prefWidth="90.0" promptText="Difficulty" visible="false">
+               <ComboBox fx:id="difficultyCombo" layoutX="15.0" layoutY="33.0" prefWidth="150.0" promptText="Difficulty" visible="false">
                   <items>
                      <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Easy Mode" />
