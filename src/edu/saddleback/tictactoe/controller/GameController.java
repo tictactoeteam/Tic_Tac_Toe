@@ -24,6 +24,7 @@ import java.util.ArrayList;
  * This class represents a controller for all data and ui functions for the game controller grid pane.
  */
 public class GameController {
+
     private static final String SAVE_LOCATION = System.getProperty("user.home") + "/.tictactoe_save";
     private Board board;
     private ArrayList<BoardUpdatedListener> boardListeners;
@@ -36,12 +37,17 @@ public class GameController {
     private boolean isMultiplayer;
     private String player1Name, player2Name;
 
+    /**
+     * Reads game data if a file exists, otherwise initializes a new board.
+     */
     public GameController() {
         this.boardListeners = new ArrayList<>();
 
         File saveFile = new File(SAVE_LOCATION);
         if (saveFile.exists()) {
+
             try {
+
                 FileInputStream fileStream = new FileInputStream(SAVE_LOCATION);
                 ObjectInputStream objectStream = new ObjectInputStream(fileStream);
 
@@ -51,35 +57,42 @@ public class GameController {
                 this.board = (Board) objectStream.readObject();
                 gameDifficulty = objectStream.readBoolean();
                 if (!isMultiplayer){
+
                     Node temp = new Node();
                     Node.generateTree(temp);
                     awakenMrBill(temp);
-                    if (gameDifficulty){
+
+                    if (gameDifficulty)
                         MrBill.setEvaluator(new AdvancedEvaluator());
-                    }
-                    else{
+                    else
                         MrBill.setEvaluator(new RandomEvaluator());
-                    }
 
                 }
-            } catch (IOException e) {
+
+            } catch (IOException e){
+
                 System.out.println("Failed to read existing savegame - making a new game");
                 saveFile.delete();
-            } catch (ClassNotFoundException e) {
+
+            } catch (ClassNotFoundException e){
+
                 System.out.println("Outdated savegame - making an new game");
                 saveFile.delete();
+
             }
         }
 
         // if unable to load a game (because no saved game or error), start a new game
-        if (this.board == null) {
+        if (this.board == null)
             this.board = new Board();
-        }
+
     }
+
 
     public void onExitRequested() {
         if (board.getTurnNumber() != 0 && checkWinner() == null && !checkDraw()) {
             try {
+
                 FileOutputStream fileStream = new FileOutputStream(SAVE_LOCATION);
                 ObjectOutputStream objectStream = new ObjectOutputStream(fileStream);
                 objectStream.writeBoolean(isMultiplayer);
@@ -89,9 +102,12 @@ public class GameController {
                 objectStream.writeBoolean(gameDifficulty);
 
                 objectStream.close();
+
             } catch (IOException e) {
+
                 System.out.println("Failed to save game - oh well, exiting");
                 e.printStackTrace();
+
             }
         }
         else{
@@ -100,10 +116,11 @@ public class GameController {
     }
 
     /**
-     * Updates the Piece[][] with the current move.
+     * Updates the board data with the current move.
      *
      * @param gridBox
      */
+
     public void onGridClicked(GridBox gridBox) throws Exception {
         if (checkWinner() != null)
             return;
@@ -111,30 +128,39 @@ public class GameController {
             return;
 
         try {
+
             GamePiece piece = board.isXTurn() ? GamePiece.X : GamePiece.O;
             board.set(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
+
             if(checkWinner() == GamePiece.X){
                 System.out.println(generateWinMessage(GamePiece.X));
                 notifyListeners();
                 MainApplication.getCoordinator().showWinnerScene();
                 return;
+
             }
+
             if(checkWinner() == GamePiece.O){
                 System.out.println(generateWinMessage(GamePiece.O));
                 notifyListeners();
                 MainApplication.getCoordinator().showWinnerScene();
                 return;
+
             }
+
 
             if (checkDraw()){
                 System.out.println("DRAW!");
                 notifyListeners();
                 MainApplication.getCoordinator().showWinnerScene();
                 return;
+
             }
             if(!isMultiplayer()){
+
                 Node temp = Node.findNode(board, root);
                 board = MrBill.bestMove(temp);
+
                 if(checkWinner() == GamePiece.X){
                     System.out.println(generateWinMessage(GamePiece.X));
                     notifyListeners();
@@ -146,32 +172,51 @@ public class GameController {
                     notifyListeners();
                     MainApplication.getCoordinator().showWinnerScene();
                     return;
+
                 }
+
                 if (checkDraw()){
                     System.out.println("DRAW!");
                     notifyListeners();
                     MainApplication.getCoordinator().showWinnerScene();
                     return;
+
                 }
             }
+
             notifyListeners();
+
         } catch (GridAlreadyChosenException e) {
             // TODO: re-prompt for another position
             System.out.println(e.getMessage());
         }
     }
 
-    public void addBoardListener(BoardUpdatedListener listener) {
+    /**
+     * Adds a new listener to the board.
+     * @param listener
+     */
+    public void addBoardListener(BoardUpdatedListener listener){
+
         boardListeners.add(listener);
         listener.update(board);
+
     }
 
+    /**
+     * Deletes the game save file.
+     */
     public void deleteSaveFile(){
 
         File saveFile = new File(SAVE_LOCATION);
         saveFile.delete();
+
     }
 
+    /**
+     * True if a game save file exists, false if it does not.
+     * @return
+     */
     public boolean gameStateExists(){
 
         File saveFile = new File(SAVE_LOCATION);
@@ -179,30 +224,28 @@ public class GameController {
             return true;
         else
             return false;
+
     }
 
-//    public GamePiece checkWinner(Board board){
-//        if (winnerChecker.evaluate(board) > 0)
-//            return GamePiece.X;
-//        if (winnerChecker.evaluate(board) < 0)
-//            return GamePiece.O;
-//
-//        return null;
-//    }
+
 
     public GamePiece checkWinner(){
         if (winnerChecker.evaluate(board) > 0)
             return GamePiece.X;
+
         if (winnerChecker.evaluate(board) < 0)
             return GamePiece.O;
 
         return null;
+
     }
 
     public boolean checkDraw(){
         if (board.getTurnNumber() == 9 && winnerChecker.evaluate(board) == 0)
             return true;
+
         return false;
+
     }
 
     public void removeBoardListener(BoardUpdatedListener listener) {
