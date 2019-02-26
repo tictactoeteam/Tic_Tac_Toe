@@ -3,10 +3,7 @@ package edu.saddleback.tictactoe.view;
 import edu.saddleback.tictactoe.MainApplication;
 import edu.saddleback.tictactoe.decision.Node;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import edu.saddleback.tictactoe.controller.GameController;
 
@@ -38,6 +35,8 @@ public class LoginView {
     private ComboBox difficultyCombo;
     @FXML
     private Label errorText;
+    @FXML
+    private ComboBox multiplayerComboBox;
 
     /**
      * Initializes the controller in the login view
@@ -53,6 +52,7 @@ public class LoginView {
     public void setMultiplayer(boolean multiplayer){
 
         playerNamesBox.setVisible(multiplayer);
+        multiplayerComboBox.setVisible(multiplayer);
         singlePlayerNameBox.setVisible(!multiplayer);
         difficultyCombo.setVisible(!multiplayer);
         controller.setMultiplayer(multiplayer);
@@ -65,6 +65,7 @@ public class LoginView {
     public void onSingleplayerClicked() {
         radioHbox.setVisible(true);
         setMultiplayer(false);
+        difficultyCombo.getSelectionModel().selectFirst();
     }
 
     /**
@@ -73,6 +74,7 @@ public class LoginView {
     public void onMultiplayerClicked() {
         radioHbox.setVisible(false);
         setMultiplayer(true);
+        multiplayerComboBox.getSelectionModel().selectFirst();
     }
 
     /**
