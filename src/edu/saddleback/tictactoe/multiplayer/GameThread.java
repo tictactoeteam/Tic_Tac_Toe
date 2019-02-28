@@ -20,6 +20,7 @@ public class GameThread extends Thread {
     @Override
     public synchronized void start() {
         runnable.run();
+        System.out.println("Game Terminated!");
     }
 }
 
@@ -71,6 +72,7 @@ class GameThreadRunnable implements Runnable{
         catch(ClassNotFoundException ex){
             ex.printStackTrace();
         }
+
 
 
     }
