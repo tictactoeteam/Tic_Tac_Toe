@@ -14,17 +14,14 @@ import edu.saddleback.tictactoe.controller.GameController;
 public class LoginView {
 
     private boolean mrBillGoesFirst;
+    private GameController controller;
+
     @FXML
     private HBox radioHbox;
     @FXML
     private RadioButton radioPlayer;
     @FXML
     private RadioButton radioBill;
-    private GameController controller;
-    @FXML
-    private HBox playerNamesBox;
-    @FXML
-    private HBox singlePlayerNameBox;
     @FXML
     private TextField playerName;
     @FXML
@@ -37,12 +34,19 @@ public class LoginView {
     private Label errorText;
     @FXML
     private ComboBox multiplayerComboBox;
+    @FXML
+    private ComboBox onlineTypeComboBox;
+    @FXML
+    private TextField ipTextField;
 
     /**
      * Initializes the controller in the login view
      */
     public void initialize() {
         controller = MainApplication.getController();
+        ToggleGroup group = new ToggleGroup();
+        radioPlayer.setToggleGroup(group);
+        radioBill.setToggleGroup(group);
     }
 
     /**
@@ -51,11 +55,13 @@ public class LoginView {
      */
     public void setMultiplayer(boolean multiplayer){
 
-        playerNamesBox.setVisible(multiplayer);
+        player1Name.setVisible(multiplayer);
+        player2Name.setVisible(multiplayer);
         multiplayerComboBox.setVisible(multiplayer);
-        singlePlayerNameBox.setVisible(!multiplayer);
+        playerName.setVisible(!multiplayer);
         difficultyCombo.setVisible(!multiplayer);
         controller.setMultiplayer(multiplayer);
+        errorText.setVisible(false);
 
     }
 
@@ -66,6 +72,9 @@ public class LoginView {
         radioHbox.setVisible(true);
         setMultiplayer(false);
         difficultyCombo.getSelectionModel().selectFirst();
+        radioPlayer.setSelected(true);
+        onlineTypeComboBox.setVisible(false);
+        ipTextField.setVisible(false);
     }
 
     /**
@@ -75,20 +84,39 @@ public class LoginView {
         radioHbox.setVisible(false);
         setMultiplayer(true);
         multiplayerComboBox.getSelectionModel().selectFirst();
+        onlineTypeComboBox.getSelectionModel().selectFirst();
     }
 
-    /**
-     * Makes mrbill go second.
-     */
-    public void handlePlayer(){
-        mrBillGoesFirst = false;
-    }
 
     /**
-     * Makes mrbill go first.
+     * Triggered when the user clicks on the multiplayer type combobox, changing the needed ui
      */
-    public void handleMrBill(){
-        mrBillGoesFirst = true;
+    public void setMultiplayerType(){
+
+        errorText.setVisible(false);
+
+        //Local Option
+        if(multiplayerComboBox.getSelectionModel().getSelectedIndex() == 0){
+
+
+            player1Name.setVisible(true);
+            player1Name.setPromptText("Player One");
+            player2Name.setVisible(true);
+            ipTextField.setVisible(false);
+
+
+
+            //Online Option
+        }else if(multiplayerComboBox.getSelectionModel().getSelectedIndex() == 1){
+
+            player1Name.setPromptText("Player Name");
+            player2Name.setVisible(false);
+            onlineTypeComboBox.setVisible(true);
+            ipTextField.setVisible(true);
+
+
+        }
+
     }
 
     /**
@@ -99,13 +127,29 @@ public class LoginView {
 
         if(controller.isMultiplayer()){
 
-            if(!player1Name.getText().trim().equals("") && !player2Name.getText().trim().equals("")){
+            //Local case
+            if(onlineTypeComboBox.getSelectionModel().getSelectedItem().toString().equals("Local")){
 
-                errorText.setText("Loading...");
-                errorText.setVisible(true);
+                if(!player1Name.getText().trim().equals("") && !player2Name.getText().trim().equals("")){
+
+                    errorText.setText("Loading...");
+                    errorText.setVisible(true);
+
+                }
+
+                //Online Case
+            }else{
+
+                if(!player1Name.getText().trim().equals("") && !ipTextField.getText().trim().equals("")){
+
+                    errorText.setText("Loading...");
+                    errorText.setVisible(true);
+
+                }
 
             }
 
+            //Singleplayer case
         }else{
 
             if(!difficultyCombo.getSelectionModel().isEmpty() && !playerName.getText().trim().equals("")){
@@ -132,19 +176,42 @@ public class LoginView {
 
         if (controller.isMultiplayer()) {
 
-            if(!player1Name.getText().trim().equals("") && !player2Name.getText().trim().equals("")){
+            //Local case
+            if(onlineTypeComboBox.getSelectionModel().getSelectedItem().toString().equals("Local")){
 
-                controller.setPlayer1Name(player1Name.getText());
-                controller.setPlayer2Name(player2Name.getText());
-                MainApplication.getCoordinator().showGameScene();
+                if(!player1Name.getText().trim().equals("") && !player2Name.getText().trim().equals("")){
 
+                    controller.setPlayer1Name(player1Name.getText());
+                    controller.setPlayer2Name(player2Name.getText());
+                    MainApplication.getCoordinator().showGameScene();
+
+
+                }else{
+
+                    errorText.setText("***error - please enter all info***");
+                    errorText.setVisible(true);
+
+                }
+
+                //Online case
             }else{
 
-                errorText.setText("***error - please enter all info***");
-                errorText.setVisible(true);
+                if(!player1Name.getText().trim().equals("") && !ipTextField.getText().trim().equals("")){
+
+                    controller.setPlayer1Name(player1Name.getText());
+                    MainApplication.getCoordinator().showGameScene();
+
+
+                }else{
+
+                    errorText.setText("***error - please enter all info***");
+                    errorText.setVisible(true);
+
+                }
 
             }
 
+            //Singleplayer case
         } else{
 
             if(!difficultyCombo.getSelectionModel().isEmpty() && !playerName.getText().trim().equals("")){
