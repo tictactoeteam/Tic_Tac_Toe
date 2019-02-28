@@ -3,6 +3,9 @@ package edu.saddleback.tictactoe.multiplayer;
 import edu.saddleback.tictactoe.decision.AdvancedEvaluator;
 import edu.saddleback.tictactoe.model.Board;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class GameThread extends Thread {
@@ -40,17 +43,35 @@ class GameThreadRunnable implements Runnable{
         Socket nonCurrentPlayer = socketPlayerO;
         Socket temp;
 
+        ObjectOutputStream sending;
+        ObjectInputStream reading;
+
         Board board = new Board();
-        while (winnerChecker.evaluate(board) != 0 || board.getTurnNumber() != 9){
-            /**board = get board from CurrentPlayer**/
-            /**send the board to NonCurrentPlayer**/
+
+        try {
+            while (winnerChecker.evaluate(board) != 0 || board.getTurnNumber() != 9) {
+                reading = new ObjectInputStream(currentPlayer.getInputStream());
+                sending = new ObjectOutputStream(nonCurrentPlayer.getOutputStream());
 
 
-            System.out.println(board);
-            temp = currentPlayer;
-            currentPlayer = nonCurrentPlayer;
-            nonCurrentPlayer = temp;
+                board = (Board)reading.readObject();
+                sending.writeObject(board);
+                sending.flush();
+
+                System.out.println(board);
+
+                temp = currentPlayer;
+                currentPlayer = nonCurrentPlayer;
+                nonCurrentPlayer = temp;
+            }
         }
+        catch(IOException ex){
+            ex.printStackTrace();
+        }
+        catch(ClassNotFoundException ex){
+            ex.printStackTrace();
+        }
+
 
     }
 }
