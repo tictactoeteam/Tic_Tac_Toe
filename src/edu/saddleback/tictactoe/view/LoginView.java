@@ -1,6 +1,5 @@
 package edu.saddleback.tictactoe.view;
 
-import edu.saddleback.tictactoe.MainApplication;
 import edu.saddleback.tictactoe.decision.Node;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -43,7 +42,7 @@ public class LoginView {
      * Initializes the controller in the login view
      */
     public void initialize() {
-        controller = MainApplication.getController();
+        controller = TicTacToeApplication.getController();
     }
 
     /**
@@ -134,7 +133,7 @@ public class LoginView {
 
                 controller.setPlayer1Name(player1Name.getText());
                 controller.setPlayer2Name(player2Name.getText());
-                MainApplication.getCoordinator().showGameScene();
+                TicTacToeApplication.getCoordinator().showGameScene();
 
             }else{
 
@@ -164,7 +163,7 @@ public class LoginView {
                 if (mrBillGoesFirst)
                     controller.MakeAMove();
 
-                MainApplication.getCoordinator().showGameScene();
+                TicTacToeApplication.getCoordinator().showGameScene();
 
             }else{
 

@@ -1,6 +1,6 @@
 package edu.saddleback.tictactoe.controller;
 
-import edu.saddleback.tictactoe.MainApplication;
+import edu.saddleback.tictactoe.view.TicTacToeApplication;
 import edu.saddleback.tictactoe.decision.AdvancedEvaluator;
 import edu.saddleback.tictactoe.decision.Minimax;
 import edu.saddleback.tictactoe.decision.Node;
@@ -17,7 +17,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.SocketOption;
 import java.util.ArrayList;
 
 /**
@@ -136,7 +135,7 @@ public class GameController {
             if(checkWinner() == GamePiece.X){
                 System.out.println(generateWinMessage(GamePiece.X));
                 notifyListeners();
-                MainApplication.getCoordinator().showWinnerScene();
+                TicTacToeApplication.getCoordinator().showWinnerScene();
                 return;
 
             }
@@ -144,7 +143,7 @@ public class GameController {
             if(checkWinner() == GamePiece.O){
                 System.out.println(generateWinMessage(GamePiece.O));
                 notifyListeners();
-                MainApplication.getCoordinator().showWinnerScene();
+                TicTacToeApplication.getCoordinator().showWinnerScene();
                 return;
 
             }
@@ -153,7 +152,7 @@ public class GameController {
             if (checkDraw()){
                 System.out.println("DRAW!");
                 notifyListeners();
-                MainApplication.getCoordinator().showWinnerScene();
+                TicTacToeApplication.getCoordinator().showWinnerScene();
                 return;
 
             }
@@ -165,13 +164,13 @@ public class GameController {
                 if(checkWinner() == GamePiece.X){
                     System.out.println(generateWinMessage(GamePiece.X));
                     notifyListeners();
-                    MainApplication.getCoordinator().showWinnerScene();
+                    TicTacToeApplication.getCoordinator().showWinnerScene();
                     return;
                 }
                 if(checkWinner() == GamePiece.O){
                     System.out.println(generateWinMessage(GamePiece.O));
                     notifyListeners();
-                    MainApplication.getCoordinator().showWinnerScene();
+                    TicTacToeApplication.getCoordinator().showWinnerScene();
                     return;
 
                 }
@@ -179,7 +178,7 @@ public class GameController {
                 if (checkDraw()){
                     System.out.println("DRAW!");
                     notifyListeners();
-                    MainApplication.getCoordinator().showWinnerScene();
+                    TicTacToeApplication.getCoordinator().showWinnerScene();
                     return;
 
                 }

@@ -1,14 +1,13 @@
-package edu.saddleback.tictactoe;
+package edu.saddleback.tictactoe.view;
 
 import edu.saddleback.tictactoe.controller.GameController;
-import edu.saddleback.tictactoe.view.SceneCoordinator;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 /**
  * Launches the application, interacts with the scene controller to handle swapping scenes.
  */
-public class MainApplication extends Application {
+public class TicTacToeApplication extends Application {
     private static SceneCoordinator coordinator;
 
     /**
@@ -49,11 +48,5 @@ public class MainApplication extends Application {
      */
     @Override
     public void stop(){coordinator.onExitRequested();}
-
-    /**
-     * Launches the application.
-     * @param args
-     */
-    public static void main(String[] args){launch(args);}
 
 }
