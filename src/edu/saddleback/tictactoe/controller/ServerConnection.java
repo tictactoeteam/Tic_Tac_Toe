@@ -19,13 +19,16 @@ public class ServerConnection {
     ObjectOutputStream sending;
 
     public static void main(String[] args){
+        System.out.println("Trying to connect first player!");
         ServerConnection player1 = new ServerConnection();
+        System.out.println("Connection succesful!");
         try {
             Thread.sleep(500);
         }catch(InterruptedException ex){}
 
+        System.out.println("Tying to connect second player!");
         ServerConnection player2 = new ServerConnection();
-
+        System.out.println("Connection succesful!");
 
         System.out.println("Sending an empty board!");
         player1.sendBoard(new Board());
