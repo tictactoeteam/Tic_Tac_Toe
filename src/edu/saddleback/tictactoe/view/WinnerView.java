@@ -19,10 +19,16 @@ public class WinnerView{
      */
     @FXML
     protected void initialize(){
-
         controller = MainApplication.getController();
         winnerText.setText(controller.generateWinMessage(controller.checkWinner()));
-
     }
 
+    public void onMainMenuClicked() throws Exception {
+        MainApplication.getController().resetGame();
+        MainApplication.getCoordinator().showLoginScene();
+    }
+
+    public void onQuitClicked() {
+        System.exit(0);
+    }
 }

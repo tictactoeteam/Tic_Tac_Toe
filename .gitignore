@@ -5,6 +5,7 @@
 ### Java ###
 # Compiled class file
 *.class
+/src/META-INF/
 
 # Out dir
 out/
