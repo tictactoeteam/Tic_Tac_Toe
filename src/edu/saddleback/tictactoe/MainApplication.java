@@ -32,7 +32,7 @@ public class MainApplication extends Application {
     public void start(Stage window) throws Exception {
         window.setTitle("Tic Tac Toe");
         window.setWidth(600);
-        window.setHeight(400);
+        window.setHeight(475);
         window.show();
 
         coordinator = new SceneCoordinator(window);
