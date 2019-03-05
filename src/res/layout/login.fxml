@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.tictactoe.view.LoginView">
+<AnchorPane prefHeight="475.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.tictactoe.view.LoginView">
    <children>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="600.0" spacing="2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -38,7 +38,7 @@
                   </FXCollections>
                </items>
             </ComboBox>
-            <ComboBox fx:id="onlineTypeComboBox" prefWidth="150.0" visible="false">
+            <ComboBox fx:id="onlineTypeComboBox" onAction="#setOnlineType" prefWidth="150.0" visible="false">
                <items>
                   <FXCollections fx:factory="observableArrayList">
                      <String fx:value="Create Game" />
@@ -64,6 +64,7 @@
             <TextField fx:id="player1Name" alignment="CENTER" maxWidth="-Infinity" promptText="Player One" visible="false" />
             <TextField fx:id="player2Name" alignment="CENTER" maxWidth="-Infinity" promptText="Player Two" visible="false" />
             <TextField fx:id="ipTextField" alignment="CENTER" maxWidth="-Infinity" promptText="Server IP Address" visible="false" />
+            <TextField fx:id="joinCodeTextField" alignment="CENTER" maxWidth="-Infinity" promptText="Join Code" visible="false" />
             <Button fx:id="playButton" mnemonicParsing="false" onMouseClicked="#onPlayClicked" onMousePressed="#onPlayPressed" text="Play!" />
             <Label fx:id="errorText" text="***error - please enter all information***" textFill="RED" visible="false">
                <font>

@@ -38,6 +38,8 @@ public class LoginView {
     private ComboBox onlineTypeComboBox;
     @FXML
     private TextField ipTextField;
+    @FXML
+    private TextField joinCodeTextField;
 
     /**
      * Initializes the controller in the login view
@@ -75,6 +77,7 @@ public class LoginView {
         radioPlayer.setSelected(true);
         onlineTypeComboBox.setVisible(false);
         ipTextField.setVisible(false);
+        joinCodeTextField.setVisible(false);
     }
 
     /**
@@ -103,6 +106,8 @@ public class LoginView {
             player1Name.setPromptText("Player One");
             player2Name.setVisible(true);
             ipTextField.setVisible(false);
+            onlineTypeComboBox.setVisible(false);
+            joinCodeTextField.setVisible(false);
 
 
 
@@ -114,6 +119,37 @@ public class LoginView {
             onlineTypeComboBox.setVisible(true);
             ipTextField.setVisible(true);
 
+            //Create game case
+            if(onlineTypeComboBox.getSelectionModel().getSelectedIndex() == 0){
+
+                joinCodeTextField.setVisible(false);
+
+
+                //Join game case
+            }else{
+
+                joinCodeTextField.setVisible(true);
+
+            }
+
+        }
+
+    }
+
+    /**
+     * Triggered when the online type combo box is updated with a new choice.
+     */
+    public void setOnlineType(){
+
+        //Create game case
+        if(onlineTypeComboBox.getSelectionModel().getSelectedIndex() == 0){
+
+            joinCodeTextField.setVisible(false);
+
+            //Join game case
+        }else{
+
+            joinCodeTextField.setVisible(true);
 
         }
 
@@ -128,7 +164,7 @@ public class LoginView {
         if(controller.isMultiplayer()){
 
             //Local case
-            if(onlineTypeComboBox.getSelectionModel().getSelectedItem().toString().equals("Local")){
+            if(multiplayerComboBox.getSelectionModel().getSelectedItem().toString().equals("Local")){
 
                 if(!player1Name.getText().trim().equals("") && !player2Name.getText().trim().equals("")){
 
@@ -140,10 +176,26 @@ public class LoginView {
                 //Online Case
             }else{
 
-                if(!player1Name.getText().trim().equals("") && !ipTextField.getText().trim().equals("")){
+                //Create game case
+                if(onlineTypeComboBox.getSelectionModel().getSelectedItem().toString().equals("Create Game")){
 
-                    errorText.setText("Loading...");
-                    errorText.setVisible(true);
+                    if(!player1Name.getText().trim().equals("") && !ipTextField.getText().trim().equals("")){
+
+                        errorText.setText("Loading...");
+                        errorText.setVisible(true);
+
+                    }
+
+                    //Join game case
+                }else{
+
+                    if(!player1Name.getText().trim().equals("") && !ipTextField.getText().trim().equals("") &&
+                       !joinCodeTextField.getText().trim().equals("")){
+
+                        errorText.setText("Loading...");
+                        errorText.setVisible(true);
+
+                    }
 
                 }
 
@@ -177,7 +229,7 @@ public class LoginView {
         if (controller.isMultiplayer()) {
 
             //Local case
-            if(onlineTypeComboBox.getSelectionModel().getSelectedItem().toString().equals("Local")){
+            if(multiplayerComboBox.getSelectionModel().getSelectedItem().toString().equals("Local")){
 
                 if(!player1Name.getText().trim().equals("") && !player2Name.getText().trim().equals("")){
 
@@ -196,16 +248,38 @@ public class LoginView {
                 //Online case
             }else{
 
-                if(!player1Name.getText().trim().equals("") && !ipTextField.getText().trim().equals("")){
+                //Create game case
+                if(onlineTypeComboBox.getSelectionModel().getSelectedItem().toString().equals("Create Game")){
 
-                    controller.setPlayer1Name(player1Name.getText());
-                    MainApplication.getCoordinator().showGameScene();
+                    if(!player1Name.getText().trim().equals("") && !ipTextField.getText().trim().equals("")){
+
+                        controller.setPlayer1Name(player1Name.getText());
+                        MainApplication.getCoordinator().showGameScene();
 
 
+                    }else{
+
+                        errorText.setText("***error - please enter all info***");
+                        errorText.setVisible(true);
+
+                    }
+
+                    //Join game case
                 }else{
 
-                    errorText.setText("***error - please enter all info***");
-                    errorText.setVisible(true);
+                    if(!player1Name.getText().trim().equals("") && !ipTextField.getText().trim().equals("") &&
+                       !joinCodeTextField.getText().trim().equals("")){
+
+                        controller.setPlayer1Name(player1Name.getText());
+                        MainApplication.getCoordinator().showGameScene();
+
+
+                    }else{
+
+                        errorText.setText("***error - please enter all info***");
+                        errorText.setVisible(true);
+
+                    }
 
                 }
 
