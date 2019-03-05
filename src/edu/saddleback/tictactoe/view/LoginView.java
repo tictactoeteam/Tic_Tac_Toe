@@ -290,7 +290,7 @@ public class LoginView {
 
             if(!difficultyCombo.getSelectionModel().isEmpty() && !playerName.getText().trim().equals("")){
 
-                if (mrBillGoesFirst) {
+                if (radioBill.isSelected() == true) {
 
                     controller.setPlayer1Name("Mr. Bill");
                     controller.setPlayer2Name(playerName.getText());
@@ -304,7 +304,7 @@ public class LoginView {
 
                 controller.awakenMrBill(new Node());
                 controller.setDifficulty(difficultyCombo.getValue().toString());
-                if (mrBillGoesFirst)
+                if (radioBill.isSelected() == true)
                     controller.MakeAMove();
 
                 MainApplication.getCoordinator().showGameScene();
