@@ -90,20 +90,20 @@ public class Board implements Serializable, Cloneable, Comparable<Board> {
      * Used for console testing of the evaluators.
      * @return
      */
-//    @Override
-//    public String toString() {
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("Turn #" + turnNumber + '\n');
-//        for (int i = 0; i < board.length; i++) {
-//            for (int j = 0; j < board[0].length; j++) {
-//                char piece = board[i][j] == GamePiece.X ? 'X' : board[i][j] == GamePiece.O ? 'O' : ' ';
-//                sb.append(piece);
-//            }
-//            sb.append('\n');
-//        }
-//
-//        return sb.toString();
-//    }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Turn #" + turnNumber + '\n');
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                char piece = board[i][j] == GamePiece.X ? 'X' : board[i][j] == GamePiece.O ? 'O' : ' ';
+                sb.append(piece);
+            }
+            sb.append('\n');
+        }
+
+        return sb.toString();
+    }
 
     /**
      *
