@@ -70,15 +70,7 @@ public class ServerConnection {
         try {
             connection = new Socket(IP, port);
 
-
-            sending = new ObjectOutputStream(connection.getOutputStream());
-            receiving = new ObjectInputStream(connection.getInputStream());
-
-        }
-        catch(UnknownHostException ex){
-            ex.printStackTrace();
-        }
-        catch(IOException ex){
+        } catch(IOException ex){
             ex.printStackTrace();
         }
     }
@@ -87,6 +79,7 @@ public class ServerConnection {
     /**method that sends the board across the connection**/
     void sendBoard(Board board){
         try {
+            sending = new ObjectOutputStream(connection.getOutputStream());
             sending.writeObject(board);
             sending.flush();
         }
@@ -98,6 +91,7 @@ public class ServerConnection {
     /**method that waits for the board object to be received**/
     Board receiveBoard(){
         try {
+            receiving = new ObjectInputStream(connection.getInputStream());
             Board result = (Board) receiving.readObject();
             return result;
         }
