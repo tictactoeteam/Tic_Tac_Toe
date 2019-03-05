@@ -42,7 +42,7 @@ public class ServerConnection {
             ex.printStackTrace();
         }
         System.out.println("Sending something else!");
-        player2.sendBoard(new Board());
+        player2.sendBoard(board);
 
 
 

@@ -44,8 +44,9 @@ public class Server {
                 //Sessions.add(thread);
 
                 thread.start();
+
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("Connection closed, game ended!");
             }
         }
     }
