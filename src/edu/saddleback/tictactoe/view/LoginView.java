@@ -2,10 +2,7 @@ package edu.saddleback.tictactoe.view;
 
 import edu.saddleback.tictactoe.decision.Node;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import edu.saddleback.tictactoe.controller.GameController;
 
@@ -16,17 +13,14 @@ import edu.saddleback.tictactoe.controller.GameController;
 public class LoginView {
 
     private boolean mrBillGoesFirst;
+    private GameController controller;
+
     @FXML
     private HBox radioHbox;
     @FXML
     private RadioButton radioPlayer;
     @FXML
     private RadioButton radioBill;
-    private GameController controller;
-    @FXML
-    private HBox playerNamesBox;
-    @FXML
-    private HBox singlePlayerNameBox;
     @FXML
     private TextField playerName;
     @FXML
@@ -37,12 +31,23 @@ public class LoginView {
     private ComboBox difficultyCombo;
     @FXML
     private Label errorText;
+    @FXML
+    private ComboBox multiplayerComboBox;
+    @FXML
+    private ComboBox onlineTypeComboBox;
+    @FXML
+    private TextField ipTextField;
+    @FXML
+    private TextField joinCodeTextField;
 
     /**
      * Initializes the controller in the login view
      */
     public void initialize() {
         controller = TicTacToeApplication.getController();
+        ToggleGroup group = new ToggleGroup();
+        radioPlayer.setToggleGroup(group);
+        radioBill.setToggleGroup(group);
     }
 
     /**
@@ -51,10 +56,13 @@ public class LoginView {
      */
     public void setMultiplayer(boolean multiplayer){
 
-        playerNamesBox.setVisible(multiplayer);
-        singlePlayerNameBox.setVisible(!multiplayer);
+        player1Name.setVisible(multiplayer);
+        player2Name.setVisible(multiplayer);
+        multiplayerComboBox.setVisible(multiplayer);
+        playerName.setVisible(!multiplayer);
         difficultyCombo.setVisible(!multiplayer);
         controller.setMultiplayer(multiplayer);
+        errorText.setVisible(false);
 
     }
 
@@ -64,6 +72,11 @@ public class LoginView {
     public void onSingleplayerClicked() {
         radioHbox.setVisible(true);
         setMultiplayer(false);
+        difficultyCombo.getSelectionModel().selectFirst();
+        radioPlayer.setSelected(true);
+        onlineTypeComboBox.setVisible(false);
+        ipTextField.setVisible(false);
+        joinCodeTextField.setVisible(false);
     }
 
     /**
@@ -72,20 +85,73 @@ public class LoginView {
     public void onMultiplayerClicked() {
         radioHbox.setVisible(false);
         setMultiplayer(true);
+        multiplayerComboBox.getSelectionModel().selectFirst();
+        onlineTypeComboBox.getSelectionModel().selectFirst();
+    }
+
+
+    /**
+     * Triggered when the user clicks on the multiplayer type combobox, changing the needed ui
+     */
+    public void setMultiplayerType(){
+
+        errorText.setVisible(false);
+
+        //Local Option
+        if(multiplayerComboBox.getSelectionModel().getSelectedIndex() == 0){
+
+
+            player1Name.setVisible(true);
+            player1Name.setPromptText("Player One");
+            player2Name.setVisible(true);
+            ipTextField.setVisible(false);
+            onlineTypeComboBox.setVisible(false);
+            joinCodeTextField.setVisible(false);
+
+
+
+            //Online Option
+        }else if(multiplayerComboBox.getSelectionModel().getSelectedIndex() == 1){
+
+            player1Name.setPromptText("Player Name");
+            player2Name.setVisible(false);
+            onlineTypeComboBox.setVisible(true);
+            ipTextField.setVisible(true);
+
+            //Create game case
+            if(onlineTypeComboBox.getSelectionModel().getSelectedIndex() == 0){
+
+                joinCodeTextField.setVisible(false);
+
+
+                //Join game case
+            }else{
+
+                joinCodeTextField.setVisible(true);
+
+            }
+
+        }
+
     }
 
     /**
-     * Makes mrbill go second.
+     * Triggered when the online type combo box is updated with a new choice.
      */
-    public void handlePlayer(){
-        mrBillGoesFirst = false;
-    }
+    public void setOnlineType(){
 
-    /**
-     * Makes mrbill go first.
-     */
-    public void handleMrBill(){
-        mrBillGoesFirst = true;
+        //Create game case
+        if(onlineTypeComboBox.getSelectionModel().getSelectedIndex() == 0){
+
+            joinCodeTextField.setVisible(false);
+
+            //Join game case
+        }else{
+
+            joinCodeTextField.setVisible(true);
+
+        }
+
     }
 
     /**
@@ -96,13 +162,45 @@ public class LoginView {
 
         if(controller.isMultiplayer()){
 
-            if(!player1Name.getText().trim().equals("") && !player2Name.getText().trim().equals("")){
+            //Local case
+            if(multiplayerComboBox.getSelectionModel().getSelectedItem().toString().equals("Local")){
 
-                errorText.setText("Loading...");
-                errorText.setVisible(true);
+                if(!player1Name.getText().trim().equals("") && !player2Name.getText().trim().equals("")){
+
+                    errorText.setText("Loading...");
+                    errorText.setVisible(true);
+
+                }
+
+                //Online Case
+            }else{
+
+                //Create game case
+                if(onlineTypeComboBox.getSelectionModel().getSelectedItem().toString().equals("Create Game")){
+
+                    if(!player1Name.getText().trim().equals("") && !ipTextField.getText().trim().equals("")){
+
+                        errorText.setText("Loading...");
+                        errorText.setVisible(true);
+
+                    }
+
+                    //Join game case
+                }else{
+
+                    if(!player1Name.getText().trim().equals("") && !ipTextField.getText().trim().equals("") &&
+                       !joinCodeTextField.getText().trim().equals("")){
+
+                        errorText.setText("Loading...");
+                        errorText.setVisible(true);
+
+                    }
+
+                }
 
             }
 
+            //Singleplayer case
         }else{
 
             if(!difficultyCombo.getSelectionModel().isEmpty() && !playerName.getText().trim().equals("")){
@@ -129,37 +227,67 @@ public class LoginView {
 
         if (controller.isMultiplayer()) {
 
-            if(!player1Name.getText().trim().equals("") && !player2Name.getText().trim().equals("")){
+            //Local case
+            if(multiplayerComboBox.getSelectionModel().getSelectedItem().toString().equals("Local")){
 
                 controller.setPlayer1Name(player1Name.getText());
                 controller.setPlayer2Name(player2Name.getText());
                 TicTacToeApplication.getCoordinator().showGameScene();
+                if(!player1Name.getText().trim().equals("") && !player2Name.getText().trim().equals("")){
 
+                    controller.setPlayer1Name(player1Name.getText());
+                    controller.setPlayer2Name(player2Name.getText());
+                    TicTacToeApplication.getCoordinator().showGameScene();
+                }else{
+                    errorText.setText("***error - please enter all info***");
+                    errorText.setVisible(true);
+                }
+
+                //Online case
             }else{
 
-                errorText.setText("***error - please enter all info***");
-                errorText.setVisible(true);
+                //Create game case
+                if(onlineTypeComboBox.getSelectionModel().getSelectedItem().toString().equals("Create Game")){
+                    if(!player1Name.getText().trim().equals("") && !ipTextField.getText().trim().equals("")){
+                        controller.setPlayer1Name(player1Name.getText());
+                        TicTacToeApplication.getCoordinator().showGameScene();
 
-            }
 
-        } else{
+                    }else{
 
-            if(!difficultyCombo.getSelectionModel().isEmpty() && !playerName.getText().trim().equals("")){
+                        errorText.setText("***error - please enter all info***");
+                        errorText.setVisible(true);
 
-                if (mrBillGoesFirst) {
+                    }
 
-                    controller.setPlayer1Name("Mr. Bill");
-                    controller.setPlayer2Name(playerName.getText());
-
+                    //Join game case
                 }else{
 
+                    if(!player1Name.getText().trim().equals("") && !ipTextField.getText().trim().equals("") &&
+                       !joinCodeTextField.getText().trim().equals("")){
+                        controller.setPlayer1Name(player1Name.getText());
+                        TicTacToeApplication.getCoordinator().showGameScene();
+                    }else{
+                        errorText.setText("***error - please enter all info***");
+                        errorText.setVisible(true);
+                    }
+                }
+            }
+
+            //Singleplayer case
+        } else{
+            if(!difficultyCombo.getSelectionModel().isEmpty() && !playerName.getText().trim().equals("")){
+                if (mrBillGoesFirst) {
+                    controller.setPlayer1Name("Mr. Bill");
+                    controller.setPlayer2Name(playerName.getText());
+                }else{
                     controller.setPlayer2Name("Mr. Bill");
                     controller.setPlayer1Name(playerName.getText());
-
                 }
 
                 controller.awakenMrBill(new Node());
                 controller.setDifficulty(difficultyCombo.getValue().toString());
+
                 if (mrBillGoesFirst)
                     controller.MakeAMove();
 

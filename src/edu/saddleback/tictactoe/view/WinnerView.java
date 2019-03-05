@@ -18,10 +18,16 @@ public class WinnerView{
      */
     @FXML
     protected void initialize(){
-
         controller = TicTacToeApplication.getController();
         winnerText.setText(controller.generateWinMessage(controller.checkWinner()));
-
     }
 
+    public void onMainMenuClicked() throws Exception {
+        TicTacToeApplication.getController().resetGame();
+        TicTacToeApplication.getCoordinator().showLoginScene();
+    }
+
+    public void onQuitClicked() {
+        System.exit(0);
+    }
 }

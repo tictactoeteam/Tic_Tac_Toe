@@ -49,6 +49,7 @@ public class BoardView extends GridPane {
 
                     }catch(Exception ex){
                         System.out.println("This shouldn't happen, rethink your life");
+                        System.out.println(ex.getMessage());
                     }
 
                 });

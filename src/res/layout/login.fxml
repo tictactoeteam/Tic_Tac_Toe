@@ -2,10 +2,10 @@
 
 <?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -13,72 +13,58 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.ToggleGroup?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.tictactoe.view.LoginView">
+<AnchorPane prefHeight="475.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.tictactoe.view.LoginView">
    <children>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="600.0" spacing="2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="CENTER">
-               <children>
-                  <ImageView fitHeight="300.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/tictactoe2.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="8.0">
+            <ImageView fitHeight="300.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/tictactoe2.png" />
+               </image>
+            </ImageView>
+            <HBox alignment="CENTER" prefWidth="200.0" spacing="8.0">
                <children>
                   <Button fx:id="singleplayerButton" mnemonicParsing="false" onMouseClicked="#onSingleplayerClicked" text="Singleplayer" />
                   <Button fx:id="multiplayerButton" mnemonicParsing="false" onMouseClicked="#onMultiplayerClicked" text="Multiplayer" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="10.0">
-               <ComboBox fx:id="difficultyCombo" layoutX="15.0" layoutY="33.0" prefWidth="150.0" promptText="Difficulty" visible="false">
-                  <items>
-                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Easy Mode" />
-                        <String fx:value="Mr. Bill Mode" />
-                     </FXCollections>
-                  </items>
-               </ComboBox>
-            </HBox>
+            <ComboBox fx:id="multiplayerComboBox" onAction="#setMultiplayerType" prefWidth="150.0" promptText="Choose Type" visible="false">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="Local" />
+                     <String fx:value="Online" />
+                  </FXCollections>
+               </items>
+            </ComboBox>
+            <ComboBox fx:id="onlineTypeComboBox" onAction="#setOnlineType" prefWidth="150.0" visible="false">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="Create Game" />
+                     <String fx:value="Join Game" />
+                  </FXCollections>
+               </items>
+            </ComboBox>
+            <ComboBox fx:id="difficultyCombo" prefWidth="150.0" promptText="Difficulty" visible="false">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="Easy Mode" />
+                     <String fx:value="Mr. Bill Mode" />
+                  </FXCollections>
+               </items>
+            </ComboBox>
 
-            <HBox fx:id="radioHbox" alignment="CENTER" prefHeight="25.0" prefWidth="100.0" spacing="2.0" visible="false">
-               <Text fx:id="billFirst"  text="Who will go first?      "/>
-               <fx:define>
-                  <ToggleGroup fx:id="toggleGroup" />
-               </fx:define>
-               <children>
-                  <RadioButton fx:id="radioPlayer" mnemonicParsing="false"
-                               onAction="#handlePlayer" prefHeight="30.0" prefWidth="50.0"
-                               text="Me" toggleGroup="$toggleGroup"/>
-                  <RadioButton fx:id="radioBill" mnemonicParsing="false"
-                               onAction="#handleMrBill" prefHeight="30.0" prefWidth="100.0"
-                               text="Mr. Bill" toggleGroup="$toggleGroup"/>
-               </children>
-
+            <HBox fx:id="radioHbox" alignment="CENTER" prefWidth="100.0" spacing="10.0" visible="false">
+               <Text fx:id="billFirst" text="Who will go first?  " />
+               <RadioButton fx:id="radioPlayer" mnemonicParsing="false" text="Me" />
+               <RadioButton fx:id="radioBill" mnemonicParsing="false" text="Mr.Bill" />
             </HBox>
-            <HBox fx:id="singlePlayerNameBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="24.0" visible="false">
-               <children>
-                  <TextField fx:id="playerName" alignment="CENTER" promptText="Player Name" />
-               </children>
-            </HBox>
-            <HBox fx:id="playerNamesBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="24.0" visible="false">
-               <children>
-                  <TextField fx:id="player1Name" alignment="CENTER" promptText="Player One" />
-                  <TextField fx:id="player2Name" alignment="CENTER" promptText="Player Two" />
-               </children>
-               <VBox.margin>
-                  <Insets bottom="24.0" top="-100.0" />
-               </VBox.margin>
-            </HBox>
+            <TextField fx:id="playerName" alignment="CENTER" maxWidth="-Infinity" promptText="Player Name" visible="false" />
+            <TextField fx:id="player1Name" alignment="CENTER" maxWidth="-Infinity" promptText="Player One" visible="false" />
+            <TextField fx:id="player2Name" alignment="CENTER" maxWidth="-Infinity" promptText="Player Two" visible="false" />
+            <TextField fx:id="ipTextField" alignment="CENTER" maxWidth="-Infinity" promptText="Server IP Address" visible="false" />
+            <TextField fx:id="joinCodeTextField" alignment="CENTER" maxWidth="-Infinity" promptText="Join Code" visible="false" />
             <Button fx:id="playButton" mnemonicParsing="false" onMouseClicked="#onPlayClicked" onMousePressed="#onPlayPressed" text="Play!" />
             <Label fx:id="errorText" text="***error - please enter all information***" textFill="RED" visible="false">
                <font>

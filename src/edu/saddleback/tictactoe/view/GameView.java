@@ -35,11 +35,9 @@ public class GameView{
     /**
      * Deletes the same file and closes the application.
      */
-    public void onResetClicked(){
-
-        controller.deleteSaveFile();
-        System.exit(0);
-
+    public void onResetClicked() throws Exception {
+        controller.resetGame();
+        TicTacToeApplication.getCoordinator().showLoginScene();
     }
 
     /**

@@ -192,6 +192,13 @@ public class GameController {
         }
     }
 
+    public void resetGame() {
+        this.board = new Board();
+        this.notifyListeners();
+
+        this.deleteSaveFile();
+    }
+
     /**
      * Adds a new listener to the board.
      * @param listener
