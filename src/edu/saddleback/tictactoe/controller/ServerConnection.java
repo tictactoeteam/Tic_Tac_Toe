@@ -1,6 +1,7 @@
 package edu.saddleback.tictactoe.controller;
 
 import edu.saddleback.tictactoe.model.Board;
+import edu.saddleback.tictactoe.model.BoardMove;
 import edu.saddleback.tictactoe.model.GamePiece;
 import edu.saddleback.tictactoe.model.GridAlreadyChosenException;
 import edu.saddleback.tictactoe.multiplayer.Server;
@@ -13,40 +14,40 @@ import java.net.UnknownHostException;
 
 public class ServerConnection {
 
-    Socket connection;
+    private Socket connection;
 
-    ObjectInputStream receiving;
-    ObjectOutputStream sending;
+    private ObjectInputStream receiving;
+    private ObjectOutputStream sending;
 
-    public static void main(String[] args){
-        System.out.println("Trying to connect first player!");
-        ServerConnection player1 = new ServerConnection();
-        System.out.println("Connection succesful!");
-        try {
-            Thread.sleep(500);
-        }catch(InterruptedException ex){}
-
-        System.out.println("Tying to connect second player!");
-        ServerConnection player2 = new ServerConnection();
-        System.out.println("Connection succesful!");
-
-        System.out.println("Sending an empty board!");
-        player1.sendBoard(new Board());
-
-        System.out.println("Receiving an empty board!");
-        Board board = player2.receiveBoard();
-
-        try {
-            board.set(0, 0, GamePiece.X);
-        }catch(GridAlreadyChosenException ex){
-            ex.printStackTrace();
-        }
-        System.out.println("Sending something else!");
-        player2.sendBoard(board);
-
-
-
-    }
+//    public static void main(String[] args){
+//        System.out.println("Trying to connect first player!");
+//        ServerConnection player1 = new ServerConnection();
+//        System.out.println("Connection succesful!");
+//        try {
+//            Thread.sleep(500);
+//        }catch(InterruptedException ex){}
+//
+//        System.out.println("Tying to connect second player!");
+//        ServerConnection player2 = new ServerConnection();
+//        System.out.println("Connection succesful!");
+//
+//        System.out.println("Sending an empty board!");
+//        player1.sendBoardMove(new BoardMove(0, 0, GamePiece.X));
+//
+//        System.out.println("Receiving an empty board!");
+//        Board board = player2.receiveBoard();
+//
+//        try {
+//            board.set(0, 0, GamePiece.X);
+//        }catch(GridAlreadyChosenException ex){
+//            ex.printStackTrace();
+//        }
+//        System.out.println("Sending something else!");
+//        player2.sendBoard(board);
+//
+//
+//
+//    }
 
 
 
@@ -77,10 +78,10 @@ public class ServerConnection {
 
 
     /**method that sends the board across the connection**/
-    void sendBoard(Board board){
+    void sendBoardMove(BoardMove boardMove){
         try {
             sending = new ObjectOutputStream(connection.getOutputStream());
-            sending.writeObject(board);
+            sending.writeObject(boardMove);
             sending.flush();
         }
         catch(IOException ex){

@@ -2,6 +2,8 @@ package edu.saddleback.tictactoe.multiplayer;
 
 import edu.saddleback.tictactoe.decision.AdvancedEvaluator;
 import edu.saddleback.tictactoe.model.Board;
+import edu.saddleback.tictactoe.model.BoardMove;
+import edu.saddleback.tictactoe.model.GridAlreadyChosenException;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -48,22 +50,34 @@ class GameThreadRunnable implements Runnable{
         ObjectInputStream reading;
 
         Board board = new Board();
+        BoardMove boardMove;
 
-        try {
+        try{
+            sending = new ObjectOutputStream(currentPlayer.getOutputStream());
+            sending.writeObject(board);
+            sending.flush();
             while (winnerChecker.evaluate(board) != 0 || board.getTurnNumber() != 9) {
                 reading = new ObjectInputStream(currentPlayer.getInputStream());
                 sending = new ObjectOutputStream(nonCurrentPlayer.getOutputStream());
 
 
-                board = (Board)reading.readObject();
-                sending.writeObject(board);
-                sending.flush();
+                boardMove = (BoardMove)reading.readObject();
 
-                System.out.println(board);
+                try{
+                    boardMove.applyTo(board);
+                    sending.writeObject(board);
+                    sending.flush();
 
-                temp = currentPlayer;
-                currentPlayer = nonCurrentPlayer;
-                nonCurrentPlayer = temp;
+                    System.out.println(board);
+
+                    temp = currentPlayer;
+                    currentPlayer = nonCurrentPlayer;
+                    nonCurrentPlayer = temp;
+                }catch(GridAlreadyChosenException ex){
+                    sending = new ObjectOutputStream(currentPlayer.getOutputStream());
+                    sending.writeObject(board);
+                    sending.flush();
+                }
             }
         }
         catch(IOException ex){

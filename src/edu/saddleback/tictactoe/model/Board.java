@@ -86,6 +86,14 @@ public class Board implements Serializable, Cloneable, Comparable<Board> {
         }
     }
 
+    public void set(Board board){
+        for (int i=0; i<3; ++i){
+            for (int j=0; j<3; ++j){
+                this.board[i][j] = board.get(i, j);
+            }
+        }
+    }
+
     /**
      * Used for console testing of the evaluators.
      * @return
