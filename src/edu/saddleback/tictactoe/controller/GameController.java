@@ -1,5 +1,6 @@
 package edu.saddleback.tictactoe.controller;
 
+import edu.saddleback.tictactoe.multiplayer.Server;
 import edu.saddleback.tictactoe.view.TicTacToeApplication;
 import edu.saddleback.tictactoe.decision.AdvancedEvaluator;
 import edu.saddleback.tictactoe.decision.Minimax;
@@ -36,11 +37,20 @@ public class GameController {
     private boolean isMultiplayer;
     private String player1Name, player2Name;
 
+    private Player player1;
+    private Player player2;
+
+    private Server localServer;
+
     /**
      * Reads game data if a file exists, otherwise initializes a new board.
      */
     public GameController() {
         this.boardListeners = new ArrayList<>();
+
+        localServer = new Server();
+        localServer.start();
+
 
         File saveFile = new File(SAVE_LOCATION);
         if (saveFile.exists()) {
@@ -81,10 +91,19 @@ public class GameController {
             }
         }
 
+
+
         // if unable to load a game (because no saved game or error), start a new game
         if (this.board == null)
             this.board = new Board();
 
+
+
+        player1 = new HumanPlayer(board);
+        player2 = new HumanPlayer(board);
+
+        player1.start();
+        player2.start();
     }
 
     /**
@@ -101,8 +120,9 @@ public class GameController {
                 objectStream.writeUTF(player2Name);
                 objectStream.writeObject(board);
                 objectStream.writeBoolean(gameDifficulty);
-
                 objectStream.close();
+
+
 
             } catch (IOException e) {
 
@@ -114,6 +134,9 @@ public class GameController {
         else{
             deleteSaveFile();
         }
+
+
+        localServer.stop();
     }
 
     /**
@@ -122,74 +145,84 @@ public class GameController {
      * @param gridBox
      */
     public void onGridClicked(GridBox gridBox) throws Exception {
-        if (checkWinner() != null)
+        if (checkWinner() != null || checkDraw()) {
+            TicTacToeApplication.getCoordinator().showWinnerScene();
             return;
-        if (checkDraw())
-            return;
-
-        try {
-
-            GamePiece piece = board.isXTurn() ? GamePiece.X : GamePiece.O;
-            board.set(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
-
-            if(checkWinner() == GamePiece.X){
-                System.out.println(generateWinMessage(GamePiece.X));
-                notifyListeners();
-                TicTacToeApplication.getCoordinator().showWinnerScene();
-                return;
-
-            }
-
-            if(checkWinner() == GamePiece.O){
-                System.out.println(generateWinMessage(GamePiece.O));
-                notifyListeners();
-                TicTacToeApplication.getCoordinator().showWinnerScene();
-                return;
-
-            }
-
-
-            if (checkDraw()){
-                System.out.println("DRAW!");
-                notifyListeners();
-                TicTacToeApplication.getCoordinator().showWinnerScene();
-                return;
-
-            }
-            if(!isMultiplayer()){
-
-                Node temp = Node.findNode(board, root);
-                board = MrBill.bestMove(temp);
-
-                if(checkWinner() == GamePiece.X){
-                    System.out.println(generateWinMessage(GamePiece.X));
-                    notifyListeners();
-                    TicTacToeApplication.getCoordinator().showWinnerScene();
-                    return;
-                }
-                if(checkWinner() == GamePiece.O){
-                    System.out.println(generateWinMessage(GamePiece.O));
-                    notifyListeners();
-                    TicTacToeApplication.getCoordinator().showWinnerScene();
-                    return;
-
-                }
-
-                if (checkDraw()){
-                    System.out.println("DRAW!");
-                    notifyListeners();
-                    TicTacToeApplication.getCoordinator().showWinnerScene();
-                    return;
-
-                }
-            }
-
-            notifyListeners();
-
-        } catch (GridAlreadyChosenException e) {
-            // TODO: re-prompt for another position
-            System.out.println(e.getMessage());
         }
+//        try {
+
+        GamePiece piece = board.isXTurn() ? GamePiece.X : GamePiece.O;
+
+        if (piece == GamePiece.X){
+            player1.setMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
+        }else{
+            player2.setMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
+        }
+
+        Thread.sleep(500);
+
+        notifyListeners();
+
+//            board.set(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
+//
+//            if(checkWinner() == GamePiece.X){
+//                System.out.println(generateWinMessage(GamePiece.X));
+//                notifyListeners();
+//                TicTacToeApplication.getCoordinator().showWinnerScene();
+//                return;
+//
+//            }
+//
+//            if(checkWinner() == GamePiece.O){
+//                System.out.println(generateWinMessage(GamePiece.O));
+//                notifyListeners();
+//                TicTacToeApplication.getCoordinator().showWinnerScene();
+//                return;
+//
+//            }
+//
+//
+//            if (checkDraw()){
+//                System.out.println("DRAW!");
+//                notifyListeners();
+//                TicTacToeApplication.getCoordinator().showWinnerScene();
+//                return;
+//
+//            }
+//            if(!isMultiplayer()){
+//
+//                Node temp = Node.findNode(board, root);
+//                board = MrBill.bestMove(temp);
+//
+//                if(checkWinner() == GamePiece.X){
+//                    System.out.println(generateWinMessage(GamePiece.X));
+//                    notifyListeners();
+//                    TicTacToeApplication.getCoordinator().showWinnerScene();
+//                    return;
+//                }
+//                if(checkWinner() == GamePiece.O){
+//                    System.out.println(generateWinMessage(GamePiece.O));
+//                    notifyListeners();
+//                    TicTacToeApplication.getCoordinator().showWinnerScene();
+//                    return;
+//
+//                }
+//
+//                if (checkDraw()){
+//                    System.out.println("DRAW!");
+//                    notifyListeners();
+//                    TicTacToeApplication.getCoordinator().showWinnerScene();
+//                    return;
+//
+//                }
+//            }
+//
+//            notifyListeners();
+//
+//        } catch (GridAlreadyChosenException e) {
+//            // TODO: re-prompt for another position
+//            System.out.println(e.getMessage());
+//        }
     }
 
     public void resetGame() {

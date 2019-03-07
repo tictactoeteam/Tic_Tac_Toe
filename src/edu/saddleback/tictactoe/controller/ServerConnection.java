@@ -9,6 +9,7 @@ import edu.saddleback.tictactoe.multiplayer.Server;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -93,7 +94,7 @@ public class ServerConnection {
     Board receiveBoard(){
         try {
             receiving = new ObjectInputStream(connection.getInputStream());
-            Board result = (Board) receiving.readObject();
+            Board result = (Board)receiving.readObject();
             return result;
         }
         catch(IOException ex){

@@ -6,6 +6,7 @@ import edu.saddleback.tictactoe.decision.Node;
 import edu.saddleback.tictactoe.decision.StaticEvaluator;
 import edu.saddleback.tictactoe.model.Board;
 import edu.saddleback.tictactoe.model.BoardMove;
+import edu.saddleback.tictactoe.model.GamePiece;
 
 public class ComputerPlayer extends Player{
     private Minimax MrBill;
@@ -24,7 +25,7 @@ public class ComputerPlayer extends Player{
         this.root = root;
         MrBill = new Minimax(new AdvancedEvaluator(), root);
         behavior = new Thread(() -> {
-            while(winnerChecker.evaluate(board) == 0 || board.getTurnNumber() !=9) {
+            while(winnerChecker.evaluate(board) == 0 || board.getTurnNumber() < 9) {
                 readBoard();
                 findMove();
                 sendMove();
@@ -42,4 +43,7 @@ public class ComputerPlayer extends Player{
         boardMove = BoardMove.fromTwoBoards(currentNode.getBoard(), currentBoard);
 
     }
+
+    @Override
+    public void setMove(int row, int col, GamePiece piece) {}
 }

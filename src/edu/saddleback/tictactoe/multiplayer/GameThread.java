@@ -15,6 +15,7 @@ public class GameThread extends Thread {
     private GameThreadRunnable runnable;
 
 
+
     public GameThread(Socket socketPlayerX, Socket socketPlayerO) {
         runnable = new GameThreadRunnable(socketPlayerX, socketPlayerO);
     }
@@ -24,6 +25,11 @@ public class GameThread extends Thread {
         runnable.run();
         System.out.println("Game Terminated!");
     }
+
+
+    public void cease(){
+        runnable.threadIsGoodAndRunning = false;
+    }
 }
 
 
@@ -32,6 +38,7 @@ class GameThreadRunnable implements Runnable{
     private Socket socketPlayerX;
     private Socket socketPlayerO;
     private AdvancedEvaluator winnerChecker;
+    boolean threadIsGoodAndRunning = true;
 
     GameThreadRunnable(Socket socketPlayerX, Socket socketPlayerO){
         this.socketPlayerX = socketPlayerX;
@@ -56,7 +63,7 @@ class GameThreadRunnable implements Runnable{
             sending = new ObjectOutputStream(currentPlayer.getOutputStream());
             sending.writeObject(board);
             sending.flush();
-            while (winnerChecker.evaluate(board) != 0 || board.getTurnNumber() != 9) {
+            while ((winnerChecker.evaluate(board) == 0 || board.getTurnNumber() < 9) && threadIsGoodAndRunning) {
                 reading = new ObjectInputStream(currentPlayer.getInputStream());
                 sending = new ObjectOutputStream(nonCurrentPlayer.getOutputStream());
 

@@ -1,6 +1,8 @@
 package edu.saddleback.tictactoe.controller;
 
 import edu.saddleback.tictactoe.model.Board;
+import edu.saddleback.tictactoe.model.BoardMove;
+import edu.saddleback.tictactoe.model.GamePiece;
 
 public class HumanPlayer extends Player{
 
@@ -16,7 +18,7 @@ public class HumanPlayer extends Player{
         super(board, IP, port);
 
         behavior = new Thread(() -> {
-            while(winnerChecker.evaluate(board) == 0 || board.getTurnNumber() !=9) {
+            while(winnerChecker.evaluate(board) == 0 || board.getTurnNumber() < 9) {
                 readBoard();
                 boardMove = null;
                 try {
@@ -29,5 +31,10 @@ public class HumanPlayer extends Player{
                 boardMove = null;
             }
         });
+    }
+
+    @Override
+    public void setMove(int row, int col, GamePiece piece){
+        boardMove = new BoardMove(row, col, piece);
     }
 }

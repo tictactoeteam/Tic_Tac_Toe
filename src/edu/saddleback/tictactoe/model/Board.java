@@ -77,7 +77,7 @@ public class Board implements Serializable, Cloneable, Comparable<Board> {
      * @param piece the piece to place
      * @throws GridAlreadyChosenException if there is already a piece at the specified position.
      */
-    public void set(int row, int col, GamePiece piece) throws GridAlreadyChosenException {
+    public synchronized void set(int row, int col, GamePiece piece) throws GridAlreadyChosenException {
         if (board[row][col] == null) {
             board[row][col] = piece;
             turnNumber++;
@@ -86,7 +86,7 @@ public class Board implements Serializable, Cloneable, Comparable<Board> {
         }
     }
 
-    public void set(Board board){
+    public synchronized void set(Board board){
         for (int i=0; i<3; ++i){
             for (int j=0; j<3; ++j){
                 this.board[i][j] = board.get(i, j);
