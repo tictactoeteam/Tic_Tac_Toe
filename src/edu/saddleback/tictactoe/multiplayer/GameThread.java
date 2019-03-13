@@ -1,13 +1,13 @@
 package edu.saddleback.tictactoe.multiplayer;
 
 import edu.saddleback.tictactoe.decision.AdvancedEvaluator;
+import edu.saddleback.tictactoe.decision.Node;
+import edu.saddleback.tictactoe.decision.RandomEvaluator;
 import edu.saddleback.tictactoe.model.Board;
 import edu.saddleback.tictactoe.model.BoardMove;
 import edu.saddleback.tictactoe.model.GridAlreadyChosenException;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class GameThread extends Thread {
@@ -56,14 +56,40 @@ class GameThreadRunnable implements Runnable{
         ObjectOutputStream sending;
         ObjectInputStream reading;
 
+        File saveFile = new File(System.getProperty("user.home") + "/.tictactoe_save");
         Board board = new Board();
+
+        if(saveFile.exists()){
+            try {
+
+                FileInputStream fileStream = new FileInputStream(System.getProperty("user.home") + "/.tictactoe_save");
+                ObjectInputStream objectStream = new ObjectInputStream(fileStream);
+
+               objectStream.readBoolean();
+               objectStream.readUTF();
+               objectStream.readUTF();
+                board = (Board) objectStream.readObject();
+            } catch (IOException e){
+
+                System.out.println("Failed to read existing savegame - making a new game");
+                saveFile.delete();
+
+            } catch (ClassNotFoundException e){
+
+                System.out.println("Outdated savegame - making an new game");
+                saveFile.delete();
+            }
+        }
+
         BoardMove boardMove;
 
         try{
             sending = new ObjectOutputStream(currentPlayer.getOutputStream());
             sending.writeObject(board);
             sending.flush();
-            while ((winnerChecker.evaluate(board) == 0 || board.getTurnNumber() < 9) && threadIsGoodAndRunning) {
+            //We need a way to implement a shut down to this thread... this thread needs to be shutdown when we press
+            //X
+            while ((winnerChecker.evaluate(board) == 0 && board.getTurnNumber() < 9)) {
                 reading = new ObjectInputStream(currentPlayer.getInputStream());
                 sending = new ObjectOutputStream(nonCurrentPlayer.getOutputStream());
 
@@ -94,7 +120,7 @@ class GameThreadRunnable implements Runnable{
             ex.printStackTrace();
         }
 
-
+        System.out.println("HEY I MADE IT OUT OF THIS LOOP");
 
     }
 }

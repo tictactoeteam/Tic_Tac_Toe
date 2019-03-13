@@ -114,13 +114,18 @@ public class GameController {
             try {
 
                 FileOutputStream fileStream = new FileOutputStream(SAVE_LOCATION);
+                System.out.println(SAVE_LOCATION);
                 ObjectOutputStream objectStream = new ObjectOutputStream(fileStream);
                 objectStream.writeBoolean(isMultiplayer);
                 objectStream.writeUTF(player1Name);
                 objectStream.writeUTF(player2Name);
                 objectStream.writeObject(board);
+                System.out.println("this is our board we're saving: ");
+                System.out.println(board);
                 objectStream.writeBoolean(gameDifficulty);
                 objectStream.close();
+
+                System.out.println("I am storing everything");
 
 
 
@@ -133,10 +138,12 @@ public class GameController {
         }
         else{
             deleteSaveFile();
+            System.out.println("I am deleting the game");
         }
 
 
         localServer.stop();
+        System.exit(1);
     }
 
     /**

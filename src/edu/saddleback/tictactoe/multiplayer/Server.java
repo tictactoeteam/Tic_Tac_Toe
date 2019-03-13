@@ -15,9 +15,9 @@ public class Server {
 
     GameThread thread;
 
+    //We need to check if the save file exists when we start this thread.. the board is saved, however it is never loaded
+    //The board needs to be loaded to the local version of the game when/if a game save already exists
     private Thread serverTask = new Thread(() -> {
-        System.out.println("Starting server");
-        while (threadIsGoodAndRunning) {
             try {
                 System.out.println("Awaiting first player for game no.1");
                 Socket socketPlayerX = server.accept();
@@ -31,14 +31,14 @@ public class Server {
 
                 System.out.println("Let the game begin!!");
                 thread = new GameThread(socketPlayerX, socketPlayerO);
-                //Sessions.add(thread);
 
                 thread.start();
 
             } catch (IOException e) {
                 System.out.println("Connection closed, game ended!");
             }
-        }
+
+            System.out.println("I made it out of thread too");
     });
 
     //LinkedList<GameThread> Sessions = new LinkedList<>();
