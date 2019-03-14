@@ -78,6 +78,8 @@ public class GameController {
 
                     setSinglePlayerUp(false);
 
+                }else{
+                    setLocalMultiplayerUp();
                 }
 
             } catch (IOException e){
@@ -162,10 +164,20 @@ public class GameController {
 
         GamePiece piece = board.isXTurn() ? GamePiece.X : GamePiece.O;
 
-        if (piece == GamePiece.X){
-            player1.setMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
-        }else{
-            player2.setMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
+        try {
+            if (piece == GamePiece.X) {
+                player1.setMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
+                if (player1 instanceof ComputerPlayer) {
+                    player2.setMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
+                }
+            } else {
+                player2.setMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
+                if (player2 instanceof ComputerPlayer) {
+                    player1.setMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
+                }
+            }
+        }catch(NullPointerException ex){
+            System.out.println("Wait for other player!!");
         }
 
         Thread.sleep(500);
@@ -462,5 +474,16 @@ public class GameController {
         player2.start();
 
 
+    }
+
+    public void setOnlineUp(boolean host){
+        // Nolan knows what to do <3
+
+        if (host){
+            player1 = new HumanPlayer(board, "INPUT IP RIGHT HERE <<<<<<<<<<<<<");
+        }
+        else{
+            player2 = new HumanPlayer(board, "INPUT IP RIGHT HERE <<<<<<<<<<<<<");
+        }
     }
 }
