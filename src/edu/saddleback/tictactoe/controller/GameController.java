@@ -1,6 +1,7 @@
 package edu.saddleback.tictactoe.controller;
 
-import edu.saddleback.tictactoe.MainApplication;
+import edu.saddleback.tictactoe.multiplayer.Server;
+import edu.saddleback.tictactoe.view.TicTacToeApplication;
 import edu.saddleback.tictactoe.decision.AdvancedEvaluator;
 import edu.saddleback.tictactoe.decision.Minimax;
 import edu.saddleback.tictactoe.decision.Node;
@@ -17,7 +18,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.SocketOption;
 import java.util.ArrayList;
 
 /**
@@ -37,11 +37,22 @@ public class GameController {
     private boolean isMultiplayer;
     private String player1Name, player2Name;
 
+    private Player player1;
+    private Player player2;
+
+    private Server localServer;
+
+    private String gameIP;
+
     /**
      * Reads game data if a file exists, otherwise initializes a new board.
      */
     public GameController() {
         this.boardListeners = new ArrayList<>();
+
+//        localServer = new Server();
+//        localServer.start();
+
 
         File saveFile = new File(SAVE_LOCATION);
         if (saveFile.exists()) {
@@ -67,6 +78,10 @@ public class GameController {
                     else
                         MrBill.setEvaluator(new RandomEvaluator());
 
+                    setSinglePlayerUp(false);
+
+                }else{
+                    setLocalMultiplayerUp();
                 }
 
             } catch (IOException e){
@@ -82,10 +97,19 @@ public class GameController {
             }
         }
 
+
+
         // if unable to load a game (because no saved game or error), start a new game
         if (this.board == null)
             this.board = new Board();
 
+
+
+//        player1 = new HumanPlayer(board);
+//        player2 = new HumanPlayer(board);
+//
+//        player1.start();
+//        player2.start();
     }
 
     /**
@@ -96,14 +120,20 @@ public class GameController {
             try {
 
                 FileOutputStream fileStream = new FileOutputStream(SAVE_LOCATION);
+                System.out.println(SAVE_LOCATION);
                 ObjectOutputStream objectStream = new ObjectOutputStream(fileStream);
                 objectStream.writeBoolean(isMultiplayer);
                 objectStream.writeUTF(player1Name);
                 objectStream.writeUTF(player2Name);
                 objectStream.writeObject(board);
+                System.out.println("this is our board we're saving: ");
+                System.out.println(board);
                 objectStream.writeBoolean(gameDifficulty);
-
                 objectStream.close();
+
+                System.out.println("I am storing everything");
+
+
 
             } catch (IOException e) {
 
@@ -114,7 +144,12 @@ public class GameController {
         }
         else{
             deleteSaveFile();
+            System.out.println("I am deleting the game");
         }
+
+
+        localServer.stop();
+        System.exit(1);
     }
 
     /**
@@ -123,78 +158,101 @@ public class GameController {
      * @param gridBox
      */
     public void onGridClicked(GridBox gridBox) throws Exception {
-        if (checkWinner() != null)
+
+        notifyListeners();
+        if (checkWinner() != null || checkDraw()) {
+            TicTacToeApplication.getCoordinator().showWinnerScene();
             return;
-        if (checkDraw())
-            return;
+        }
+//        try {
+
+        GamePiece piece = board.isXTurn() ? GamePiece.X : GamePiece.O;
 
         try {
-
-            GamePiece piece = board.isXTurn() ? GamePiece.X : GamePiece.O;
-            board.set(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
-
-            if(checkWinner() == GamePiece.X){
-                System.out.println(generateWinMessage(GamePiece.X));
-                notifyListeners();
-                MainApplication.getCoordinator().showWinnerScene();
-                return;
-
-            }
-
-            if(checkWinner() == GamePiece.O){
-                System.out.println(generateWinMessage(GamePiece.O));
-                notifyListeners();
-                MainApplication.getCoordinator().showWinnerScene();
-                return;
-
-            }
-
-
-            if (checkDraw()){
-                System.out.println("DRAW!");
-                notifyListeners();
-                MainApplication.getCoordinator().showWinnerScene();
-                return;
-
-            }
-            if(!isMultiplayer()){
-
-                Node temp = Node.findNode(board, root);
-                board = MrBill.bestMove(temp);
-
-                if(checkWinner() == GamePiece.X){
-                    System.out.println(generateWinMessage(GamePiece.X));
-                    notifyListeners();
-                    MainApplication.getCoordinator().showWinnerScene();
-                    return;
+            if (piece == GamePiece.X) {
+                player1.setMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
+                if (player1 instanceof ComputerPlayer) {
+                    player2.setMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
                 }
-                if(checkWinner() == GamePiece.O){
-                    System.out.println(generateWinMessage(GamePiece.O));
-                    notifyListeners();
-                    MainApplication.getCoordinator().showWinnerScene();
-                    return;
-
-                }
-
-                if (checkDraw()){
-                    System.out.println("DRAW!");
-                    notifyListeners();
-                    MainApplication.getCoordinator().showWinnerScene();
-                    return;
-
+            } else {
+                player2.setMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
+                if (player2 instanceof ComputerPlayer) {
+                    player1.setMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
                 }
             }
-
-            notifyListeners();
-
-        } catch (GridAlreadyChosenException e) {
-            // TODO: re-prompt for another position
-            System.out.println(e.getMessage());
+        }catch(NullPointerException ex){
+            System.out.println("Wait for other player!!");
         }
+
+        Thread.sleep(500);
+
+        notifyListeners();
+
+//            board.set(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
+//
+//            if(checkWinner() == GamePiece.X){
+//                System.out.println(generateWinMessage(GamePiece.X));
+//                notifyListeners();
+//                TicTacToeApplication.getCoordinator().showWinnerScene();
+//                return;
+//
+//            }
+//
+//            if(checkWinner() == GamePiece.O){
+//                System.out.println(generateWinMessage(GamePiece.O));
+//                notifyListeners();
+//                TicTacToeApplication.getCoordinator().showWinnerScene();
+//                return;
+//
+//            }
+//
+//
+//            if (checkDraw()){
+//                System.out.println("DRAW!");
+//                notifyListeners();
+//                TicTacToeApplication.getCoordinator().showWinnerScene();
+//                return;
+//
+//            }
+//            if(!isMultiplayer()){
+//
+//                Node temp = Node.findNode(board, root);
+//                board = MrBill.bestMove(temp);
+//
+//                if(checkWinner() == GamePiece.X){
+//                    System.out.println(generateWinMessage(GamePiece.X));
+//                    notifyListeners();
+//                    TicTacToeApplication.getCoordinator().showWinnerScene();
+//                    return;
+//                }
+//                if(checkWinner() == GamePiece.O){
+//                    System.out.println(generateWinMessage(GamePiece.O));
+//                    notifyListeners();
+//                    TicTacToeApplication.getCoordinator().showWinnerScene();
+//                    return;
+//
+//                }
+//
+//                if (checkDraw()){
+//                    System.out.println("DRAW!");
+//                    notifyListeners();
+//                    TicTacToeApplication.getCoordinator().showWinnerScene();
+//                    return;
+//
+//                }
+//            }
+//
+//            notifyListeners();
+//
+//        } catch (GridAlreadyChosenException e) {
+//            // TODO: re-prompt for another position
+//            System.out.println(e.getMessage());
+//        }
     }
 
     public void resetGame() {
         this.board = new Board();
+        this.localServer.stop();
         this.notifyListeners();
 
         this.deleteSaveFile();
@@ -273,7 +331,7 @@ public class GameController {
     /**
      * Updates the board for each listener.
      */
-    private void notifyListeners() {
+    public void notifyListeners() {
         boardListeners.forEach(listener -> listener.update(board));
     }
 
@@ -346,6 +404,10 @@ public class GameController {
      */
     public String getPlayer2Name(){return player2Name;}
 
+    public void setIP(String serverIP){gameIP = serverIP;}
+
+    public String getIP(){return gameIP;}
+
     /**
      * Generates a win message depending on who won the game, and the random message.
      * @param winner
@@ -389,5 +451,58 @@ public class GameController {
      */
     public void MakeAMove() {
         board = MrBill.bestMove(root);
+    }
+
+    public void setLocalMultiplayerUp() {
+        localServer = new Server();
+        localServer.start();
+
+        player1 = new HumanPlayer(this);
+        player2 = new HumanPlayer(this);
+
+        player1.start();
+        player2.start();
+
+    }
+
+    public void setSinglePlayerUp(boolean mrBillGoesFirst) {
+        localServer = new Server();
+        localServer.start();
+
+        if (mrBillGoesFirst){
+            player1 = new ComputerPlayer(this, MrBill);
+            player2 = new HumanPlayer(this);
+        }else{
+            player1 = new HumanPlayer(this);
+            player2 = new ComputerPlayer(this, MrBill);
+        }
+
+        player1.start();
+        player2.start();
+
+
+    }
+
+    //setting up online, sets the player to the appropriate host/2nd player
+    public void setOnlineUp(boolean host){
+        if (host){
+            player1 = new HumanPlayer(this, getIP());
+            player2 = null;
+            player1.start();
+        }
+        else{
+            player1 = null;
+            player2 = new HumanPlayer(this, getIP());
+            player2.start();
+        }
+
+    }
+
+    public void setBoard(Board board){
+        this.board.set(board);
+    }
+
+    public Board getBoard(){
+        return board;
     }
 }

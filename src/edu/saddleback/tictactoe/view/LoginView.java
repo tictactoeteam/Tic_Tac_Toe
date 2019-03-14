@@ -1,6 +1,5 @@
 package edu.saddleback.tictactoe.view;
 
-import edu.saddleback.tictactoe.MainApplication;
 import edu.saddleback.tictactoe.decision.Node;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -45,7 +44,7 @@ public class LoginView {
      * Initializes the controller in the login view
      */
     public void initialize() {
-        controller = MainApplication.getController();
+        controller = TicTacToeApplication.getController();
         ToggleGroup group = new ToggleGroup();
         radioPlayer.setToggleGroup(group);
         radioBill.setToggleGroup(group);
@@ -226,35 +225,37 @@ public class LoginView {
      */
     public void onPlayClicked() throws Exception {
 
+        mrBillGoesFirst = radioBill.isSelected();
+
         if (controller.isMultiplayer()) {
 
             //Local case
             if(multiplayerComboBox.getSelectionModel().getSelectedItem().toString().equals("Local")){
 
+                controller.setPlayer1Name(player1Name.getText());
+                controller.setPlayer2Name(player2Name.getText());
+                TicTacToeApplication.getCoordinator().showGameScene();
                 if(!player1Name.getText().trim().equals("") && !player2Name.getText().trim().equals("")){
 
                     controller.setPlayer1Name(player1Name.getText());
                     controller.setPlayer2Name(player2Name.getText());
-                    MainApplication.getCoordinator().showGameScene();
-
-
+                    TicTacToeApplication.getCoordinator().showGameScene();
                 }else{
-
                     errorText.setText("***error - please enter all info***");
                     errorText.setVisible(true);
-
                 }
+
+                controller.setLocalMultiplayerUp();
 
                 //Online case
             }else{
 
                 //Create game case
                 if(onlineTypeComboBox.getSelectionModel().getSelectedItem().toString().equals("Create Game")){
-
                     if(!player1Name.getText().trim().equals("") && !ipTextField.getText().trim().equals("")){
-
                         controller.setPlayer1Name(player1Name.getText());
-                        MainApplication.getCoordinator().showGameScene();
+                        controller.setIP(ipTextField.getText());
+                        TicTacToeApplication.getCoordinator().showGameScene();
 
 
                     }else{
@@ -263,51 +264,50 @@ public class LoginView {
                         errorText.setVisible(true);
 
                     }
+
+                    controller.setOnlineUp(true);
 
                     //Join game case
                 }else{
 
                     if(!player1Name.getText().trim().equals("") && !ipTextField.getText().trim().equals("") &&
                        !joinCodeTextField.getText().trim().equals("")){
-
-                        controller.setPlayer1Name(player1Name.getText());
-                        MainApplication.getCoordinator().showGameScene();
-
-
+                        controller.setPlayer2Name(player1Name.getText());
+                        controller.setIP(ipTextField.getText());
+                        TicTacToeApplication.getCoordinator().showGameScene();
                     }else{
-
                         errorText.setText("***error - please enter all info***");
                         errorText.setVisible(true);
-
                     }
 
+                    controller.setOnlineUp(false);
                 }
-
             }
 
             //Singleplayer case
         } else{
-
             if(!difficultyCombo.getSelectionModel().isEmpty() && !playerName.getText().trim().equals("")){
-
-                if (radioBill.isSelected() == true) {
+                if (mrBillGoesFirst) {
 
                     controller.setPlayer1Name("Mr. Bill");
                     controller.setPlayer2Name(playerName.getText());
-
                 }else{
-
                     controller.setPlayer2Name("Mr. Bill");
                     controller.setPlayer1Name(playerName.getText());
-
                 }
 
                 controller.awakenMrBill(new Node());
                 controller.setDifficulty(difficultyCombo.getValue().toString());
-                if (radioBill.isSelected() == true)
-                    controller.MakeAMove();
 
-                MainApplication.getCoordinator().showGameScene();
+//                if (mrBillGoesFirst)
+//                    controller.MakeAMove();
+
+
+                controller.setSinglePlayerUp(mrBillGoesFirst);
+
+                TicTacToeApplication.getCoordinator().showGameScene();
+
+                controller.notifyListeners();
 
             }else{
 

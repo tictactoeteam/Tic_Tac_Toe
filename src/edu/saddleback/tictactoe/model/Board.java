@@ -77,7 +77,7 @@ public class Board implements Serializable, Cloneable, Comparable<Board> {
      * @param piece the piece to place
      * @throws GridAlreadyChosenException if there is already a piece at the specified position.
      */
-    public void set(int row, int col, GamePiece piece) throws GridAlreadyChosenException {
+    public synchronized void set(int row, int col, GamePiece piece) throws GridAlreadyChosenException {
         if (board[row][col] == null) {
             board[row][col] = piece;
             turnNumber++;
@@ -86,24 +86,34 @@ public class Board implements Serializable, Cloneable, Comparable<Board> {
         }
     }
 
+    public synchronized void set(Board board){
+        for (int i=0; i<3; ++i){
+            for (int j=0; j<3; ++j){
+                this.board[i][j] = board.get(i, j);
+            }
+        }
+
+        this.turnNumber = board.getTurnNumber();
+    }
+
     /**
      * Used for console testing of the evaluators.
      * @return
      */
-//    @Override
-//    public String toString() {
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("Turn #" + turnNumber + '\n');
-//        for (int i = 0; i < board.length; i++) {
-//            for (int j = 0; j < board[0].length; j++) {
-//                char piece = board[i][j] == GamePiece.X ? 'X' : board[i][j] == GamePiece.O ? 'O' : ' ';
-//                sb.append(piece);
-//            }
-//            sb.append('\n');
-//        }
-//
-//        return sb.toString();
-//    }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Turn #" + turnNumber + '\n');
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                char piece = board[i][j] == GamePiece.X ? 'X' : board[i][j] == GamePiece.O ? 'O' : ' ';
+                sb.append(piece);
+            }
+            sb.append('\n');
+        }
+
+        return sb.toString();
+    }
 
     /**
      *

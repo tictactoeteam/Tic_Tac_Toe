@@ -1,6 +1,5 @@
 package edu.saddleback.tictactoe.view;
 
-import edu.saddleback.tictactoe.MainApplication;
 import edu.saddleback.tictactoe.controller.GameController;
 import edu.saddleback.tictactoe.model.Board;
 import edu.saddleback.tictactoe.model.GamePiece;
@@ -24,7 +23,7 @@ public class BoardView extends GridPane {
      */
     public BoardView(){
 
-        this.controller = MainApplication.getController();
+        this.controller = TicTacToeApplication.getController();
         //Initializes static integer for gridBox indices and the controller controller.
         gridBoxIndex = 0;
         this.grid = new GridBox[3][3];

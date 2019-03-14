@@ -1,6 +1,5 @@
 package edu.saddleback.tictactoe.view;
 
-import edu.saddleback.tictactoe.MainApplication;
 import edu.saddleback.tictactoe.controller.GameController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -38,7 +37,7 @@ public class GameView{
      */
     public void onResetClicked() throws Exception {
         controller.resetGame();
-        MainApplication.getCoordinator().showLoginScene();
+        TicTacToeApplication.getCoordinator().showLoginScene();
     }
 
     /**
@@ -47,7 +46,7 @@ public class GameView{
     @FXML
     protected void initialize(){
 
-        controller = MainApplication.getController();
+        controller = TicTacToeApplication.getController();
         player1Name.setText(controller.getPlayer1Name());
         player2Name.setText(controller.getPlayer2Name());
         if(controller.isMultiplayer()){ radioHBoxDiff.setVisible(false); }
