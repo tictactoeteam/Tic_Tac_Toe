@@ -234,6 +234,17 @@ public class GameController {
 
     public void resetGame() {
         this.board = new Board();
+        this.localServer.stop();
+        this.localServer = new Server();
+        localServer.start();
+
+
+        this.player1 = new HumanPlayer(board);
+        this.player2 = new HumanPlayer(board);
+
+        player1.start();
+        player2.start();
+
         this.notifyListeners();
 
         this.deleteSaveFile();

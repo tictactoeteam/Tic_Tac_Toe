@@ -39,6 +39,8 @@ public class Server {
             }
 
             System.out.println("I made it out of thread too");
+
+
     });
 
     //LinkedList<GameThread> Sessions = new LinkedList<>();
@@ -59,7 +61,8 @@ public class Server {
     }
 
     public void stop(){
-        threadIsGoodAndRunning = false;
-        thread.cease();
+        try {
+            server.close();
+        }catch(Exception ex){}
     }
 }
