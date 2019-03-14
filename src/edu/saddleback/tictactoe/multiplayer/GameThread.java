@@ -68,7 +68,7 @@ class GameThreadRunnable implements Runnable{
                objectStream.readBoolean();
                objectStream.readUTF();
                objectStream.readUTF();
-                board = (Board) objectStream.readObject();
+               board = (Board) objectStream.readObject();
             } catch (IOException e){
 
                 System.out.println("Failed to read existing savegame - making a new game");

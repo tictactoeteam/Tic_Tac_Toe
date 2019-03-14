@@ -42,6 +42,8 @@ public class GameController {
 
     private Server localServer;
 
+    private String gameIP;
+
     /**
      * Reads game data if a file exists, otherwise initializes a new board.
      */
@@ -400,6 +402,10 @@ public class GameController {
      */
     public String getPlayer2Name(){return player2Name;}
 
+    public void setIP(String serverIP){gameIP = serverIP;}
+
+    public String getIP(){return gameIP;}
+
     /**
      * Generates a win message depending on who won the game, and the random message.
      * @param winner
@@ -469,21 +475,24 @@ public class GameController {
             player2 = new ComputerPlayer(board, MrBill);
         }
 
-
         player1.start();
         player2.start();
 
 
     }
 
+    //setting up online, sets the player to the appropriate host/2nd player
     public void setOnlineUp(boolean host){
-        // Nolan knows what to do <3
-
         if (host){
-            player1 = new HumanPlayer(board, "INPUT IP RIGHT HERE <<<<<<<<<<<<<");
+            player1 = new HumanPlayer(board, getIP());
+            player2 = null;
         }
         else{
-            player2 = new HumanPlayer(board, "INPUT IP RIGHT HERE <<<<<<<<<<<<<");
+            player1 = null;
+            player2 = new HumanPlayer(board, getIP());
         }
+
+        player1.start();
+        player2.start();
     }
 }
