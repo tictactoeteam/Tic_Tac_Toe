@@ -37,7 +37,7 @@ public class ComputerPlayer extends Player{
     }
 
     public ComputerPlayer(GameController hope, Node root, String IP, int port){
-        super(hope, IP, port);
+        super(hope, false, IP, port);
         this.root = root;
         MrBill = new Minimax(new AdvancedEvaluator(), root);
         behavior = new Thread(() -> {

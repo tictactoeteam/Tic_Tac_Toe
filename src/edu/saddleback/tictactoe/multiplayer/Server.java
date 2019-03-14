@@ -1,6 +1,8 @@
 package edu.saddleback.tictactoe.multiplayer;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -22,20 +24,27 @@ public class Server {
                 System.out.println("Awaiting first player for game no.1");
                 Socket socketPlayerX = server.accept();
                 PlayerX = socketPlayerX.getInetAddress();
-                System.out.println("Player X joined the game! The Challenger's IP address is: " + PlayerX.getHostAddress());
+                ObjectInputStream xNameStream = new ObjectInputStream(socketPlayerX.getInputStream());
+                String playerXName = (String) xNameStream.readObject();
+                System.out.println(playerXName + " joined the game! The Challenger's IP address is: " + PlayerX.getHostAddress());
 
                 System.out.println("Awaiting second player for game no.1");
                 Socket socketPlayerO = server.accept();
+                System.out.println("got p2");
                 PlayerO = socketPlayerO.getInetAddress();
-                System.out.println("Player O joined the game! The Challenger's IP address is: " + PlayerO.getHostAddress());
+                ObjectInputStream oNameStream = new ObjectInputStream(socketPlayerO.getInputStream());
+                String playerOName = (String) oNameStream.readObject();
+                System.out.println(playerOName + " joined the game! The Challenger's IP address is: " + PlayerO.getHostAddress());
 
                 System.out.println("Let the game begin!!");
-                thread = new GameThread(socketPlayerX, socketPlayerO);
+                thread = new GameThread(socketPlayerX, socketPlayerO, playerXName, playerOName);
 
                 thread.start();
 
             } catch (IOException e) {
                 System.out.println("Connection closed, game ended!");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
 
             System.out.println("I made it out of thread too");
