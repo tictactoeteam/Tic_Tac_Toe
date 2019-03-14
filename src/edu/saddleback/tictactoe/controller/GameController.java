@@ -76,6 +76,8 @@ public class GameController {
                     else
                         MrBill.setEvaluator(new RandomEvaluator());
 
+                    setSinglePlayerUp(false);
+
                 }
 
             } catch (IOException e){
@@ -313,7 +315,7 @@ public class GameController {
     /**
      * Updates the board for each listener.
      */
-    private void notifyListeners() {
+    public void notifyListeners() {
         boardListeners.forEach(listener -> listener.update(board));
     }
 
@@ -455,7 +457,10 @@ public class GameController {
             player2 = new ComputerPlayer(board, MrBill);
         }
 
+
         player1.start();
         player2.start();
+
+
     }
 }

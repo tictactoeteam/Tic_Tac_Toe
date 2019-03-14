@@ -28,6 +28,7 @@ public class WinnerView{
     }
 
     public void onQuitClicked() {
+        controller.deleteSaveFile();
         System.exit(0);
     }
 }

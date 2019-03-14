@@ -225,6 +225,8 @@ public class LoginView {
      */
     public void onPlayClicked() throws Exception {
 
+        mrBillGoesFirst = radioBill.isSelected();
+
         if (controller.isMultiplayer()) {
 
             //Local case
@@ -293,9 +295,12 @@ public class LoginView {
 //                if (mrBillGoesFirst)
 //                    controller.MakeAMove();
 
+
                 controller.setSinglePlayerUp(mrBillGoesFirst);
 
                 TicTacToeApplication.getCoordinator().showGameScene();
+
+                controller.notifyListeners();
 
             }else{
 
