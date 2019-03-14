@@ -288,6 +288,7 @@ public class LoginView {
         } else{
             if(!difficultyCombo.getSelectionModel().isEmpty() && !playerName.getText().trim().equals("")){
                 if (mrBillGoesFirst) {
+
                     controller.setPlayer1Name("Mr. Bill");
                     controller.setPlayer2Name(playerName.getText());
                 }else{
