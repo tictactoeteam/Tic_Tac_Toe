@@ -100,7 +100,9 @@ class GameThreadRunnable implements Runnable{
                     boardMove.applyTo(board);
                     sending.writeObject(board);
                     sending.flush();
-
+                    try {
+                        Thread.sleep(50);
+                    }catch(InterruptedException ex){}
                     System.out.println(board);
 
                     temp = currentPlayer;

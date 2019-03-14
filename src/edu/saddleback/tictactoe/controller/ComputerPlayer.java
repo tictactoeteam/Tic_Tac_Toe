@@ -17,7 +17,7 @@ public class ComputerPlayer extends Player{
     }
 
     public ComputerPlayer(Board board, Minimax mrBill){
-        super(board);
+        super(new GameController());
         this.MrBill = mrBill;
         this.root = mrBill.getTreeRoot();
         behavior = new Thread(() -> {
@@ -37,7 +37,7 @@ public class ComputerPlayer extends Player{
     }
 
     public ComputerPlayer(Board board, Node root, String IP, int port){
-        super(board, IP, port);
+        super(new GameController(), IP, port);
         this.root = root;
         MrBill = new Minimax(new AdvancedEvaluator(), root);
         behavior = new Thread(() -> {
@@ -56,7 +56,7 @@ public class ComputerPlayer extends Player{
     }
 
     public void findMove(){
-        Node currentNode = Node.findNode(board, root);
+        Node currentNode = Node.findNode(hope.getBoard(), root);
         Board currentBoard = MrBill.bestMove(currentNode);
         boardMove = BoardMove.fromTwoBoards(currentNode.getBoard(), currentBoard);
 
