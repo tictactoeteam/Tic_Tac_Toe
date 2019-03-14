@@ -48,8 +48,8 @@ public class GameController {
     public GameController() {
         this.boardListeners = new ArrayList<>();
 
-        localServer = new Server();
-        localServer.start();
+//        localServer = new Server();
+//        localServer.start();
 
 
         File saveFile = new File(SAVE_LOCATION);
@@ -99,11 +99,11 @@ public class GameController {
 
 
 
-        player1 = new HumanPlayer(board);
-        player2 = new HumanPlayer(board);
-
-        player1.start();
-        player2.start();
+//        player1 = new HumanPlayer(board);
+//        player2 = new HumanPlayer(board);
+//
+//        player1.start();
+//        player2.start();
     }
 
     /**
@@ -235,16 +235,6 @@ public class GameController {
     public void resetGame() {
         this.board = new Board();
         this.localServer.stop();
-        this.localServer = new Server();
-        localServer.start();
-
-
-        this.player1 = new HumanPlayer(board);
-        this.player2 = new HumanPlayer(board);
-
-        player1.start();
-        player2.start();
-
         this.notifyListeners();
 
         this.deleteSaveFile();
@@ -439,5 +429,33 @@ public class GameController {
      */
     public void MakeAMove() {
         board = MrBill.bestMove(root);
+    }
+
+    public void setLocalMultiplayerUp() {
+        localServer = new Server();
+        localServer.start();
+
+        player1 = new HumanPlayer(board);
+        player2 = new HumanPlayer(board);
+
+        player1.start();
+        player2.start();
+
+    }
+
+    public void setSinglePlayerUp(boolean mrBillGoesFirst) {
+        localServer = new Server();
+        localServer.start();
+
+        if (mrBillGoesFirst){
+            player1 = new ComputerPlayer(board, MrBill);
+            player2 = new HumanPlayer(board);
+        }else{
+            player1 = new HumanPlayer(board);
+            player2 = new ComputerPlayer(board, MrBill);
+        }
+
+        player1.start();
+        player2.start();
     }
 }

@@ -16,6 +16,22 @@ public class ComputerPlayer extends Player{
         this(board, root, "127.0.0.1");
     }
 
+    public ComputerPlayer(Board board, Minimax mrBill){
+        super(board);
+        this.MrBill = mrBill;
+        this.root = mrBill.getTreeRoot();
+        behavior = new Thread(() -> {
+            while(winnerChecker.evaluate(board) == 0 || board.getTurnNumber() < 9) {
+                readBoard();
+                boardMove = null;
+                findMove();
+                sendMove();
+                boardMove = null;
+            }
+        });
+
+    }
+
     public ComputerPlayer(Board board, Node root, String IP){
         this(board, root, IP, 6969);
     }
@@ -27,8 +43,10 @@ public class ComputerPlayer extends Player{
         behavior = new Thread(() -> {
             while(winnerChecker.evaluate(board) == 0 || board.getTurnNumber() < 9) {
                 readBoard();
+                boardMove = null;
                 findMove();
                 sendMove();
+                boardMove = null;
             }
         });
     }

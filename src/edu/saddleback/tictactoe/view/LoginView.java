@@ -243,6 +243,8 @@ public class LoginView {
                     errorText.setVisible(true);
                 }
 
+                controller.setLocalMultiplayerUp();
+
                 //Online case
             }else{
 
@@ -288,8 +290,10 @@ public class LoginView {
                 controller.awakenMrBill(new Node());
                 controller.setDifficulty(difficultyCombo.getValue().toString());
 
-                if (mrBillGoesFirst)
-                    controller.MakeAMove();
+//                if (mrBillGoesFirst)
+//                    controller.MakeAMove();
+
+                controller.setSinglePlayerUp(mrBillGoesFirst);
 
                 TicTacToeApplication.getCoordinator().showGameScene();
 

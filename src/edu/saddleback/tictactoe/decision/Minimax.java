@@ -107,4 +107,8 @@ public class Minimax {
         return (Board)(parent.getChildren()[bestIndex].getBoard().clone());
 
     }
+
+    public Node getTreeRoot(){
+        return treeRoot;
+    }
 }
