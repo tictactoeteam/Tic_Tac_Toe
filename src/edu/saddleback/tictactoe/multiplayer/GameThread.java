@@ -89,7 +89,8 @@ class GameThreadRunnable implements Runnable{
             sending.flush();
             //We need a way to implement a shut down to this thread... this thread needs to be shutdown when we press
             //X
-            while ((winnerChecker.evaluate(board) == 0 && board.getTurnNumber() < 9)) {
+
+            while (true) {
                 reading = new ObjectInputStream(currentPlayer.getInputStream());
                 sending = new ObjectOutputStream(nonCurrentPlayer.getOutputStream());
 
@@ -100,9 +101,7 @@ class GameThreadRunnable implements Runnable{
                     boardMove.applyTo(board);
                     sending.writeObject(board);
                     sending.flush();
-                    try {
-                        Thread.sleep(50);
-                    }catch(InterruptedException ex){}
+
                     System.out.println(board);
 
                     temp = currentPlayer;
@@ -116,11 +115,12 @@ class GameThreadRunnable implements Runnable{
             }
         }
         catch(IOException ex){
-            ex.printStackTrace();
+            System.out.println("Challengers left the arena");
         }
         catch(ClassNotFoundException ex){
             ex.printStackTrace();
         }
+
 
         System.out.println("HEY I MADE IT OUT OF THIS LOOP");
 
