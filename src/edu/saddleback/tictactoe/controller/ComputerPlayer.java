@@ -12,16 +12,16 @@ public class ComputerPlayer extends Player{
     private Minimax MrBill;
     private Node root;
 
-    public ComputerPlayer(Board board, Node root){
-        this(board, root, "127.0.0.1");
+    public ComputerPlayer(GameController hope, Node root){
+        this(hope, root, "127.0.0.1");
     }
 
-    public ComputerPlayer(Board board, Minimax mrBill){
-        super(new GameController());
+    public ComputerPlayer(GameController hope, Minimax mrBill){
+        super(hope);
         this.MrBill = mrBill;
         this.root = mrBill.getTreeRoot();
         behavior = new Thread(() -> {
-            while(winnerChecker.evaluate(board) == 0 || board.getTurnNumber() < 9) {
+            while(winnerChecker.evaluate(hope.getBoard()) == 0 || hope.getBoard().getTurnNumber() < 9) {
                 readBoard();
                 boardMove = null;
                 findMove();
@@ -32,16 +32,16 @@ public class ComputerPlayer extends Player{
 
     }
 
-    public ComputerPlayer(Board board, Node root, String IP){
-        this(board, root, IP, 6969);
+    public ComputerPlayer(GameController hope, Node root, String IP){
+        this(hope, root, IP, 6969);
     }
 
-    public ComputerPlayer(Board board, Node root, String IP, int port){
-        super(new GameController(), IP, port);
+    public ComputerPlayer(GameController hope, Node root, String IP, int port){
+        super(hope, IP, port);
         this.root = root;
         MrBill = new Minimax(new AdvancedEvaluator(), root);
         behavior = new Thread(() -> {
-            while(winnerChecker.evaluate(board) == 0 || board.getTurnNumber() < 9) {
+            while(winnerChecker.evaluate(hope.getBoard()) == 0 || hope.getBoard().getTurnNumber() < 9) {
                 readBoard();
                 boardMove = null;
                 findMove();

@@ -470,11 +470,11 @@ public class GameController {
         localServer.start();
 
         if (mrBillGoesFirst){
-            player1 = new ComputerPlayer(board, MrBill);
+            player1 = new ComputerPlayer(this, MrBill);
             player2 = new HumanPlayer(this);
         }else{
             player1 = new HumanPlayer(this);
-            player2 = new ComputerPlayer(board, MrBill);
+            player2 = new ComputerPlayer(this, MrBill);
         }
 
         player1.start();
