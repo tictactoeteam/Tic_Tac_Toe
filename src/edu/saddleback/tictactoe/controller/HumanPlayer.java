@@ -6,19 +6,19 @@ import edu.saddleback.tictactoe.model.GamePiece;
 
 public class HumanPlayer extends Player{
 
-    public HumanPlayer(Board board){
-        this(board, "127.0.0.1");
+    public HumanPlayer(GameController hope){
+        this(hope, "127.0.0.1");
     }
 
-    public HumanPlayer(Board board, String IP){
-        this(board, IP, 6969);
+    public HumanPlayer(GameController hope, String IP){
+        this(hope, IP, 6969);
     }
 
-    public HumanPlayer(Board board, String IP, int port){
-        super(board, IP, port);
+    public HumanPlayer(GameController hope, String IP, int port){
+        super(hope, IP, port);
 
         behavior = new Thread(() -> {
-            while(winnerChecker.evaluate(board) == 0 || board.getTurnNumber() < 9) {
+            while(winnerChecker.evaluate(hope.getBoard()) == 0 || hope.getBoard().getTurnNumber() < 9) {
                 readBoard();
                 boardMove = null;
                 try {

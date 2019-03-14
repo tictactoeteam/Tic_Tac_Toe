@@ -9,37 +9,39 @@ import edu.saddleback.tictactoe.model.GridAlreadyChosenException;
 import java.io.Serializable;
 
 public abstract class Player implements Serializable {
-    final protected Board board;
+    final protected GameController hope;
     protected BoardMove boardMove;
     protected ServerConnection connection;
     protected Thread behavior;
     protected AdvancedEvaluator winnerChecker;
 
-    public Player(Board board){
-        this(board, "127.0.0.1");
+    public Player(GameController hope){
+        this(hope, "127.0.0.1");
     }
 
-    public Player(Board board, String IP){
-        this(board, IP, 6969);
+    public Player(GameController hope, String IP){
+        this(hope, IP, 6969);
     }
 
-    public Player(Board board, String IP, int port){
-        this.board = board;
+    public Player(GameController hope, String IP, int port){
+        this.hope = hope;
         connection = new ServerConnection(IP, port);
         winnerChecker = new AdvancedEvaluator();
     }
 
     public void readBoard(){
         Board temp = connection.receiveBoard();
-        board.set(temp);
+        hope.setBoard(temp);
+        hope.notifyListeners();
         // notify listeners??
     }
 
     public void sendMove(){
         connection.sendBoardMove(boardMove);
         try {
-            boardMove.applyTo(board);
+            boardMove.applyTo(hope.getBoard());
         }catch(GridAlreadyChosenException ex){}
+        hope.notifyListeners();
         // notify listeners??
     }
 

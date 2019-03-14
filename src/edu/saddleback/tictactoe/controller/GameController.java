@@ -457,8 +457,8 @@ public class GameController {
         localServer = new Server();
         localServer.start();
 
-        player1 = new HumanPlayer(board);
-        player2 = new HumanPlayer(board);
+        player1 = new HumanPlayer(this);
+        player2 = new HumanPlayer(this);
 
         player1.start();
         player2.start();
@@ -471,9 +471,9 @@ public class GameController {
 
         if (mrBillGoesFirst){
             player1 = new ComputerPlayer(board, MrBill);
-            player2 = new HumanPlayer(board);
+            player2 = new HumanPlayer(this);
         }else{
-            player1 = new HumanPlayer(board);
+            player1 = new HumanPlayer(this);
             player2 = new ComputerPlayer(board, MrBill);
         }
 
@@ -486,15 +486,23 @@ public class GameController {
     //setting up online, sets the player to the appropriate host/2nd player
     public void setOnlineUp(boolean host){
         if (host){
-            player1 = new HumanPlayer(board, getIP());
+            player1 = new HumanPlayer(this, getIP());
             player2 = null;
             player1.start();
         }
         else{
             player1 = null;
-            player2 = new HumanPlayer(board, getIP());
+            player2 = new HumanPlayer(this, getIP());
             player2.start();
         }
 
+    }
+
+    public void setBoard(Board board){
+        this.board.set(board);
+    }
+
+    public Board getBoard(){
+        return board;
     }
 }
