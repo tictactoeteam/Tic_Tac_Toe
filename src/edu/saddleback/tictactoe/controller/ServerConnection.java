@@ -90,6 +90,16 @@ public class ServerConnection {
         }
     }
 
+    void sendName(String name) {
+        try {
+            sending = new ObjectOutputStream(connection.getOutputStream());
+            sending.writeObject(name);
+            sending.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**method that waits for the board object to be received**/
     Board receiveBoard(){
         try {
@@ -106,6 +116,16 @@ public class ServerConnection {
         return null;
     }
 
+    String receiveName() {
+        try {
+            receiving = new ObjectInputStream(connection.getInputStream());
+            return (String) receiving.readObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
-
+        return null;
+    }
 }

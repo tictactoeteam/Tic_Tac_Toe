@@ -16,8 +16,8 @@ public class GameThread extends Thread {
 
 
 
-    public GameThread(Socket socketPlayerX, Socket socketPlayerO) {
-        runnable = new GameThreadRunnable(socketPlayerX, socketPlayerO);
+    public GameThread(Socket socketPlayerX, Socket socketPlayerO, String playerXName, String playerOName) {
+        runnable = new GameThreadRunnable(socketPlayerX, socketPlayerO, playerXName, playerOName);
     }
 
     @Override
@@ -40,9 +40,14 @@ class GameThreadRunnable implements Runnable{
     private AdvancedEvaluator winnerChecker;
     boolean threadIsGoodAndRunning = true;
 
-    GameThreadRunnable(Socket socketPlayerX, Socket socketPlayerO){
+    private String playerXName;
+    private String playerOName;
+
+    GameThreadRunnable(Socket socketPlayerX, Socket socketPlayerO, String playerXName, String playerOName){
         this.socketPlayerX = socketPlayerX;
         this.socketPlayerO = socketPlayerO;
+        this.playerXName = playerXName;
+        this.playerOName = playerOName;
         winnerChecker = new AdvancedEvaluator();
     }
 
@@ -52,6 +57,8 @@ class GameThreadRunnable implements Runnable{
         Socket currentPlayer = socketPlayerX;
         Socket nonCurrentPlayer = socketPlayerO;
         Socket temp;
+
+        sendNames();
 
         ObjectOutputStream sending;
         ObjectInputStream reading;
@@ -124,5 +131,16 @@ class GameThreadRunnable implements Runnable{
 
         System.out.println("HEY I MADE IT OUT OF THIS LOOP");
 
+    }
+
+    private void sendNames() {
+        try {
+            ObjectOutputStream p1Stream = new ObjectOutputStream(socketPlayerX.getOutputStream());
+            p1Stream.writeObject(playerOName);
+            ObjectOutputStream p2Stream = new ObjectOutputStream(socketPlayerO.getOutputStream());
+            p2Stream.writeObject(playerXName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

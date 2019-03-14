@@ -15,16 +15,23 @@ public abstract class Player implements Serializable {
     protected Thread behavior;
     protected AdvancedEvaluator winnerChecker;
 
-    public Player(GameController hope){
-        this(hope, "127.0.0.1");
+    private boolean isPlayer1;
+
+    public Player(GameController hope) {
+        this(hope, true);
     }
 
-    public Player(GameController hope, String IP){
-        this(hope, IP, 6969);
+    public Player(GameController hope, boolean isPlayer1){
+        this(hope, isPlayer1, "127.0.0.1");
     }
 
-    public Player(GameController hope, String IP, int port){
+    public Player(GameController hope, boolean isPlayer1, String IP){
+        this(hope, isPlayer1, IP, 6969);
+    }
+
+    public Player(GameController hope, boolean isPlayer1, String IP, int port){
         this.hope = hope;
+        this.isPlayer1 = isPlayer1;
         connection = new ServerConnection(IP, port);
         winnerChecker = new AdvancedEvaluator();
     }
@@ -32,8 +39,18 @@ public abstract class Player implements Serializable {
     public void readBoard(){
         Board temp = connection.receiveBoard();
         hope.setBoard(temp);
-        hope.notifyListeners();
+        hope.notifyBoard();
         // notify listeners??
+    }
+
+    public void readName() {
+        String name = connection.receiveName();
+        System.out.println(name);
+        if (isPlayer1) {
+            hope.setPlayer2Name(name);
+        } else {
+            hope.setPlayer1Name(name);
+        }
     }
 
     public void sendMove(){
@@ -41,8 +58,20 @@ public abstract class Player implements Serializable {
         try {
             boardMove.applyTo(hope.getBoard());
         }catch(GridAlreadyChosenException ex){}
-        hope.notifyListeners();
+        hope.notifyBoard();
         // notify listeners??
+    }
+
+    public void sendName() {
+        if (isPlayer1) {
+            connection.sendName(hope.getPlayer1Name());
+        } else {
+            connection.sendName(hope.getPlayer2Name());
+        }
+    }
+
+    public boolean isPlayer1() {
+        return isPlayer1;
     }
 
     public abstract void setMove(int row, int col, GamePiece piece);
