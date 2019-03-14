@@ -257,13 +257,10 @@ public class LoginView {
                         controller.setPlayer2Name("Opponent");
                         controller.setIP(ipTextField.getText());
                         TicTacToeApplication.getCoordinator().showGameScene();
-
-
                     }else{
 
                         errorText.setText("***error - please enter all info***");
                         errorText.setVisible(true);
-
                     }
 
                     controller.setOnlineUp(true);
@@ -301,15 +298,11 @@ public class LoginView {
                 controller.awakenMrBill(new Node());
                 controller.setDifficulty(difficultyCombo.getValue().toString());
 
-//                if (mrBillGoesFirst)
-//                    controller.MakeAMove();
-
-
                 controller.setSinglePlayerUp(mrBillGoesFirst);
 
                 TicTacToeApplication.getCoordinator().showGameScene();
 
-                controller.notifyListeners();
+                controller.notifyBoard();
 
             }else{
 

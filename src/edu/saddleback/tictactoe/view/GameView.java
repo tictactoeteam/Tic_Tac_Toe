@@ -47,10 +47,17 @@ public class GameView{
     protected void initialize(){
 
         controller = TicTacToeApplication.getController();
-        player1Name.setText(controller.getPlayer1Name());
-        player2Name.setText(controller.getPlayer2Name());
         if(controller.isMultiplayer()){ radioHBoxDiff.setVisible(false); }
 
+        controller.addNameListener(this::onNameChanged);
+    }
+
+    private void onNameChanged(boolean isPlayer1, String name) {
+        if (isPlayer1) {
+            player1Name.setText(name);
+        } else {
+            player2Name.setText(name);
+        }
     }
 
 }
