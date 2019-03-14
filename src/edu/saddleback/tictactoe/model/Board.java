@@ -92,6 +92,8 @@ public class Board implements Serializable, Cloneable, Comparable<Board> {
                 this.board[i][j] = board.get(i, j);
             }
         }
+
+        this.turnNumber = board.getTurnNumber();
     }
 
     /**

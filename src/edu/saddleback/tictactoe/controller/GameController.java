@@ -158,6 +158,8 @@ public class GameController {
      * @param gridBox
      */
     public void onGridClicked(GridBox gridBox) throws Exception {
+
+        notifyListeners();
         if (checkWinner() != null || checkDraw()) {
             TicTacToeApplication.getCoordinator().showWinnerScene();
             return;
@@ -486,13 +488,13 @@ public class GameController {
         if (host){
             player1 = new HumanPlayer(board, getIP());
             player2 = null;
+            player1.start();
         }
         else{
             player1 = null;
             player2 = new HumanPlayer(board, getIP());
+            player2.start();
         }
 
-        player1.start();
-        player2.start();
     }
 }

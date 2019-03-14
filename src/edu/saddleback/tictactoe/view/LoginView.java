@@ -265,18 +265,22 @@ public class LoginView {
 
                     }
 
+                    controller.setOnlineUp(true);
+
                     //Join game case
                 }else{
 
                     if(!player1Name.getText().trim().equals("") && !ipTextField.getText().trim().equals("") &&
                        !joinCodeTextField.getText().trim().equals("")){
-                        controller.setPlayer1Name(player1Name.getText());
+                        controller.setPlayer2Name(player1Name.getText());
                         controller.setIP(ipTextField.getText());
                         TicTacToeApplication.getCoordinator().showGameScene();
                     }else{
                         errorText.setText("***error - please enter all info***");
                         errorText.setVisible(true);
                     }
+
+                    controller.setOnlineUp(false);
                 }
             }
 
