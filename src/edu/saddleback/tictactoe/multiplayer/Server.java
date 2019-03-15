@@ -13,7 +13,6 @@ public class Server {
     private static final int PORT = 6969;
     private InetAddress PlayerX;
     private InetAddress PlayerO;
-    private boolean threadIsGoodAndRunning = true;
 
     GameThread thread;
 
