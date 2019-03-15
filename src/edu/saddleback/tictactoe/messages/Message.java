@@ -1,14 +1,52 @@
 package edu.saddleback.tictactoe.messages;
 
-import edu.saddleback.tictactoe.model.Board;
+import edu.saddleback.tictactoe.controller.ServerConnection;
 import edu.saddleback.tictactoe.model.BoardMove;
+import edu.saddleback.tictactoe.model.GamePiece;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Scanner;
 
-public abstract class Message implements Serializable {
+public class Message implements Serializable {
     private String type;
     private Serializable data;
+
+    public static void main(String[] args){
+        ServerConnection connection = new ServerConnection();
+
+        int choice = 0;
+        Scanner input = new Scanner(System.in);
+
+        while(choice != -1){
+            System.out.println("Choose a request to send!");
+
+            System.out.println("<1> Host Request");
+            System.out.println("<2> Join Request");
+            System.out.println("<3> MoveEvaluate Request");
+            System.out.println("<4> Empty Request");
+
+            choice = input.nextInt();
+
+            switch (choice){
+                case 1:
+                    connection.sendRequest(Request.createHostRequest());
+                    break;
+                case 2:
+                    connection.sendRequest(Request.createJoinRequest(55));
+                    break;
+                case 3:
+                    connection.sendRequest(Request.createMoveValidationRequest(new BoardMove(0, 0, GamePiece.X)));
+                    break;
+                case 4:
+                    connection.sendRequest(new Request());
+                    break;
+                default:
+                    choice = -1;
+                    break;
+            }
+
+        }
+    }
 
     public Message(){
         this("EmptyMessage", null);

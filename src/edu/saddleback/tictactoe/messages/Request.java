@@ -28,7 +28,7 @@ public class Request extends Message {
 
     public static Request createMoveValidationRequest(BoardMove boardMove){
         Request request = new Request();
-        request.setType("MoveValudate");
+        request.setType("MoveValidate");
         request.setData(boardMove);
         return request;
     }
