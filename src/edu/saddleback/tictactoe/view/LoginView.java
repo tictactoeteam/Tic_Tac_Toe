@@ -254,7 +254,6 @@ public class LoginView {
                 if(onlineTypeComboBox.getSelectionModel().getSelectedItem().toString().equals("Create Game")){
                     if(!player1Name.getText().trim().equals("") && !ipTextField.getText().trim().equals("")){
                         controller.setPlayer1Name(player1Name.getText());
-                        controller.setPlayer2Name("Opponent");
                         controller.setIP(ipTextField.getText());
                         TicTacToeApplication.getCoordinator().showGameScene();
                     }else{
@@ -271,7 +270,6 @@ public class LoginView {
                     if(!player1Name.getText().trim().equals("") && !ipTextField.getText().trim().equals("") &&
                        !joinCodeTextField.getText().trim().equals("")){
                         controller.setPlayer2Name(player1Name.getText());
-                        controller.setPlayer1Name("Opponent");
                         controller.setIP(ipTextField.getText());
                         TicTacToeApplication.getCoordinator().showGameScene();
                     }else{
