@@ -29,13 +29,13 @@ public class Message implements Serializable {
 
             switch (choice){
                 case 1:
-                    connection.sendRequest(Request.createHostRequest());
+                    connection.sendRequest(Request.createHostRequest("Tomasz"));
                     break;
                 case 2:
-                    connection.sendRequest(Request.createJoinRequest(55));
+                    connection.sendRequest(Request.createJoinRequest(420));
                     break;
                 case 3:
-                    connection.sendRequest(Request.createMoveValidationRequest(new BoardMove(0, 0, GamePiece.X)));
+                    connection.sendRequest(Request.createMoveValidateRequest(new BoardMove(0, 0, GamePiece.X)));
                     break;
                 case 4:
                     connection.sendRequest(new Request());

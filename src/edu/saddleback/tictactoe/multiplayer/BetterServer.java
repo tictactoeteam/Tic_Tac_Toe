@@ -40,18 +40,23 @@ public class BetterServer {
                 switch (request.getType()) {
                     case "Host":
                         System.out.println(">>>>>Host request received!");
+                        System.out.println(">>>Player name that requested:" + request.getData());
                         break;
                     case "Join":
                         System.out.println(">>>>>Join request received!");
+                        System.out.println(">>>Join code given: " + request.getData()) ;
                         break;
                     case "MoveValidate":
                         System.out.println(">>>>>MoveValidate request received!");
+                        System.out.println(">>>Move to validate: " + request.getData());
                         break;
                     default:
                         System.out.println(">>>>>Unknown request received! Type: " + request.getType());
                         break;
 
                 }
+
+                System.out.println("============================");
 
             }
         }catch(IOException ex){

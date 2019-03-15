@@ -13,24 +13,16 @@ public class Request extends Message {
         super(type, data);
     }
 
-    public static Request createHostRequest(){
-        Request request = new Request();
-        request.setType("Host");
-        return request;
+    public static Request createHostRequest(String playerName){
+        return new Request("Host", playerName);
     }
 
     public static Request createJoinRequest(Integer joinCode){
-        Request request = new Request();
-        request.setType("Join");
-        request.setData(joinCode);
-        return request;
+        return new Request("Join", joinCode);
     }
 
-    public static Request createMoveValidationRequest(BoardMove boardMove){
-        Request request = new Request();
-        request.setType("MoveValidate");
-        request.setData(boardMove);
-        return request;
+    public static Request createMoveValidateRequest(BoardMove boardMove){
+        return new Request("MoveValidate", boardMove);
     }
 
 }
