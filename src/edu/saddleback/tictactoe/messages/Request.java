@@ -17,12 +17,16 @@ public class Request extends Message {
         return new Request("Host", playerName);
     }
 
-    public static Request createJoinRequest(Integer joinCode){
-        return new Request("Join", joinCode);
+    public static Request createJoinRequest(String playerName, Integer joinCode){
+        return new Request("Join", new Serializable[]{playerName, joinCode});
     }
 
-    public static Request createMoveValidateRequest(BoardMove boardMove){
-        return new Request("MoveValidate", boardMove);
+    public static Request createMoveValidateRequest(BoardMove boardMove, int gameId){
+        return new Request("MoveValidate", new Serializable[]{boardMove, gameId});
+    }
+
+    public static Request createLocalMultiplayerRequest(String playerName1, String playerName2){
+        return new Request("LocalMultiplayer", new String[]{playerName1, playerName2});
     }
 
 }

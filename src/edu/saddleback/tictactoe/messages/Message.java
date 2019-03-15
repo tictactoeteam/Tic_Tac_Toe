@@ -11,42 +11,42 @@ public class Message implements Serializable {
     private String type;
     private Serializable data;
 
-    public static void main(String[] args){
-        ServerConnection connection = new ServerConnection();
-
-        int choice = 0;
-        Scanner input = new Scanner(System.in);
-
-        while(choice != -1){
-            System.out.println("Choose a request to send!");
-
-            System.out.println("<1> Host Request");
-            System.out.println("<2> Join Request");
-            System.out.println("<3> MoveEvaluate Request");
-            System.out.println("<4> Empty Request");
-
-            choice = input.nextInt();
-
-            switch (choice){
-                case 1:
-                    connection.sendRequest(Request.createHostRequest("Tomasz"));
-                    break;
-                case 2:
-                    connection.sendRequest(Request.createJoinRequest(420));
-                    break;
-                case 3:
-                    connection.sendRequest(Request.createMoveValidateRequest(new BoardMove(0, 0, GamePiece.X)));
-                    break;
-                case 4:
-                    connection.sendRequest(new Request());
-                    break;
-                default:
-                    choice = -1;
-                    break;
-            }
-
-        }
-    }
+//    public static void main(String[] args){
+//        ServerConnection connection = new ServerConnection();
+//
+//        int choice = 0;
+//        Scanner input = new Scanner(System.in);
+//
+//        while(choice != -1){
+//            System.out.println("Choose a request to send!");
+//
+//            System.out.println("<1> Host Request");
+//            System.out.println("<2> Join Request");
+//            System.out.println("<3> MoveEvaluate Request");
+//            System.out.println("<4> Empty Request");
+//
+//            choice = input.nextInt();
+//
+//            switch (choice){
+//                case 1:
+//                    connection.sendRequest(Request.createHostRequest("Tomasz"));
+//                    break;
+//                case 2:
+//                    connection.sendRequest(Request.createJoinRequest("Kai", 420));
+//                    break;
+//                case 3:
+//                    connection.sendRequest(Request.createMoveValidateRequest(new BoardMove(0, 0, GamePiece.X)));
+//                    break;
+//                case 4:
+//                    connection.sendRequest(new Request());
+//                    break;
+//                default:
+//                    choice = -1;
+//                    break;
+//            }
+//
+//        }
+//    }
 
     public Message(){
         this("EmptyMessage", null);

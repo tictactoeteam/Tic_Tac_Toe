@@ -27,6 +27,9 @@ public class Response extends Message {
         return new Response("MoveInvalid", board);
     }
 
+
+
+
     public static Response createYouWinResponse(String opponentName){
         return new Response("YouWin", opponentName);
     }
@@ -40,9 +43,14 @@ public class Response extends Message {
     }
 
 
+
+
     // Responses fired when trying to establish connection
     public static Response createHostSuccessResponse(Integer joinCode){
         return new Response("HostSuccess", joinCode);
+    }
+    public static Response createHostJoinedResponse(String opponentName){
+        return new Response("HostJoined", opponentName);
     }
 
     public static Response createHostErrorResponse(String reason){

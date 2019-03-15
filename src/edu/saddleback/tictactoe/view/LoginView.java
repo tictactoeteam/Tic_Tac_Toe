@@ -262,7 +262,7 @@ public class LoginView {
                         errorText.setVisible(true);
                     }
 
-                    controller.setOnlineUp(true);
+                    //controller.setOnlineUp(true);
 
                     //Join game case
                 }else{
@@ -277,7 +277,7 @@ public class LoginView {
                         errorText.setVisible(true);
                     }
 
-                    controller.setOnlineUp(false);
+                    //controller.setOnlineUp(false);
                 }
             }
 
@@ -296,7 +296,7 @@ public class LoginView {
                 controller.awakenMrBill(new Node());
                 controller.setDifficulty(difficultyCombo.getValue().toString());
 
-                controller.setSinglePlayerUp(mrBillGoesFirst);
+                //controller.setSinglePlayerUp(mrBillGoesFirst);
 
                 TicTacToeApplication.getCoordinator().showGameScene();
 
