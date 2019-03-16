@@ -293,8 +293,8 @@ public class LoginView {
                     controller.setPlayer1Name(playerName.getText());
                 }
 
-                controller.awakenMrBill(new Node());
-                controller.setDifficulty(difficultyCombo.getValue().toString());
+//                controller.awakenMrBill(new Node());
+//                controller.setDifficulty(difficultyCombo.getValue().toString());
 
                 controller.setSinglePlayerUp(mrBillGoesFirst);
 
