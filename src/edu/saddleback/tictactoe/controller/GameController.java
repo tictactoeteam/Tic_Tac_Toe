@@ -45,6 +45,7 @@ public class GameController {
     private BetterServer localServer;
     private String gameIP;
 
+    private int gameID = -1;
     /**
      * Reads game data if a file exists, otherwise initializes a new board.
      */
@@ -151,7 +152,8 @@ public class GameController {
         String turnPlayer = piece == GamePiece.X ? player1Name : player2Name;
         BoardMove currentMove = new BoardMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
 
-        client.sendRequest(Request.createMoveValidateRequest(currentMove, -1));
+        if (gameID!= -1)
+            client.sendRequest(Request.createMoveValidateRequest(currentMove, gameID));
 
 //        notifyBoard();
 //        if (checkWinner() != null || checkDraw()) {
@@ -465,6 +467,7 @@ public class GameController {
                 case "YouWin":
                 case "YouLost":
                 case "GameDrawn":
+                    System.out.println("Game terminated!");
                     gameGoingOn = false;
                     break;
                 case "GameBegins":
@@ -472,6 +475,7 @@ public class GameController {
                     board = (Board)((Serializable[])(response.getData()))[1];
                     player1Name = ((String[])((Serializable[])(response.getData()))[0])[0];
                     player2Name = ((String[])((Serializable[])(response.getData()))[0])[1];
+                    gameID = (Integer) ((Serializable[])(response.getData()))[2];
                     notifyBoard();
                     break;
                 default:

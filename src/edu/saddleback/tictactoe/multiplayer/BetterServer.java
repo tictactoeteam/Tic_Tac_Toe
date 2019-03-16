@@ -20,8 +20,7 @@ public class BetterServer {
     private ServerSocket serverSocket;
     private Socket connection;
     private static final int PORT = 6969;
-    private int localGameID = -1;
-    private final int currentGameID = 1;
+    private int currentGameID = 1;
 
 //    public static void main(String[] args){
 //        BetterServer s = new BetterServer();
@@ -94,15 +93,16 @@ public class BetterServer {
                     case "LocalMultiplayer":
                         System.out.println(">>>>>LocalMultiplayer request received!");
                         System.out.println(">>>Player Names: " + ((String[])request.getData())[0] + " " + ((String[])request.getData())[1]);
-                        BetterGame game2 = new BetterGame(localGameID);
+                        BetterGame game2 = new BetterGame(currentGameID);
                         game2.setPlayer1(((String[])request.getData())[0]);
                         game2.setPlayer2(((String[])request.getData())[1]);
                         games.add(game2);
-                        send(Response.createGameBeginsResponse(new String[]{"lp1", "lp2"}, game2.getBoard()));
+                        send(Response.createGameBeginsResponse(new String[]{"lp1", "lp2"}, game2.getBoard(), game2.getGameId()));
+                        currentGameID++;
                         break;
                     case "SinglePlayer":
                         System.out.println(">>>>>LocalSinglePlayer request received!");
-                        BetterGame game3 = new BetterGame(localGameID, true);
+                        BetterGame game3 = new BetterGame(currentGameID, true);
                         String playerN = (String)(((Serializable[])request.getData())[0]);
                         boolean mrBillGoesFirst = (boolean)(((Serializable[])request.getData())[1]);
                         if (mrBillGoesFirst){
@@ -110,13 +110,14 @@ public class BetterServer {
                             game3.setPlayer2(playerN);
                             game3.makeAMove();
                             games.add(game3);
-                            send(Response.createGameBeginsResponse(new String[]{"Mr.Bill", playerN}, game3.getBoard()));
+                            send(Response.createGameBeginsResponse(new String[]{"Mr.Bill", playerN}, game3.getBoard(), game3.getGameId()));
                         }else{
                             game3.setPlayer1(playerN);
                             game3.setPlayer2("Mr.Bill");
                             games.add(game3);
-                            send(Response.createGameBeginsResponse(new String[]{playerN, "Mr.Bill"}, game3.getBoard()));
+                            send(Response.createGameBeginsResponse(new String[]{playerN, "Mr.Bill"}, game3.getBoard(), game3.getGameId()));
                         }
+                        currentGameID++;
                         break;
                     default:
                         System.out.println(">>>>>Unknown request received! Type: " + request.getType());

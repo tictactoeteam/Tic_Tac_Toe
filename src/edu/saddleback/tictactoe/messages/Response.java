@@ -66,8 +66,8 @@ public class Response extends Message {
         return new Response("JoinError", reason);
     }
 
-    public static Response createGameBeginsResponse(String[] playerNames, Board board){
-        return new Response("GameBegins", new Serializable[]{playerNames, board});
+    public static Response createGameBeginsResponse(String[] playerNames, Board board, int gameID){
+        return new Response("GameBegins", new Serializable[]{playerNames, board, gameID});
     }
 
     public static Response createConnectionErrorResponse(String reason){
