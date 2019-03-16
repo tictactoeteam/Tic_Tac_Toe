@@ -296,7 +296,7 @@ public class LoginView {
                 controller.awakenMrBill(new Node());
                 controller.setDifficulty(difficultyCombo.getValue().toString());
 
-                //controller.setSinglePlayerUp(mrBillGoesFirst);
+                controller.setSinglePlayerUp(mrBillGoesFirst);
 
                 TicTacToeApplication.getCoordinator().showGameScene();
 

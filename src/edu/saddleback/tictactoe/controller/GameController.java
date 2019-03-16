@@ -16,12 +16,7 @@ import edu.saddleback.tictactoe.model.GamePiece;
 import edu.saddleback.tictactoe.observable.BoardUpdatedListener;
 import edu.saddleback.tictactoe.view.GridBox;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -410,23 +405,14 @@ public class GameController {
         responseInput.start();
     }
 
-//    public void setSinglePlayerUp(boolean mrBillGoesFirst) {
-//        localServer = new Server();
-//        localServer.start();
-//
-//        if (mrBillGoesFirst){
-//            player1 = new ComputerPlayer(this, MrBill);
-//            player2 = new HumanPlayer(this, false);
-//        }else{
-//            player1 = new HumanPlayer(this, true);
-//            player2 = new ComputerPlayer(this, MrBill);
-//        }
-//
-//        player1.start();
-//        player2.start();
-//
-//
-//    }
+    public void setSinglePlayerUp(boolean mrBillGoesFirst) {
+        localServer = new BetterServer();
+        localServer.fireTheServer();
+        client = new ServerConnection();
+        client.sendRequest(Request.createSinglePlayerRequest(player1Name, mrBillGoesFirst));
+
+        responseInput.start();
+    }
 
     //setting up online, sets the player to the appropriate host/2nd player
 //    public void setOnlineUp(boolean host){
@@ -480,6 +466,13 @@ public class GameController {
                 case "YouLost":
                 case "GameDrawn":
                     gameGoingOn = false;
+                    break;
+                case "GameBegins":
+                    System.out.println("Game Begins!");
+                    board = (Board)((Serializable[])(response.getData()))[1];
+                    player1Name = ((String[])((Serializable[])(response.getData()))[0])[0];
+                    player2Name = ((String[])((Serializable[])(response.getData()))[0])[1];
+                    notifyBoard();
                     break;
                 default:
                     System.out.println("Unrecognized Response. Type: " + response.getType());

@@ -79,6 +79,12 @@ public class BetterServer {
                             if(game1.getWinner() != null){
                                 send(Response.createYouWinResponse("Idk what to do over here"));
                             }
+                            if (game1.isSinglePlayerMode()){
+                                game1.makeAMove();
+                                if (game1.getWinner()!= null){
+                                    send(Response.createYouWinResponse("Idk what to do over here"));
+                                }
+                            }
                             send(Response.createMoveValidResponse(game1.getBoard()));
                         }catch(GridAlreadyChosenException ex){
                             send(Response.createMoveInvalidResponse(game1.getBoard()));
@@ -92,7 +98,25 @@ public class BetterServer {
                         game2.setPlayer1(((String[])request.getData())[0]);
                         game2.setPlayer2(((String[])request.getData())[1]);
                         games.add(game2);
-                        send(Response.createGameBeginsResponse(new String[]{"lp1", "lp2"}));
+                        send(Response.createGameBeginsResponse(new String[]{"lp1", "lp2"}, game2.getBoard()));
+                        break;
+                    case "SinglePlayer":
+                        System.out.println(">>>>>LocalSinglePlayer request received!");
+                        BetterGame game3 = new BetterGame(localGameID, true);
+                        String playerN = (String)(((Serializable[])request.getData())[0]);
+                        boolean mrBillGoesFirst = (boolean)(((Serializable[])request.getData())[1]);
+                        if (mrBillGoesFirst){
+                            game3.setPlayer1("Mr.Bill");
+                            game3.setPlayer2(playerN);
+                            game3.makeAMove();
+                            games.add(game3);
+                            send(Response.createGameBeginsResponse(new String[]{"Mr.Bill", playerN}, game3.getBoard()));
+                        }else{
+                            game3.setPlayer1(playerN);
+                            game3.setPlayer2("Mr.Bill");
+                            games.add(game3);
+                            send(Response.createGameBeginsResponse(new String[]{playerN, "Mr.Bill"}, game3.getBoard()));
+                        }
                         break;
                     default:
                         System.out.println(">>>>>Unknown request received! Type: " + request.getType());

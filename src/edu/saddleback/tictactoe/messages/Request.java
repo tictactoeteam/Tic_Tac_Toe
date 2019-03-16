@@ -21,6 +21,10 @@ public class Request extends Message {
         return new Request("Join", new Serializable[]{playerName, joinCode});
     }
 
+    public static Request createSinglePlayerRequest(String playerName, boolean mrBillGoesFirst){
+        return new Request("SinglePlayer", new Serializable[]{playerName, mrBillGoesFirst});
+    }
+
     public static Request createMoveValidateRequest(BoardMove boardMove, int gameId){
         return new Request("MoveValidate", new Serializable[]{boardMove, gameId});
     }

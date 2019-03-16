@@ -49,6 +49,7 @@ public class Response extends Message {
     public static Response createHostSuccessResponse(Integer joinCode){
         return new Response("HostSuccess", joinCode);
     }
+
     public static Response createHostJoinedResponse(String opponentName){
         return new Response("HostJoined", opponentName);
     }
@@ -65,8 +66,8 @@ public class Response extends Message {
         return new Response("JoinError", reason);
     }
 
-    public static Response createGameBeginsResponse(String[] playerNames){
-        return new Response("GameBegins", playerNames);
+    public static Response createGameBeginsResponse(String[] playerNames, Board board){
+        return new Response("GameBegins", new Serializable[]{playerNames, board});
     }
 
     public static Response createConnectionErrorResponse(String reason){

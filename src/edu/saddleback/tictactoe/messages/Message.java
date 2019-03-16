@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Scanner;
 
 public class Message implements Serializable {
+
     private String type;
     private Serializable data;
 
