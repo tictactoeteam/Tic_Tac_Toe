@@ -15,6 +15,7 @@ import edu.saddleback.tictactoe.model.Board;
 import edu.saddleback.tictactoe.model.GamePiece;
 import edu.saddleback.tictactoe.observable.BoardUpdatedListener;
 import edu.saddleback.tictactoe.view.GridBox;
+import javafx.application.Platform;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -46,6 +47,12 @@ public class GameController {
     private String gameIP;
 
     private int gameID = -1;
+    private String winnerName = null;
+    private String loserName = null;
+
+    public String getWinnerName(){return winnerName;}
+    public String getLoserName(){return loserName;}
+
     /**
      * Reads game data if a file exists, otherwise initializes a new board.
      */
@@ -155,34 +162,6 @@ public class GameController {
         if (gameID!= -1)
             client.sendRequest(Request.createMoveValidateRequest(currentMove, gameID));
 
-//        notifyBoard();
-//        if (checkWinner() != null || checkDraw()) {
-//            TicTacToeApplication.getCoordinator().showWinnerScene();
-//            return;
-//        }
-////        try {
-//
-//        GamePiece piece = board.isXTurn() ? GamePiece.X : GamePiece.O;
-//
-//        try {
-//            if (piece == GamePiece.X) {
-//                player1.setMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
-//                if (player1 instanceof ComputerPlayer) {
-//                    player2.setMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
-//                }
-//            } else {
-//                player2.setMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
-//                if (player2 instanceof ComputerPlayer) {
-//                    player1.setMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
-//                }
-//            }
-//        }catch(NullPointerException ex){
-//            System.out.println("Wait for other player!!");
-//        }
-//
-//        Thread.sleep(500);
-//
-//        notifyBoard();
     }
 
     public void resetGame() {
@@ -355,24 +334,15 @@ public class GameController {
 
     /**
      * Generates a win message depending on who won the game, and the random message.
-     * @param winner
+     * @param
      * @return
      */
-    public String generateWinMessage(GamePiece winner){
-        String win;
-        String los;
+    public String generateWinMessage(){
+        String win = getWinnerName();
+        String los = getLoserName();
 
-        if (winner == GamePiece.X){
-            win = getPlayer1Name();
-            los = getPlayer2Name();
-        }
-        else if (winner == GamePiece.O){
-            win = getPlayer2Name();
-            los = getPlayer1Name();
-        }
-        else{
+        if(win.equals("DRAW") && los.equals("DRAW"))
             return "DRAW!";
-        }
 
         String[] possibilities= new String[]{
                 los + " got spanked by " + win,
@@ -445,31 +415,39 @@ public class GameController {
 
 
 
-        while(gameGoingOn) {
+        do{
             Response response = client.receiveResponse();
             switch (response.getType()) {
                 case "MoveValid":
+
                 case "MoveInvalid":
+
                 case "NotYourTurn":
                     board = (Board) response.getData();
                     System.out.println(board);
                     notifyBoard();
                     break;
+
                 case "HostSuccess":
                     System.out.println("Join Code: " + response.getData());
                     break;
+
                 case "HostJoined":
                     setPlayer2Name((String) response.getData());
                     break;
+
                 case "JoinSuccess":
                     setPlayer1Name((String) response.getData());
                     break;
-                case "YouWin":
-                case "YouLost":
-                case "GameDrawn":
-                    System.out.println("Game terminated!");
+
+                case "GameEndState":
+                    String[] tmpNames = ((String[])((response.getData())));
+                    winnerName = tmpNames[0];
+                    loserName = tmpNames[1];
+
                     gameGoingOn = false;
                     break;
+
                 case "GameBegins":
                     System.out.println("Game Begins!");
                     board = (Board)((Serializable[])(response.getData()))[1];
@@ -478,15 +456,18 @@ public class GameController {
                     gameID = (Integer) ((Serializable[])(response.getData()))[2];
                     notifyBoard();
                     break;
+
                 default:
                     System.out.println("Unrecognized Response. Type: " + response.getType());
                     break;
             }
-        }
+        }while(gameGoingOn);
 
-        try {
-            TicTacToeApplication.getCoordinator().showWinnerScene();
-        }catch(Exception ex){}
+        Platform.runLater(() -> {
+            try {
+                TicTacToeApplication.getCoordinator().showWinnerScene();
+            }catch(Exception ex){System.out.println("ERROR SHOWING WINNER SCREEN");}
+        });
 
     });
 }

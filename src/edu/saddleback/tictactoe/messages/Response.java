@@ -27,23 +27,10 @@ public class Response extends Message {
         return new Response("MoveInvalid", board);
     }
 
-
-
-
-    public static Response createYouWinResponse(String opponentName){
-        return new Response("YouWin", opponentName);
+    //End State Flag
+    public static Response createGameOverResponse(String winnerName, String loserName){
+        return new Response("GameEndState", new String[]{winnerName, loserName});
     }
-
-    public static Response createYouLostResponse(String opponentName){
-        return new Response("YouLost", opponentName);
-    }
-
-    public static Response createGameDrawnResponse(){
-        return new Response("GameDrawn", null);
-    }
-
-
-
 
     // Responses fired when trying to establish connection
     public static Response createHostSuccessResponse(Integer joinCode){

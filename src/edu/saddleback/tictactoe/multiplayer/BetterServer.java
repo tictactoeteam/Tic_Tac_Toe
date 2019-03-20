@@ -54,15 +54,18 @@ public class BetterServer {
                 Request request = receive();
 
                 switch (request.getType()) {
+
                     case "Host":
                         System.out.println(">>>>>Host request received!");
                         System.out.println(">>>Player name that requested:" + request.getData());
                         break;
+
                     case "Join":
                         System.out.println(">>>>>Join request received!");
                         System.out.println(">>>Joining player name: "+ ((Serializable[])request.getData())[0]);
                         System.out.println(">>>Join code given: " + ((Serializable[])request.getData())[1]) ;
                         break;
+
                     case "MoveValidate":
                         System.out.println(">>>>>MoveValidate request received!");
                         BoardMove move = (BoardMove)(((Serializable[])request.getData())[0]);
@@ -75,13 +78,26 @@ public class BetterServer {
                         }
                         try{
                             game1.applyMove(move);
-                            if(game1.getWinner() != null){
-                                send(Response.createYouWinResponse("Idk what to do over here"));
+
+                            //Sends game end state message
+                            if(game1.getWinner() == GamePiece.X){
+                                send(Response.createGameOverResponse(game1.getPlayer1(), game1.getPlayer2()));
+                            }else if(game1.getWinner() == GamePiece.O){
+                                send(Response.createGameOverResponse(game1.getPlayer2(), game1.getPlayer1()));
+                            }else if(game1.isDrawn()){
+                                send(Response.createGameOverResponse("DRAW", "DRAW"));
                             }
+
                             if (game1.isSinglePlayerMode()){
                                 game1.makeAMove();
-                                if (game1.getWinner()!= null){
-                                    send(Response.createYouWinResponse("Idk what to do over here"));
+
+                                //Sends game end state message
+                                if(game1.getWinner() == GamePiece.X){
+                                    send(Response.createGameOverResponse(game1.getPlayer1(), game1.getPlayer2()));
+                                }else if(game1.getWinner() == GamePiece.O){
+                                    send(Response.createGameOverResponse(game1.getPlayer2(), game1.getPlayer1()));
+                                }else if(game1.isDrawn()){
+                                    send(Response.createGameOverResponse("DRAW", "DRAW"));
                                 }
                             }
                             send(Response.createMoveValidResponse(game1.getBoard()));
@@ -90,6 +106,7 @@ public class BetterServer {
                         }
 
                         break;
+
                     case "LocalMultiplayer":
                         System.out.println(">>>>>LocalMultiplayer request received!");
                         System.out.println(">>>Player Names: " + ((String[])request.getData())[0] + " " + ((String[])request.getData())[1]);
@@ -100,6 +117,7 @@ public class BetterServer {
                         send(Response.createGameBeginsResponse(new String[]{"lp1", "lp2"}, game2.getBoard(), game2.getGameId()));
                         currentGameID++;
                         break;
+
                     case "SinglePlayer":
                         System.out.println(">>>>>LocalSinglePlayer request received!");
                         BetterGame game3 = new BetterGame(currentGameID, true);
@@ -119,6 +137,7 @@ public class BetterServer {
                         }
                         currentGameID++;
                         break;
+
                     default:
                         System.out.println(">>>>>Unknown request received! Type: " + request.getType());
                         break;
