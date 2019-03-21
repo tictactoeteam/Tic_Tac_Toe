@@ -9,7 +9,7 @@ public class Response extends Message {
     public Response(){
         this("EmptyResponse", null);
     }
-
+    public Response(String type){super(type);}
     public Response(String type, Serializable data){
         super(type, data);
     }
@@ -60,6 +60,8 @@ public class Response extends Message {
     public static Response createConnectionErrorResponse(String reason){
         return  new Response("ConnectionError", reason);
     }
+
+    public static Response createCloseClientThreadOnResetResponse(){return new Response("CloseClientThread");}
 
 
 }

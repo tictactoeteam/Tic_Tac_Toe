@@ -13,6 +13,8 @@ public class Request extends Message {
         super(type, data);
     }
 
+    public Request(String type){super(type);}
+
     public static Request createHostRequest(String playerName){
         return new Request("Host", playerName);
     }
@@ -32,5 +34,7 @@ public class Request extends Message {
     public static Request createLocalMultiplayerRequest(String playerName1, String playerName2){
         return new Request("LocalMultiplayer", new String[]{playerName1, playerName2});
     }
+
+    public static Request createResetRequest(Integer gameId){return new Request("Reset", gameId);}
 
 }

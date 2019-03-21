@@ -15,6 +15,7 @@ public class Message implements Serializable {
     public Message(){
         this("EmptyMessage", null);
     }
+    public Message(String type){this(type, null);}
 
     public Message(String type, Serializable data){
         this.type = type;

@@ -165,6 +165,8 @@ public class GameController {
     }
 
     public void resetGame() {
+
+        client.sendRequest(Request.createResetRequest(gameID));
         this.board = new Board();
         this.notifyBoard();
 
@@ -374,6 +376,7 @@ public class GameController {
         client = new ServerConnection();
         client.sendRequest(Request.createLocalMultiplayerRequest(player1Name, player2Name));
 
+        responseInput.interrupt();
         responseInput.start();
     }
 
@@ -382,7 +385,7 @@ public class GameController {
         localServer.fireTheServer();
         client = new ServerConnection();
         client.sendRequest(Request.createSinglePlayerRequest(player1Name, mrBillGoesFirst));
-
+        responseInput.interrupt();
         responseInput.start();
     }
 
@@ -412,8 +415,6 @@ public class GameController {
     private Thread responseInput = new Thread(()->{
 
         boolean gameGoingOn = true;
-
-
 
         do{
             Response response = client.receiveResponse();
@@ -457,6 +458,12 @@ public class GameController {
                     notifyBoard();
                     break;
 
+                case "CloseClientThread":
+                    gameGoingOn = false;
+                    TicTacToeApplication.newCoordinator();
+
+                    break;
+
                 default:
                     System.out.println("Unrecognized Response. Type: " + response.getType());
                     break;
@@ -466,8 +473,10 @@ public class GameController {
         Platform.runLater(() -> {
             try {
                 TicTacToeApplication.getCoordinator().showWinnerScene();
-            }catch(Exception ex){System.out.println("ERROR SHOWING WINNER SCREEN");}
+            }catch(Exception ex){/*System.out.println("ERROR SHOWING WINNER SCREEN");*/}
         });
+
+        Thread.currentThread().interrupt();
 
     });
 }

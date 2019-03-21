@@ -37,7 +37,6 @@ public class GameView{
      */
     public void onResetClicked() throws Exception {
         controller.resetGame();
-        TicTacToeApplication.getCoordinator().showLoginScene();
     }
 
     /**

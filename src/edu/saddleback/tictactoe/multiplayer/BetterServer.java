@@ -6,6 +6,8 @@ import edu.saddleback.tictactoe.model.Board;
 import edu.saddleback.tictactoe.model.BoardMove;
 import edu.saddleback.tictactoe.model.GamePiece;
 import edu.saddleback.tictactoe.model.GridAlreadyChosenException;
+import edu.saddleback.tictactoe.view.TicTacToeApplication;
+import javafx.application.Platform;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -13,6 +15,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.InvalidKeyException;
 import java.util.ArrayList;
 
 public class BetterServer {
@@ -138,6 +141,18 @@ public class BetterServer {
                         currentGameID++;
                         break;
 
+                    case "Reset":
+                        System.out.println(">>>>>Reset request received!");
+                        games.remove(searchForGame((int)(Serializable)request.getData()));
+                        try {
+                            serverSocket.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        send(Response.createCloseClientThreadOnResetResponse());
+                        throw new InvalidKeyException("JUST MEANS RESET BUTTON WAS CLICKED");
+
                     default:
                         System.out.println(">>>>>Unknown request received! Type: " + request.getType());
                         break;
@@ -147,11 +162,17 @@ public class BetterServer {
                 System.out.println("============================");
 
             }
+
         }catch(IOException ex){
             System.out.println("Something went wrong with the connection!");
         }catch(NullPointerException ex){
             System.out.println("Null pointer Exception!");
+        }catch(InvalidKeyException ex) {//This is used to escape the while loop and run this code if reset is clicked.
+
+            System.out.println("============================");
+
         }
+
     });
 
     public BetterGame searchForGame(int gameId){
@@ -179,4 +200,15 @@ public class BetterServer {
         System.out.println("Starting the server!");
         serverBehavior.start();
     }
+
+    public void closeTheServer(){
+
+        try {
+            connection.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }
