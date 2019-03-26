@@ -75,11 +75,11 @@ public class BoardView extends GridPane {
 
                 String path;
                 if(board.get(i, j) == GamePiece.X)
-                    path = getClass().getResource("/res/images/x.png").toString();
+                    path = getClass().getResource("/images/x.png").toString();
                 else if(board.get(i, j) == GamePiece.O)
-                    path = getClass().getResource("/res/images/o.png").toString();
+                    path = getClass().getResource("/images/o.png").toString();
                 else
-                    path = getClass().getResource("/res/images/blank.png").toString();
+                    path = getClass().getResource("/images/blank.png").toString();
 
                 grid[i][j].getBackgroundImageView().setImage(new Image(path));
 
