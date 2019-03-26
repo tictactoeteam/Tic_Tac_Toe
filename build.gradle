@@ -1,0 +1,39 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath 'org.openjfx:javafx-plugin:0.0.7'
+    }
+}
+
+plugins {
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '5.0.0'
+}
+apply plugin: 'org.openjfx.javafxplugin'
+
+dependencies {
+    compile group: 'com.pubnub', name: 'pubnub-gson', version: '4.22.0-beta'
+}
+
+sourceCompatibility = 1.11
+targetCompatibility = 1.11
+
+repositories {
+    mavenCentral()
+}
+
+javafx {
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.base', 'javafx.graphics' ]
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'edu.saddleback.tictactoe.Main'
+    }
+}
+
+mainClassName = 'edu.saddleback.tictactoe.Main'
