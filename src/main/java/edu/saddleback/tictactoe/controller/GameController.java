@@ -1,6 +1,9 @@
 package edu.saddleback.tictactoe.controller;
 
-import edu.saddleback.tictactoe.multiplayer.Server;
+import edu.saddleback.tictactoe.messages.Request;
+import edu.saddleback.tictactoe.messages.Response;
+import edu.saddleback.tictactoe.model.BoardMove;
+import edu.saddleback.tictactoe.multiplayer.BetterServer;
 import edu.saddleback.tictactoe.observable.NameUpdatedListener;
 import edu.saddleback.tictactoe.view.TicTacToeApplication;
 import edu.saddleback.tictactoe.decision.AdvancedEvaluator;
@@ -11,13 +14,9 @@ import edu.saddleback.tictactoe.model.Board;
 import edu.saddleback.tictactoe.model.GamePiece;
 import edu.saddleback.tictactoe.observable.BoardUpdatedListener;
 import edu.saddleback.tictactoe.view.GridBox;
+import javafx.application.Platform;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -38,12 +37,20 @@ public class GameController {
     private boolean isMultiplayer;
     private String player1Name, player2Name;
 
-    private Player player1;
-    private Player player2;
+    private ServerConnection client;
 
-    private Server localServer;
+//    private Player player1;
+//    private Player player2;
 
+    private BetterServer localServer;
     private String gameIP;
+
+    private int gameID = -1;
+    private String winnerName = null;
+    private String loserName = null;
+
+    public String getWinnerName(){return winnerName;}
+    public String getLoserName(){return loserName;}
 
     /**
      * Reads game data if a file exists, otherwise initializes a new board.
@@ -76,10 +83,10 @@ public class GameController {
                     else
                         MrBill.setEvaluator(new RandomEvaluator());
 
-                    setSinglePlayerUp(false);
+                    //setSinglePlayerUp(false);
 
                 }else{
-                    setLocalMultiplayerUp();
+                    //setLocalMultiplayerUp();
                 }
 
             } catch (IOException e){
@@ -137,8 +144,6 @@ public class GameController {
             System.out.println("I am deleting the game");
         }
 
-
-        localServer.stop();
         System.exit(1);
     }
 
@@ -147,41 +152,21 @@ public class GameController {
      *
      * @param gridBox
      */
-    public void onGridClicked(GridBox gridBox) throws Exception {
-
-        notifyBoard();
-        if (checkWinner() != null || checkDraw()) {
-            TicTacToeApplication.getCoordinator().showWinnerScene();
-            return;
-        }
-//        try {
+    public void onGridClicked(GridBox gridBox){
 
         GamePiece piece = board.isXTurn() ? GamePiece.X : GamePiece.O;
+        String turnPlayer = piece == GamePiece.X ? player1Name : player2Name;
+        BoardMove currentMove = new BoardMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
 
-        try {
-            if (piece == GamePiece.X) {
-                player1.setMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
-                if (player1 instanceof ComputerPlayer) {
-                    player2.setMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
-                }
-            } else {
-                player2.setMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
-                if (player2 instanceof ComputerPlayer) {
-                    player1.setMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
-                }
-            }
-        }catch(NullPointerException ex){
-            System.out.println("Wait for other player!!");
-        }
+        if (gameID!= -1)
+            client.sendRequest(Request.createMoveValidateRequest(currentMove, gameID));
 
-        Thread.sleep(500);
-
-        notifyBoard();
     }
 
     public void resetGame() {
+
+        client.sendRequest(Request.createResetRequest(gameID));
         this.board = new Board();
-        this.localServer.stop();
         this.notifyBoard();
 
         this.deleteSaveFile();
@@ -350,24 +335,15 @@ public class GameController {
 
     /**
      * Generates a win message depending on who won the game, and the random message.
-     * @param winner
+     * @param
      * @return
      */
-    public String generateWinMessage(GamePiece winner){
-        String win;
-        String los;
+    public String generateWinMessage(){
+        String win = getWinnerName();
+        String los = getLoserName();
 
-        if (winner == GamePiece.X){
-            win = getPlayer1Name();
-            los = getPlayer2Name();
-        }
-        else if (winner == GamePiece.O){
-            win = getPlayer2Name();
-            los = getPlayer1Name();
-        }
-        else{
+        if(win.equals("DRAW") && los.equals("DRAW"))
             return "DRAW!";
-        }
 
         String[] possibilities= new String[]{
                 los + " got spanked by " + win,
@@ -394,49 +370,38 @@ public class GameController {
     }
 
     public void setLocalMultiplayerUp() {
-        localServer = new Server();
-        localServer.start();
+        localServer = new BetterServer();
+        localServer.fireTheServer();
+        client = new ServerConnection();
+        client.sendRequest(Request.createLocalMultiplayerRequest(player1Name, player2Name));
 
-        player1 = new HumanPlayer(this, true);
-        player2 = new HumanPlayer(this, false);
-
-        player1.start();
-        player2.start();
-
+        responseInput.interrupt();
+        responseInput.start();
     }
 
     public void setSinglePlayerUp(boolean mrBillGoesFirst) {
-        localServer = new Server();
-        localServer.start();
-
-        if (mrBillGoesFirst){
-            player1 = new ComputerPlayer(this, MrBill);
-            player2 = new HumanPlayer(this, false);
-        }else{
-            player1 = new HumanPlayer(this, true);
-            player2 = new ComputerPlayer(this, MrBill);
-        }
-
-        player1.start();
-        player2.start();
-
-
+        localServer = new BetterServer();
+        localServer.fireTheServer();
+        client = new ServerConnection();
+        client.sendRequest(Request.createSinglePlayerRequest(player1Name, mrBillGoesFirst));
+        responseInput.interrupt();
+        responseInput.start();
     }
 
     //setting up online, sets the player to the appropriate host/2nd player
-    public void setOnlineUp(boolean host){
-        if (host){
-            player1 = new HumanPlayer(this, true, getIP());
-            player2 = null;
-            player1.start();
-        }
-        else{
-            player1 = null;
-            player2 = new HumanPlayer(this, false, getIP());
-            player2.start();
-        }
-
-    }
+//    public void setOnlineUp(boolean host){
+//        if (host){
+//            player1 = new HumanPlayer(this, true, getIP());
+//            player2 = null;
+//            player1.start();
+//        }
+//        else{
+//            player1 = null;
+//            player2 = new HumanPlayer(this, false, getIP());
+//            player2.start();
+//        }
+//
+//    }
 
     public void setBoard(Board board){
         this.board.set(board);
@@ -445,4 +410,72 @@ public class GameController {
     public Board getBoard(){
         return board;
     }
+
+    private Thread responseInput = new Thread(()->{
+
+        boolean gameGoingOn = true;
+
+        do{
+            Response response = client.receiveResponse();
+            switch (response.getType()) {
+                case "MoveValid":
+
+                case "MoveInvalid":
+
+                case "NotYourTurn":
+                    board = (Board) response.getData();
+                    System.out.println(board);
+                    notifyBoard();
+                    break;
+
+                case "HostSuccess":
+                    System.out.println("Join Code: " + response.getData());
+                    break;
+
+                case "HostJoined":
+                    setPlayer2Name((String) response.getData());
+                    break;
+
+                case "JoinSuccess":
+                    setPlayer1Name((String) response.getData());
+                    break;
+
+                case "GameEndState":
+                    String[] tmpNames = ((String[])((response.getData())));
+                    winnerName = tmpNames[0];
+                    loserName = tmpNames[1];
+
+                    gameGoingOn = false;
+                    break;
+
+                case "GameBegins":
+                    System.out.println("Game Begins!");
+                    board = (Board)((Serializable[])(response.getData()))[1];
+                    player1Name = ((String[])((Serializable[])(response.getData()))[0])[0];
+                    player2Name = ((String[])((Serializable[])(response.getData()))[0])[1];
+                    gameID = (Integer) ((Serializable[])(response.getData()))[2];
+                    notifyBoard();
+                    break;
+
+                case "CloseClientThread":
+                    gameGoingOn = false;
+                    TicTacToeApplication.newCoordinator();
+
+                    break;
+
+                default:
+                    System.out.println("Unrecognized Response. Type: " + response.getType());
+                    break;
+            }
+        }while(gameGoingOn);
+
+        Platform.runLater(() -> {
+            try {
+                TicTacToeApplication.getCoordinator().showWinnerScene();
+            }catch(Exception ex){/*System.out.println("ERROR SHOWING WINNER SCREEN");*/}
+        });
+
+        Thread.currentThread().interrupt();
+
+    });
 }

@@ -262,7 +262,7 @@ public class LoginView {
                         errorText.setVisible(true);
                     }
 
-                    controller.setOnlineUp(true);
+                    //controller.setOnlineUp(true);
 
                     //Join game case
                 }else{
@@ -277,7 +277,7 @@ public class LoginView {
                         errorText.setVisible(true);
                     }
 
-                    controller.setOnlineUp(false);
+                    //controller.setOnlineUp(false);
                 }
             }
 
@@ -293,8 +293,8 @@ public class LoginView {
                     controller.setPlayer1Name(playerName.getText());
                 }
 
-                controller.awakenMrBill(new Node());
-                controller.setDifficulty(difficultyCombo.getValue().toString());
+//                controller.awakenMrBill(new Node());
+//                controller.setDifficulty(difficultyCombo.getValue().toString());
 
                 controller.setSinglePlayerUp(mrBillGoesFirst);
 
