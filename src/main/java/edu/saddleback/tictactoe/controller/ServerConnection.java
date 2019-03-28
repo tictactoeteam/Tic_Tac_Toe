@@ -1,17 +1,14 @@
 package edu.saddleback.tictactoe.controller;
 
+import edu.saddleback.tictactoe.messages.Request;
+import edu.saddleback.tictactoe.messages.Response;
 import edu.saddleback.tictactoe.model.Board;
 import edu.saddleback.tictactoe.model.BoardMove;
-import edu.saddleback.tictactoe.model.GamePiece;
-import edu.saddleback.tictactoe.model.GridAlreadyChosenException;
-import edu.saddleback.tictactoe.multiplayer.Server;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class ServerConnection {
 
@@ -56,25 +53,45 @@ public class ServerConnection {
      * Default IP address = "127.0.0.1"
      * Default port = 6969
      * **/
-    ServerConnection(){
+    public ServerConnection(){
         this("127.0.0.1");
     }
 
     /**Constructor that accepts an IP address
      * Default port = 6969
      * **/
-    ServerConnection(String IP){
+    public ServerConnection(String IP){
         this(IP, 6969);
     }
 
     /**Constructor that accepts an IP address and a port number**/
-    ServerConnection(String IP, int port){
+    public ServerConnection(String IP, int port){
         try {
             connection = new Socket(IP, port);
 
         } catch(IOException ex){
-            ex.printStackTrace();
+            System.out.println("Connection failed!");
         }
+    }
+
+    public void sendRequest(Request request){
+        try {
+            sending = new ObjectOutputStream(connection.getOutputStream());
+            sending.writeObject(request);
+            sending.flush();
+        }catch(IOException ex){
+            System.out.println("Things went bad!");
+        }
+    }
+
+    public Response receiveResponse(){
+        try{
+            receiving = new ObjectInputStream(connection.getInputStream());
+            return (Response)receiving.readObject();
+        }catch(IOException ex){}
+        catch(ClassNotFoundException ex){}
+        System.out.println("Something went really bad!");
+        return null;
     }
 
 

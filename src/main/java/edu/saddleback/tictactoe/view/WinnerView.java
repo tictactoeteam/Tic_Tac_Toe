@@ -19,7 +19,7 @@ public class WinnerView{
     @FXML
     protected void initialize(){
         controller = TicTacToeApplication.getController();
-        winnerText.setText(controller.generateWinMessage(controller.checkWinner()));
+        winnerText.setText(controller.generateWinMessage());
     }
 
     public void onMainMenuClicked() throws Exception {
