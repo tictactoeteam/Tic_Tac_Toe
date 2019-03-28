@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
@@ -24,36 +21,6 @@
                   <Image url="@../images/tictactoe2.png" />
                </image>
             </ImageView>
-            <HBox alignment="CENTER" prefWidth="200.0" spacing="8.0">
-               <children>
-                  <Button fx:id="singleplayerButton" mnemonicParsing="false" onMouseClicked="#onSingleplayerClicked" text="Singleplayer" />
-                  <Button fx:id="multiplayerButton" mnemonicParsing="false" onMouseClicked="#onMultiplayerClicked" text="Multiplayer" />
-               </children>
-            </HBox>
-            <ComboBox fx:id="multiplayerComboBox" onAction="#setMultiplayerType" prefWidth="150.0" promptText="Choose Type" visible="false">
-               <items>
-                  <FXCollections fx:factory="observableArrayList">
-                     <String fx:value="Local" />
-                     <String fx:value="Online" />
-                  </FXCollections>
-               </items>
-            </ComboBox>
-            <ComboBox fx:id="onlineTypeComboBox" onAction="#setOnlineType" prefWidth="150.0" visible="false">
-               <items>
-                  <FXCollections fx:factory="observableArrayList">
-                     <String fx:value="Create Game" />
-                     <String fx:value="Join Game" />
-                  </FXCollections>
-               </items>
-            </ComboBox>
-            <ComboBox fx:id="difficultyCombo" prefWidth="150.0" promptText="Difficulty" visible="false">
-               <items>
-                  <FXCollections fx:factory="observableArrayList">
-                     <String fx:value="Easy Mode" />
-                     <String fx:value="Mr. Bill Mode" />
-                  </FXCollections>
-               </items>
-            </ComboBox>
 
             <HBox fx:id="radioHbox" alignment="CENTER" prefWidth="100.0" spacing="10.0" visible="false">
                <Text fx:id="billFirst" text="Who will go first?  " />

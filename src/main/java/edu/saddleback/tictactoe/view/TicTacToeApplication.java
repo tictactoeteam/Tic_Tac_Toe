@@ -56,10 +56,7 @@ public class TicTacToeApplication extends Application {
 
         coordinator = new SceneCoordinator(Window);
 
-        if(coordinator.getController().gameStateExists())
-            coordinator.showGameScene();
-        else
-            coordinator.showLoginScene();
+        coordinator.showLoginScene();
 
     }
 
