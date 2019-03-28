@@ -39,7 +39,7 @@ public class SceneCoordinator {
      */
     public void showLoginScene() throws Exception{
 
-        Parent layout = FXMLLoader.load(getClass().getResource("/res/layout/login.fxml"));
+        Parent layout = FXMLLoader.load(getClass().getResource("/layout/login.fxml"));
         this.window.setScene(new Scene(layout));
 
     }
@@ -50,7 +50,7 @@ public class SceneCoordinator {
      */
     public void showGameScene() throws Exception{
 
-        Parent layout = FXMLLoader.load(getClass().getResource("/res/layout/game.fxml"));
+        Parent layout = FXMLLoader.load(getClass().getResource("/layout/game.fxml"));
         this.window.setScene(new Scene(layout));
 
     }
@@ -61,7 +61,7 @@ public class SceneCoordinator {
      */
     public void showWinnerScene() throws Exception{
 
-        Parent layout = FXMLLoader.load(getClass().getResource("/res/layout/winner.fxml"));
+        Parent layout = FXMLLoader.load(getClass().getResource("/layout/winner.fxml"));
         this.window.setScene(new Scene(layout));
 
     }
