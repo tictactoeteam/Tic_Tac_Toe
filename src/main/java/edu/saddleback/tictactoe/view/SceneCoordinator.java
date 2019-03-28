@@ -39,7 +39,7 @@ public class SceneCoordinator {
      */
     public void showLoginScene() throws Exception{
 
-        Parent layout = FXMLLoader.load(getClass().getResource("C:\\Users\\cptka\\Dropbox\\cs4b\\Tic_Tac_Toe\\src\\main\\res\\layout\\login.fxml"));
+        Parent layout = FXMLLoader.load(getClass().getResource("/layout/login.fxml"));
         this.window.setScene(new Scene(layout));
 
     }
