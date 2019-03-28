@@ -1,20 +1,14 @@
 package edu.saddleback.tictactoe.controller;
 
-import edu.saddleback.tictactoe.messages.Message;
 import edu.saddleback.tictactoe.messages.Request;
 import edu.saddleback.tictactoe.messages.Response;
 import edu.saddleback.tictactoe.model.Board;
 import edu.saddleback.tictactoe.model.BoardMove;
-import edu.saddleback.tictactoe.model.GamePiece;
-import edu.saddleback.tictactoe.model.GridAlreadyChosenException;
-import edu.saddleback.tictactoe.multiplayer.Server;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class ServerConnection {
 

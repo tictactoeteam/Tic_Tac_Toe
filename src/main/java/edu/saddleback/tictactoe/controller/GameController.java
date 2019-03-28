@@ -4,7 +4,6 @@ import edu.saddleback.tictactoe.messages.Request;
 import edu.saddleback.tictactoe.messages.Response;
 import edu.saddleback.tictactoe.model.BoardMove;
 import edu.saddleback.tictactoe.multiplayer.BetterServer;
-import edu.saddleback.tictactoe.multiplayer.Server;
 import edu.saddleback.tictactoe.observable.NameUpdatedListener;
 import edu.saddleback.tictactoe.view.TicTacToeApplication;
 import edu.saddleback.tictactoe.decision.AdvancedEvaluator;
