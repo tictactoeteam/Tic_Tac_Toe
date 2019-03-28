@@ -37,7 +37,7 @@ public class GameController {
     private boolean isMultiplayer;
     private String player1Name, player2Name;
 
-    private ServerConnection client;
+    //private ServerConnection client;
 
 //    private Player player1;
 //    private Player player2;
@@ -158,14 +158,14 @@ public class GameController {
         String turnPlayer = piece == GamePiece.X ? player1Name : player2Name;
         BoardMove currentMove = new BoardMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
 
-        if (gameID!= -1)
-            client.sendRequest(Request.createMoveValidateRequest(currentMove, gameID));
+        //if (gameID!= -1)
+            //client.sendRequest(Request.createMoveValidateRequest(currentMove, gameID));
 
     }
 
     public void resetGame() {
 
-        client.sendRequest(Request.createResetRequest(gameID));
+        //client.sendRequest(Request.createResetRequest(gameID));
         this.board = new Board();
         this.notifyBoard();
 
@@ -372,18 +372,9 @@ public class GameController {
     public void setLocalMultiplayerUp() {
         localServer = new BetterServer();
         localServer.fireTheServer();
-        client = new ServerConnection();
-        client.sendRequest(Request.createLocalMultiplayerRequest(player1Name, player2Name));
+//        client = new ServerConnection();
+//        client.sendRequest(Request.createLocalMultiplayerRequest(player1Name, player2Name));
 
-        responseInput.interrupt();
-        responseInput.start();
-    }
-
-    public void setSinglePlayerUp(boolean mrBillGoesFirst) {
-        localServer = new BetterServer();
-        localServer.fireTheServer();
-        client = new ServerConnection();
-        client.sendRequest(Request.createSinglePlayerRequest(player1Name, mrBillGoesFirst));
         responseInput.interrupt();
         responseInput.start();
     }
@@ -415,59 +406,59 @@ public class GameController {
 
         boolean gameGoingOn = true;
 
-        do{
-            Response response = client.receiveResponse();
-            switch (response.getType()) {
-                case "MoveValid":
-
-                case "MoveInvalid":
-
-                case "NotYourTurn":
-                    board = (Board) response.getData();
-                    System.out.println(board);
-                    notifyBoard();
-                    break;
-
-                case "HostSuccess":
-                    System.out.println("Join Code: " + response.getData());
-                    break;
-
-                case "HostJoined":
-                    setPlayer2Name((String) response.getData());
-                    break;
-
-                case "JoinSuccess":
-                    setPlayer1Name((String) response.getData());
-                    break;
-
-                case "GameEndState":
-                    String[] tmpNames = ((String[])((response.getData())));
-                    winnerName = tmpNames[0];
-                    loserName = tmpNames[1];
-
-                    gameGoingOn = false;
-                    break;
-
-                case "GameBegins":
-                    System.out.println("Game Begins!");
-                    board = (Board)((Serializable[])(response.getData()))[1];
-                    player1Name = ((String[])((Serializable[])(response.getData()))[0])[0];
-                    player2Name = ((String[])((Serializable[])(response.getData()))[0])[1];
-                    gameID = (Integer) ((Serializable[])(response.getData()))[2];
-                    notifyBoard();
-                    break;
-
-                case "CloseClientThread":
-                    gameGoingOn = false;
-                    TicTacToeApplication.newCoordinator();
-
-                    break;
-
-                default:
-                    System.out.println("Unrecognized Response. Type: " + response.getType());
-                    break;
-            }
-        }while(gameGoingOn);
+//        do{
+//            Response response = client.receiveResponse();
+//            switch (response.getType()) {
+//                case "MoveValid":
+//
+//                case "MoveInvalid":
+//
+//                case "NotYourTurn":
+//                    board = (Board) response.getData();
+//                    System.out.println(board);
+//                    notifyBoard();
+//                    break;
+//
+//                case "HostSuccess":
+//                    System.out.println("Join Code: " + response.getData());
+//                    break;
+//
+//                case "HostJoined":
+//                    setPlayer2Name((String) response.getData());
+//                    break;
+//
+//                case "JoinSuccess":
+//                    setPlayer1Name((String) response.getData());
+//                    break;
+//
+//                case "GameEndState":
+//                    String[] tmpNames = ((String[])((response.getData())));
+//                    winnerName = tmpNames[0];
+//                    loserName = tmpNames[1];
+//
+//                    gameGoingOn = false;
+//                    break;
+//
+//                case "GameBegins":
+//                    System.out.println("Game Begins!");
+//                    board = (Board)((Serializable[])(response.getData()))[1];
+//                    player1Name = ((String[])((Serializable[])(response.getData()))[0])[0];
+//                    player2Name = ((String[])((Serializable[])(response.getData()))[0])[1];
+//                    gameID = (Integer) ((Serializable[])(response.getData()))[2];
+//                    notifyBoard();
+//                    break;
+//
+//                case "CloseClientThread":
+//                    gameGoingOn = false;
+//                    TicTacToeApplication.newCoordinator();
+//
+//                    break;
+//
+//                default:
+//                    System.out.println("Unrecognized Response. Type: " + response.getType());
+//                    break;
+//            }
+//        }while(gameGoingOn);
 
         Platform.runLater(() -> {
             try {

@@ -12,33 +12,17 @@ import edu.saddleback.tictactoe.controller.GameController;
  */
 public class LoginView {
 
-    private boolean mrBillGoesFirst;
     private GameController controller;
-
-    @FXML
-    private HBox radioHbox;
-    @FXML
-    private RadioButton radioPlayer;
-    @FXML
-    private RadioButton radioBill;
-    @FXML
-    private TextField playerName;
-    @FXML
-    private TextField player1Name;
-    @FXML
-    private TextField player2Name;
-    @FXML
-    private ComboBox difficultyCombo;
     @FXML
     private Label errorText;
     @FXML
-    private ComboBox multiplayerComboBox;
+    private Button loginButton;
     @FXML
-    private ComboBox onlineTypeComboBox;
+    private Button createAccountButton;
     @FXML
-    private TextField ipTextField;
+    private TextField usernameTextField;
     @FXML
-    private TextField joinCodeTextField;
+    private TextField passwordTextField;
 
     /**
      * Initializes the controller in the login view
@@ -47,5 +31,34 @@ public class LoginView {
         controller = TicTacToeApplication.getController();
     }
 
+    public void onLoginClicked(){
 
+        if(true){//<-SEARCH THROUGH DATABASE IF THE USERNAME AND PASSWORD MATCH AN ACCOUNT, ELSE ERROR
+
+            //Login to the server and join the lobby, show lobby screen
+
+        }else{
+
+            errorText.setText("***error-invalid credentials***");
+            errorText.setVisible(true);
+
+        }
+
+    }
+
+    public void onCreateAccountClicked(){
+
+        if(true) {//<-SEARCH THROUGH DATABASE AND CREATE ACCOUNT IF ACCOUNT DOES NOT EXIST
+
+            //Add account to the database, login to the server and join the lobby, show lobby screen
+
+        }else{
+
+            errorText.setText("***error-account already exists***");
+            errorText.setVisible(true);
+
+        }
+
+    }
+    
 }
