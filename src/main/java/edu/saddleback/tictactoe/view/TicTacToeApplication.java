@@ -5,6 +5,8 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 /**
  * Launches the application, interacts with the scene controller to handle swapping scenes.
  */
@@ -47,7 +49,7 @@ public class TicTacToeApplication extends Application {
      * @throws Exception
      */
     @Override
-    public void start(Stage window) throws Exception {
+    public void start(Stage window) throws IOException {
         Window = window;
         Window.setTitle("Tic Tac Toe");
         Window.setWidth(600);

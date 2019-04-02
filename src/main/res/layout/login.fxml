@@ -27,7 +27,7 @@
             <Label text="Password:  " />
             <TextField fx:id="passwordTextField" alignment="CENTER" />
          </children></HBox>
-      <HBox fx:id="loginButton" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+      <HBox fx:id="loginButtonHBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
          <children>
             <Button fx:id="loginButton" mnemonicParsing="false" onMouseClicked="#onLoginClicked" text="Login" />
             <Button fx:id="createAccountButton" mnemonicParsing="false" onMouseClicked="#onCreateAccountClicked" text="Create Account" />
