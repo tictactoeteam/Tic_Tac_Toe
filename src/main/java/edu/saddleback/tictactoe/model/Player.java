@@ -2,7 +2,7 @@ package edu.saddleback.tictactoe.model;
 
 import java.util.Objects;
 
-//import org.mindrot.BCrypt;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class Player {
     private String id;
@@ -29,7 +29,7 @@ public class Player {
     }
 
     public boolean checkPassword(String password) {
-        return true;
+        return BCrypt.checkpw(password, this.hashedPassword);
     }
 
     public String getHashedPassword() {
@@ -45,7 +45,7 @@ public class Player {
     }
 
     public void setPassword(String password) {
-
+        this.hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
     public void setHashedPassword(String hashedPassword) {

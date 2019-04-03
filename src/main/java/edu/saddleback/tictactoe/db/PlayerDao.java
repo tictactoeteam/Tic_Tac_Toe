@@ -10,36 +10,30 @@ public class PlayerDao {
     private static Connection connection = DbConnection.getConnection();
 
     public static Player getPlayerById(String id) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(
-                "SELECT * FROM ? WHERE id=?"
-        );
-        statement.setString(1, PLAYER_TABLE);
-        statement.setString(2, id);
+        String statement = "SELECT * FROM " + PLAYER_TABLE + " WHERE id=?";
+        PreparedStatement prepared = connection.prepareStatement(statement);
+        prepared.setString(1, id);
 
-        ResultSet rs = statement.executeQuery();
+        ResultSet rs = prepared.executeQuery();
 
         return rs.next() ? extractPlayer(rs) : null;
     }
 
     public static Player getPlayerByUsername(String username) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(
-                "SELECT * FROM ? WHERE username=?"
-        );
-        statement.setString(1, PLAYER_TABLE);
-        statement.setString(2, username);
+        String statement = "SELECT * FROM " + PLAYER_TABLE + " WHERE username=?";
+        PreparedStatement prepared = connection.prepareStatement(statement);
+        prepared.setString(1, username);
 
-        ResultSet rs = statement.executeQuery();
+        ResultSet rs = prepared.executeQuery();
 
         return rs.next() ? extractPlayer(rs) : null;
     }
 
     public static Player[] getAllPlayers() throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(
-                "SELECT * FROM ?"
-        );
-        statement.setString(1, PLAYER_TABLE);
+        String statement = "SELECT * FROM " + PLAYER_TABLE;
+        PreparedStatement prepared = connection.prepareStatement(statement);
 
-        ResultSet rs = statement.executeQuery();
+        ResultSet rs = prepared.executeQuery();
 
         ArrayList<Player> players = new ArrayList<Player>();
         while (rs.next()) {
@@ -50,47 +44,41 @@ public class PlayerDao {
     }
 
     public static void insertPlayer(Player player) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO ? (username, password) VALUES (?, ?)"
-        );
-        statement.setString(1, PLAYER_TABLE);
-        statement.setString(2, player.getUsername());
-        statement.setString(3, player.getHashedPassword());
+        String statement = "INSERT INTO " + PLAYER_TABLE + " (username, password) VALUES (?, ?)";
+        PreparedStatement prepared = connection.prepareStatement(statement);
+        prepared.setString(1, player.getUsername());
+        prepared.setString(2, player.getHashedPassword());
 
-        int affectedRows = statement.executeUpdate();
-        if (affectedRows == 0) {
-            throw new SQLException("Failed to insert, constraint violated");
+        int rowsAffected = prepared.executeUpdate();
+
+        if (rowsAffected == 0) {
+            throw new SQLException("insertPlayer violated constraint");
         }
-
-        String id = statement.getGeneratedKeys().getString("id");
-        player.setId(id);
     }
 
     public static void updatePlayer(Player player) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(
-                "UPDATE ? SET username=?, password=? WHERE id=?"
-        );
-        statement.setString(1, PLAYER_TABLE);
-        statement.setString(2, player.getUsername());
-        statement.setString(3, player.getHashedPassword());
-        statement.setString(4, player.getId());
+        String statement = "UPDATE " + PLAYER_TABLE + " SET username=?, password=? WHERE id=?";
+        PreparedStatement prepared = connection.prepareStatement(statement);
+        prepared.setString(1, player.getUsername());
+        prepared.setString(2, player.getHashedPassword());
+        prepared.setString(3, player.getId());
 
-        int affectedRows = statement.executeUpdate();
-        if (affectedRows == 0) {
-            throw new SQLException("Could not find player");
+        int rowsAffected = prepared.executeUpdate();
+
+        if (rowsAffected == 0) {
+            throw new SQLException("updatePlayer could not find player with ID " + player.getId());
         }
     }
 
     public static void deletePlayer(String id) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(
-                "DELETE FROM ? WHERE id=?"
-        );
-        statement.setString(1, PLAYER_TABLE);
-        statement.setString(2, id);
+        String statement = "DELETE FROM " + PLAYER_TABLE + "WHERE id=?";
+        PreparedStatement prepared = connection.prepareStatement(statement);
+        prepared.setString(1, id);
 
-        int affectedRows = statement.executeUpdate();
-        if (affectedRows == 0) {
-            throw new SQLException("Could not find player");
+        int rowsAffected = prepared.executeUpdate(statement);
+
+        if (rowsAffected == 0) {
+            throw new SQLException("deletePlayer could not find player with ID " + id);
         }
     }
 

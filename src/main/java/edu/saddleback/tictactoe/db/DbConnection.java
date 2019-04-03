@@ -2,6 +2,7 @@ package edu.saddleback.tictactoe.db;
 
 import edu.saddleback.tictactoe.db.migrations.Init;
 import edu.saddleback.tictactoe.db.migrations.Migration;
+import edu.saddleback.tictactoe.model.Player;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
