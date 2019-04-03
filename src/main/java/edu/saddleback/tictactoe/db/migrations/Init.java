@@ -13,7 +13,8 @@ public class Init implements Migration {
                 "CREATE TABLE players " +
                 "(id text PRIMARY KEY DEFAULT gen_random_uuid()," +
                 "username text UNIQUE NOT NULL," +
-                "password text NOT NULL)"
+                "password text NOT NULL, " +
+                "disabled boolean NOT NULL DEFAULT FALSE)"
         ).execute();
 
         conn.prepareStatement("CREATE INDEX players_username ON players (username)").execute();

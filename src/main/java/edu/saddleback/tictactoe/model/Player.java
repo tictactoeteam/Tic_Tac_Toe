@@ -9,15 +9,20 @@ public class Player {
     private String username;
     private String hashedPassword;
 
+    private boolean disabled;
+
     public Player() {
         this.id = "";
         this.username = "";
         this.hashedPassword = "";
+        this.disabled = false;
     }
 
     public Player(String username, String password) {
+        this.id = "";
         this.username = username;
         setPassword(password);
+        this.disabled = false;
     }
 
     public String getId() {
@@ -36,6 +41,10 @@ public class Player {
         return hashedPassword;
     }
 
+    public boolean isDisabled() {
+        return disabled;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -50,6 +59,10 @@ public class Player {
 
     public void setHashedPassword(String hashedPassword) {
         this.hashedPassword = hashedPassword;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
     @Override

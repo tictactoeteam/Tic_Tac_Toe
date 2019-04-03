@@ -57,11 +57,12 @@ public class PlayerDao {
     }
 
     public static void updatePlayer(Player player) throws SQLException {
-        String statement = "UPDATE " + PLAYER_TABLE + " SET username=?, password=? WHERE id=?";
+        String statement = "UPDATE " + PLAYER_TABLE + " SET username=?, password=?, disabled=? WHERE id=?";
         PreparedStatement prepared = connection.prepareStatement(statement);
         prepared.setString(1, player.getUsername());
         prepared.setString(2, player.getHashedPassword());
-        prepared.setString(3, player.getId());
+        prepared.setString(3, String.valueOf(player.isDisabled()));
+        prepared.setString(4, player.getId());
 
         int rowsAffected = prepared.executeUpdate();
 
@@ -70,23 +71,12 @@ public class PlayerDao {
         }
     }
 
-    public static void deletePlayer(String id) throws SQLException {
-        String statement = "DELETE FROM " + PLAYER_TABLE + "WHERE id=?";
-        PreparedStatement prepared = connection.prepareStatement(statement);
-        prepared.setString(1, id);
-
-        int rowsAffected = prepared.executeUpdate(statement);
-
-        if (rowsAffected == 0) {
-            throw new SQLException("deletePlayer could not find player with ID " + id);
-        }
-    }
-
     public static Player extractPlayer(ResultSet rs) throws SQLException {
         Player player = new Player();
         player.setId(rs.getString("id"));
         player.setUsername(rs.getString("username"));
         player.setHashedPassword(rs.getString("password"));
+        player.setDisabled(Boolean.parseBoolean(rs.getString("disabled")));
 
         return player;
     }
