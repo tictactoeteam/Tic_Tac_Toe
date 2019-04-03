@@ -5,7 +5,8 @@ build:
 	gradle build
 
 jar: build
-	gradle shadowJar
+	gradle jar
+	cp ./build/libs/tictactoe.jar ./tictactoe.jar
 
 run:
 	gradle run
