@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class PlayerDao {
-    private static final String PLAYER_TABLE = "players";
+    public static final String PLAYER_TABLE = "players";
     private static Connection connection = DbConnection.getConnection();
 
     public static Player getPlayerById(String id) throws SQLException {
@@ -82,7 +82,7 @@ public class PlayerDao {
         }
     }
 
-    private static Player extractPlayer(ResultSet rs) throws SQLException {
+    public static Player extractPlayer(ResultSet rs) throws SQLException {
         Player player = new Player();
         player.setId(rs.getString("id"));
         player.setUsername(rs.getString("username"));

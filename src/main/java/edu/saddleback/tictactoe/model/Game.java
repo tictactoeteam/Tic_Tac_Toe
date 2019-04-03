@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class Game {
+    private String id;
     private Player playerX;
     private Player playerO;
 
@@ -17,6 +18,14 @@ public class Game {
 
     public Game(Player playerX, Player playerO) {
         this(playerX, playerO, new byte[9]);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Player getPlayerX() {
