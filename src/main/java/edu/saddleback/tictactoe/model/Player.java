@@ -34,6 +34,11 @@ public class Player {
     }
 
     public boolean checkPassword(String password) {
+        // do not allow disabled users to log in
+        if (this.disabled) {
+            return false;
+        }
+
         return BCrypt.checkpw(password, this.hashedPassword);
     }
 
