@@ -14,10 +14,13 @@ public class GameDao {
     private static Connection connection = DbConnection.getConnection();
 
     public static Game getGameById(String id) throws SQLException {
-        String statement = "SELECT * FROM " + GAMES_TABLE + " game " +
-                "INNER JOIN " + PlayerDao.PLAYER_TABLE + " player ON game.player_x=player.id " +
-                "INNER JOIN " + PlayerDao.PLAYER_TABLE + " player ON game.player_o=player.id " +
-                "WHERE id=?";
+        String statement = "SELECT g.id, g.moves, " +
+                "player_x, px.username AS player_x_username, player_o, po.username AS player_o_username" +
+                "FROM " + GAMES_TABLE + " g " +
+                "INNER JOIN " + PlayerDao.PLAYER_TABLE + " px ON px.id = g.player_x " +
+                "INNER JOIN " + PlayerDao.PLAYER_TABLE + " po ON po.id = g.player_o" +
+                "WHERE g.id=?";
+
         PreparedStatement prepared = connection.prepareStatement(statement);
         prepared.setString(1, id);
 
@@ -27,9 +30,12 @@ public class GameDao {
     }
 
     public static Game[] getAllGames() throws SQLException {
-        String statement = "SELECT * FROM " + GAMES_TABLE + " game " +
-                "INNER JOIN " + PlayerDao.PLAYER_TABLE + " player ON game.player_x=player.id " +
-                "INNER JOIN " + PlayerDao.PLAYER_TABLE + " player ON game.player_o = player.id";
+        String statement = "SELECT g.id, g.moves, " +
+                "player_x, px.username AS player_x_username, player_o, po.username AS player_o_username" +
+                "FROM " + GAMES_TABLE + " g " +
+                "INNER JOIN " + PlayerDao.PLAYER_TABLE + " px ON px.id = g.player_x " +
+                "INNER JOIN " + PlayerDao.PLAYER_TABLE + " po ON po.id = g.player_o";
+
         PreparedStatement prepared = connection.prepareStatement(statement);
 
         ResultSet rs = prepared.executeQuery();
@@ -96,14 +102,19 @@ public class GameDao {
     }
 
     private static Game extractGame(ResultSet rs) throws SQLException {
-        Player playerX = PlayerDao.extractPlayer(rs);
-        Player playerO = PlayerDao.extractPlayer(rs);
+        String playerXId = rs.getString("player_x");
+        String playerXName = rs.getString("player_x_username");
+        Player playerX = new Player();
+        playerX.setId(playerXId);
+        playerX.setUsername(playerXName);
+
+        String playerOId = rs.getString("player_o");
+        String playerOName = rs.getString("player_o_username");
+        Player playerO = new Player();
+        playerO.setId(playerOId);
+        playerO.setUsername(playerOName);
 
         byte[] moves = (byte[]) rs.getArray("moves").getArray();
-
-        Game game = new Game(playerX, playerO, moves);
-        game.setId(rs.getString("id"));
-
-        return game;
+        return new Game(playerX, playerO, moves);
     }
 }

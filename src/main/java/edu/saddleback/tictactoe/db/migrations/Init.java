@@ -12,7 +12,7 @@ public class Init implements Migration {
         conn.prepareStatement(
                 "CREATE TABLE players " +
                 "(id text PRIMARY KEY DEFAULT gen_random_uuid()," +
-                "username text NOT NULL," +
+                "username text UNIQUE NOT NULL," +
                 "password text NOT NULL)"
         ).execute();
 
