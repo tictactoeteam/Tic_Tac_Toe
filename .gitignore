@@ -2,6 +2,10 @@
 # Created by https://www.gitignore.io/api/java
 # Edit at https://www.gitignore.io/?templates=java
 
+### Secrets
+# Environment variables
+.env
+
 ### Java ###
 # Compiled class file
 *.class

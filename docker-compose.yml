@@ -1,0 +1,25 @@
+version: '3.4'
+services:
+    tictactoe:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+          - TTT_DB_URL=jdbc:postgresql://postgres:5432/
+          - TTT_DB_USER=postgres
+          - TTT_DB_PASS=postgres
+        ports:
+          - "6969:6969"
+        depends_on:
+          - "postgres"
+          - "express"
+
+    postgres:
+        image: postgres:latest
+        ports:
+          - "5432:5432"
+
+    express:
+        image: typokign/bitgo-express
+        env_file:
+          - .env

@@ -2,11 +2,17 @@
 .DEFAULT_GOAL := run
 
 build:
-	gradle build
+	./gradlew build
 
 jar: build
-	gradle jar
+	./gradlew jar
 	cp ./build/libs/tictactoe.jar ./tictactoe.jar
 
 run:
-	gradle run
+	./gradlew run
+
+build-docker:
+	docker build .
+
+up: build-docker
+	docker-compose up

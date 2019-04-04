@@ -17,8 +17,7 @@ public class Main {
         ArrayList<String> args = new ArrayList<>(Arrays.asList(a));
 
         if (args.contains("--migrate")) {
-            int from = Integer.parseInt(args.get(args.indexOf("--migrate") + 1));
-            DbConnection.runMigrations(from);
+            DbConnection.runMigrations();
         }
         if (args.contains("--server")) {
             BetterServer server = new BetterServer();
