@@ -18,8 +18,6 @@ services:
         image: postgres:latest
         ports:
           - "5432:5432"
-        volumes:
-          - ./pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
 
     express:
         image: typokign/bitgo-express
