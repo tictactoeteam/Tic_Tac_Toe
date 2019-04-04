@@ -1,22 +1,15 @@
-FROM java:openjdk-8
+FROM gradle:jdk11
 LABEL maintainer="david@typokign.com"
 
-RUN apt-get update && \
-    apt-get -y upgrade && \
-    apt-get -y install openjfx
+USER root
 
 EXPOSE 6969
 
-RUN mkdir /srv/classes
-
+COPY . /srv/
 WORKDIR /srv/
-ADD . .
 
-# workaround cuz I don't want to set up a build system
-RUN find -name "*.java"  > src.txt && \
-    javac @src.txt -d ./classes && \
-    jar cfe tictactoe.jar edu.saddleback.tictactoe.Main -C classes . && \
-    rm src.txt && \   
-    rm -rf classes
+RUN gradle build --no-daemon && \
+    gradle jar --no-daemon && \
+    cp ./build/libs/tictactoe.jar tictactoe.jar
 
-CMD ["java", "-jar", "tictactoe.jar", "--server"]
+CMD ["java", "-jar", "tictactoe.jar", "--server", "--migrate"]

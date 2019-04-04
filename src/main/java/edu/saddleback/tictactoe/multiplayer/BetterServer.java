@@ -186,6 +186,7 @@ public class BetterServer {
     public BetterServer(){
         this(PORT);
     }
+
     public BetterServer(int port){
         System.out.println("Creating a server on port no. " + port);
         try {
