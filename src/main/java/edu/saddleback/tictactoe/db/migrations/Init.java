@@ -11,7 +11,7 @@ public class Init implements Migration {
 
         conn.prepareStatement(
                 "CREATE TABLE players " +
-                "(id text PRIMARY KEY DEFAULT gen_random_uuid()," +
+                "(id uuid PRIMARY KEY DEFAULT gen_random_uuid()," +
                 "username text UNIQUE NOT NULL," +
                 "password text NOT NULL, " +
                 "disabled boolean NOT NULL DEFAULT FALSE)"
@@ -21,9 +21,9 @@ public class Init implements Migration {
 
         conn.prepareStatement(
                 "CREATE TABLE games " +
-                   "(id text PRIMARY KEY DEFAULT gen_random_uuid()," +
-                   "player_x text NOT NULL REFERENCES players(id)," +
-                   "player_o text NOT NULL REFERENCES players(id)," +
+                   "(id uuid PRIMARY KEY DEFAULT gen_random_uuid()," +
+                   "player_x uuid NOT NULL REFERENCES players(id)," +
+                   "player_o uuid NOT NULL REFERENCES players(id)," +
                    "moves smallint[] NOT NULL)"
         ).execute();
 
