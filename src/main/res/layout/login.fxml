@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -19,13 +20,13 @@
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
             <Label text="Username: " />
-            <TextField fx:id="usernameTextField" alignment="CENTER" />
+            <TextField fx:id="usernameTextField" alignment="TOP_LEFT" />
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
             <Label text="Password:  " />
-            <TextField fx:id="passwordTextField" alignment="CENTER" />
+            <PasswordField fx:id="passwordTextField" />
          </children></HBox>
       <HBox fx:id="loginButtonHBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
          <children>

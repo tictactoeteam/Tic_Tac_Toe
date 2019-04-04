@@ -23,16 +23,6 @@ public class GameView{
     Button resetButton;
 
     /**
-     * Sets difficulty to easy mode.
-     */
-    public void handleEasy(){ controller.setDifficulty("Easy Mode"); }
-
-    /**
-     * Sets difficulty to hard mode.
-     */
-    public void handleBillMode(){ controller.setDifficulty("Mr. Bill Mode"); }
-
-    /**
      * Deletes the same file and closes the application.
      */
     public void onResetClicked() throws Exception {
@@ -46,17 +36,7 @@ public class GameView{
     protected void initialize(){
 
         controller = TicTacToeApplication.getController();
-        if(controller.isMultiplayer()){ radioHBoxDiff.setVisible(false); }
 
-        controller.addNameListener(this::onNameChanged);
-    }
-
-    private void onNameChanged(boolean isPlayer1, String name) {
-        if (isPlayer1) {
-            player1Name.setText(name);
-        } else {
-            player2Name.setText(name);
-        }
     }
 
 }
