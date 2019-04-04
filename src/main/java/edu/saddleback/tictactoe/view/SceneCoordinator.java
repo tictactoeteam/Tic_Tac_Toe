@@ -6,6 +6,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+
 /**
  * Handles how the scenes switch around the main window.
  */
@@ -37,9 +41,10 @@ public class SceneCoordinator {
      * Fetches the login scene.
      * @throws Exception
      */
-    public void showLoginScene() throws Exception{
+    public void showLoginScene() throws IOException {
 
-        Parent layout = FXMLLoader.load(getClass().getResource("/layout/login.fxml"));
+        URL url = new File("src/main/res/layout/login.fxml").toURL();
+        Parent layout = FXMLLoader.load(url);
         this.window.setScene(new Scene(layout));
 
     }
@@ -50,7 +55,8 @@ public class SceneCoordinator {
      */
     public void showGameScene() throws Exception{
 
-        Parent layout = FXMLLoader.load(getClass().getResource("/layout/game.fxml"));
+        URL url = new File("src/main/res/layout/game.fxml").toURL();
+        Parent layout = FXMLLoader.load(url);
         this.window.setScene(new Scene(layout));
 
     }
@@ -61,7 +67,8 @@ public class SceneCoordinator {
      */
     public void showWinnerScene() throws Exception{
 
-        Parent layout = FXMLLoader.load(getClass().getResource("/layout/winner.fxml"));
+        URL url = new File("src/main/res/layout/winner.fxml").toURL();
+        Parent layout = FXMLLoader.load(url);
         this.window.setScene(new Scene(layout));
 
     }
