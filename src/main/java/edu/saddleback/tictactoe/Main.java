@@ -21,7 +21,7 @@ public class Main {
         }
         if (args.contains("--server")) {
             BetterServer server = new BetterServer();
-            server.fireTheServer();
+            server.start();
         } else {
             Application.launch(TicTacToeApplication.class, a);
         }
