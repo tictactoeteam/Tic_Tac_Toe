@@ -53,19 +53,19 @@ public class BetterServer {
         pubNub = new PubNub(pnConfiguration);
     }
 
-    public BetterServer(int port){
-        {
-            try {
-                serverSocket = new ServerSocket(port);
-            }catch(IOException ex){
-                serverSocket = null;
-                System.out.println("Unable to create a server!");
-            }
-            connectionHandlers = Executors.newCachedThreadPool();
-            connections = new Vector<>();
-            System.out.println("Server ready to start on port " + port);
-        }
-    }
+//    public BetterServer(int port){
+//        {
+//            try {
+//                serverSocket = new ServerSocket(port);
+//            }catch(IOException ex){
+//                serverSocket = null;
+//                System.out.println("Unable to create a server!");
+//            }
+//            connectionHandlers = Executors.newCachedThreadPool();
+//            connections = new Vector<>();
+//            System.out.println("Server ready to start on port " + port);
+//        }
+//    }
 
 
     // function that adds a client
@@ -145,61 +145,61 @@ public class BetterServer {
     }
 
     // function that handles a message, I think in PN it's together when you add a client, so this should go
-    private Response handle(Request request){
-        Response response = null;
-        switch(request.getType()) {
-
-            default:
-                System.out.println("Unknown request: " + request.getType());
-                response = new Response("UnknownRequest!");
-        }
-
-        return response;
-    }
+//    private Response handle(Request request){
+//        Response response = null;
+//        switch(request.getType()) {
+//
+//            default:
+//                System.out.println("Unknown request: " + request.getType());
+//                response = new Response("UnknownRequest!");
+//        }
+//
+//        return response;
+//    }
 
     // I think goes away, PN will do all crazy threading for us
-    private Thread serverBehavior = new Thread(() -> {
-
-        while(true) {
-            System.out.println(">>>Waiting for a connection...");
-            acceptConnection();
-            System.out.println(">>>Connection established");
-            //connectionHandlers.execute(generateConnectionHandler(connection));
-        }
-
-    });
+//    private Thread serverBehavior = new Thread(() -> {
+//
+//        while(true) {
+//            System.out.println(">>>Waiting for a connection...");
+//            acceptConnection();
+//            System.out.println(">>>Connection established");
+//            //connectionHandlers.execute(generateConnectionHandler(connection));
+//        }
+//
+//    });
 
 
     // I think goes awya for the same reason as the above
-    private Runnable generateConnectionHandler(Socket connection){
-        return new Runnable() {
-            @Override
-            public void run() {
-                boolean running = true;
-                Socket localConnection = connection;
-                Request localRequest;
-                Response localResponse;
-
-                while(running){
-                    try {
-                        localRequest = BetterServer.receiveMessage(localConnection);
-                        localResponse = handle(localRequest);
-                        if (localResponse == null) {
-                            running = false;
-                        } else {
-                            BetterServer.sendMessage(localConnection, localResponse);
-                        }
-                    }catch(IOException ex){
-                        System.out.println("Non-graceful shutdown: connection broken!");
-                        running = false;
-                    }
-                }
-
-                System.out.println("Shutting down the connection!");
-                closeConnection(localConnection);
-            }
-        };
-    }
+//    private Runnable generateConnectionHandler(Socket connection){
+//        return new Runnable() {
+//            @Override
+//            public void run() {
+//                boolean running = true;
+//                Socket localConnection = connection;
+//                Request localRequest;
+//                Response localResponse;
+//
+//                while(running){
+//                    try {
+//                        localRequest = BetterServer.receiveMessage(localConnection);
+//                        localResponse = handle(localRequest);
+//                        if (localResponse == null) {
+//                            running = false;
+//                        } else {
+//                            BetterServer.sendMessage(localConnection, localResponse);
+//                        }
+//                    }catch(IOException ex){
+//                        System.out.println("Non-graceful shutdown: connection broken!");
+//                        running = false;
+//                    }
+//                }
+//
+//                System.out.println("Shutting down the connection!");
+//                closeConnection(localConnection);
+//            }
+//        };
+//    }
 
 
     // stays, modifications needed
@@ -227,9 +227,9 @@ public class BetterServer {
 
 
     // I think goes away
-    public void start(){
-        serverBehavior.start();
-    }
+//    public void start(){
+//        serverBehavior.start();
+//    }
 
 
     // unsubscribe method
