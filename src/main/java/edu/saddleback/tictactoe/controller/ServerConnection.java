@@ -37,7 +37,7 @@ public class ServerConnection {
         this.dhPublicKey = DiffieHellmanKeyGenerator.generatePublicKey(this.dhPrivateKey);
 
         connect();
-        waitForSharedSecret();
+        waitForServerPub();
     }
 
     private void connect() {
@@ -59,7 +59,7 @@ public class ServerConnection {
         }
     }
 
-    private void waitForSharedSecret() {
+    private void waitForServerPub() {
         this.pubnub.addListener(new SubscribeCallback() {
             @Override
             public void status(PubNub pubnub, PNStatus status) {}
@@ -67,16 +67,14 @@ public class ServerConnection {
             @Override
             public void message(PubNub pubnub, PNMessageResult message) {
                 String type = message.getMessage().getAsJsonObject().get("type").getAsString();
-                if (!type.equals("sharedSecret")) {
+                if (!type.equals("serverPub")) {
                     return;
                 }
 
                 JsonObject data = message.getMessage().getAsJsonObject().get("data").getAsJsonObject();
-                String intendedClient = data.get("client").getAsString();
-
-                if (pubnub.getInstanceId().equals(intendedClient)) {
-                    sharedSecret = data.get("secret").getAsBigInteger();
-                }
+                BigInteger serverPub = data.get("publicKey").getAsBigInteger();
+                sharedSecret = DiffieHellmanKeyGenerator.generateSharedKey(serverPub, dhPrivateKey);
+                System.out.println("shared secret: " + sharedSecret);
             }
 
             @Override

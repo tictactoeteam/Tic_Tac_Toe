@@ -4,9 +4,11 @@ import com.pubnub.api.PNConfiguration;
 import com.pubnub.api.PubNub;
 import com.sauljohnson.mayo.DiffieHellmanKeyGenerator;
 import edu.saddleback.tictactoe.multiplayer.handlers.ConnectHandler;
+import edu.saddleback.tictactoe.multiplayer.handlers.LoginHandler;
 
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class Server {
     private String pubKey = System.getenv("TTT_PUBNUB_PUBLISH");
@@ -17,6 +19,7 @@ public class Server {
 
     private BigInteger privateKey;
     private BigInteger publicKey;
+    private HashMap<String, BigInteger> sharedSecrets;
 
     public Server() {
         this.pnConfiguration = new PNConfiguration();
@@ -28,10 +31,20 @@ public class Server {
 
         this.privateKey = DiffieHellmanKeyGenerator.generatePrivateKey();
         this.publicKey = DiffieHellmanKeyGenerator.generatePublicKey(this.privateKey);
+        this.sharedSecrets = new HashMap<>();
+    }
+
+    public void addSharedSecret(String clientId, BigInteger secret) {
+        this.sharedSecrets.put(clientId, secret);
+    }
+
+    public BigInteger getSharedSecret(String clientId) {
+        return this.sharedSecrets.get(clientId);
     }
 
     public void start() {
         this.delegator.addHandler("connect", new ConnectHandler(privateKey, publicKey));
+        this.delegator.addHandler("login", new LoginHandler(this));
         pubnub.subscribe().channels(Arrays.asList("main")).execute();
     }
 }
