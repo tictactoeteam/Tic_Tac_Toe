@@ -17,7 +17,7 @@ public class ConnectHandler implements MessageHandler {
     }
 
     @Override
-    public void handleMessage(JsonObject data, PubNub pubnub) {
+    public void handleMessage(JsonObject data, PubNub pubnub, String clientId) {
         BigInteger userPubkey = data.get("publicKey").getAsBigInteger();
         BigInteger sharedSecret = DiffieHellmanKeyGenerator.generateSharedKey(userPubkey, privateKey);
 
@@ -26,16 +26,17 @@ public class ConnectHandler implements MessageHandler {
         System.out.println("Shared secret is " + sharedSecret.toString());
 
         pubnub.publish()
-                .message(getMessage(sharedSecret))
+                .message(getMessage(sharedSecret, clientId))
                 .channel("main");
     }
 
-    private JsonObject getMessage(BigInteger sharedSecret) {
+    private JsonObject getMessage(BigInteger sharedSecret, String clientId) {
         JsonObject object = new JsonObject();
         object.addProperty("type", "sharedSecret");
 
         JsonObject data = new JsonObject();
         data.addProperty("secret", sharedSecret);
+        data.addProperty("client", clientId);
         object.add("data", data);
 
         return object;

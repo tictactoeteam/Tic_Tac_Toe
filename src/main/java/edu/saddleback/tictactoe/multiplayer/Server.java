@@ -32,6 +32,6 @@ public class Server {
 
     public void start() {
         this.delegator.addHandler("connect", new ConnectHandler(privateKey, publicKey));
-        pubnub.subscribe().channels(Arrays.asList("main")).withPresence().execute();
+        pubnub.subscribe().channels(Arrays.asList("main")).execute();
     }
 }
