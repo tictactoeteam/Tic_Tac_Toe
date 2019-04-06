@@ -1,31 +1,32 @@
 package edu.saddleback.tictactoe.model;
 
 import java.util.Objects;
+import java.util.UUID;
 
 import org.mindrot.jbcrypt.BCrypt;
 
 public class Player {
-    private String id;
+    private UUID id;
     private String username;
     private String hashedPassword;
 
     private boolean disabled;
 
     public Player() {
-        this.id = "";
+        this.id = UUID.randomUUID();
         this.username = "";
         this.hashedPassword = "";
         this.disabled = false;
     }
 
-    public Player(String username, String password) {
-        this.id = "";
+    public Player(UUID id, String username, String password) {
+        this.id = id;
         this.username = username;
         setPassword(password);
         this.disabled = false;
     }
 
-    public String getId() {
+    public UUID getId() {
         return this.id;
     }
 
@@ -50,7 +51,7 @@ public class Player {
         return disabled;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

@@ -42,7 +42,6 @@ public class SceneCoordinator {
      * @throws Exception
      */
     public void showLoginScene() throws IOException {
-
         URL url = new File("src/main/res/layout/login.fxml").toURL();
         Parent layout = FXMLLoader.load(url);
         this.window.setScene(new Scene(layout));
