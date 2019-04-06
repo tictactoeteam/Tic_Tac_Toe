@@ -1,36 +1,32 @@
 package edu.saddleback.tictactoe.multiplayer;
 
-import edu.saddleback.tictactoe.messages.Message;
 import edu.saddleback.tictactoe.messages.Request;
 import edu.saddleback.tictactoe.messages.Response;
-import edu.saddleback.tictactoe.model.Board;
-import edu.saddleback.tictactoe.model.BoardMove;
-import edu.saddleback.tictactoe.model.GamePiece;
-import edu.saddleback.tictactoe.model.GridAlreadyChosenException;
-import edu.saddleback.tictactoe.view.TicTacToeApplication;
-import javafx.application.Platform;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.security.InvalidKeyException;
-import java.util.ArrayList;
 import java.util.Vector;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class BetterServer {
+    //stays I think
     private Vector<BetterGame> games = new Vector<>();
-    private ServerSocket serverSocket;
+    //stays I think, just not as a vector of *sockets*
     private Vector<Socket> connections;
+    //goes away I think
     private Executor connectionHandlers;
+
+    //goes away!
+    private ServerSocket serverSocket;
     private static final int PORT = 6969;
     private int currentGameID = 1;
 
 
+    // modifications needed-those boys will configure a PN and stuff
     public BetterServer(){
         this(PORT);
     }
@@ -50,6 +46,7 @@ public class BetterServer {
     }
 
 
+    // function that adds a client
     public Socket acceptConnection(){
         try {
             Socket client = serverSocket.accept();
@@ -61,6 +58,7 @@ public class BetterServer {
         }
     }
 
+    // function that handles a message, I think in PN it's together when you add a client, so this should go
     private Response handle(Request request){
         Response response = null;
         switch(request.getType()) {
@@ -73,6 +71,7 @@ public class BetterServer {
         return response;
     }
 
+    // I think goes away, PN will do all crazy threading for us
     private Thread serverBehavior = new Thread(() -> {
 
         while(true) {
@@ -80,11 +79,12 @@ public class BetterServer {
             Socket connection = acceptConnection();
             System.out.println(">>>Connection established: " + connection.getInetAddress());
             connectionHandlers.execute(generateConnectionHandler(connection));
-    }
+        }
 
     });
 
 
+    // I think goes awya for the same reason as the above
     private Runnable generateConnectionHandler(Socket connection){
         return new Runnable() {
             @Override
@@ -116,6 +116,7 @@ public class BetterServer {
     }
 
 
+    // stays, modifications needed
     public static Request receiveMessage(Socket connection) throws IOException{
         try {
             ObjectInputStream read = new ObjectInputStream(connection.getInputStream());
@@ -128,6 +129,8 @@ public class BetterServer {
         }
     }
 
+
+    // stays, modifications needed
     public static void sendMessage(Socket connection, Response message) throws IOException{
 
         ObjectOutputStream send = new ObjectOutputStream(connection.getOutputStream());
@@ -137,11 +140,13 @@ public class BetterServer {
     }
 
 
+    // I think goes away
     public void start(){
         serverBehavior.start();
     }
 
 
+    // unsubscribe method
     public void closeConnection(Socket connection){
         try {
             connections.remove(connection);
