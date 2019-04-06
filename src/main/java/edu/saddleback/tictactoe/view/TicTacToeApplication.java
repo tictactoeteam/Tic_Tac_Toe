@@ -27,6 +27,17 @@ public class TicTacToeApplication extends Application {
     public static SceneCoordinator getCoordinator(){return coordinator;}
 
     /**
+     * Allows for the window sizes to be changes.
+     * @param weidth
+     * @param height
+     */
+    public static void setWindowSize(double weidth, double height){
+
+        Window.setWidth(weidth);
+        Window.setHeight(height);
+    }
+
+    /**
      * Effectively resets the application
      */
     public static void newCoordinator(){
