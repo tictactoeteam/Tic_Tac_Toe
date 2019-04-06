@@ -15,12 +15,17 @@ public class Crypto {
      * @param data is a string
      * @return the encrypted string
      */
-    public static String encrypt(String data, BigInteger sharedSecret) throws Exception {
-        Key key = generateKey(sharedSecret.toByteArray());
-        Cipher c = Cipher.getInstance(ALGO);
-        c.init(Cipher.ENCRYPT_MODE, key);
-        byte[] encVal = c.doFinal(data.getBytes());
-        return Base64.getEncoder().encodeToString(encVal);
+    public static String encrypt(String data, BigInteger sharedSecret) {
+        try {
+            Key key = generateKey(sharedSecret.toByteArray());
+            Cipher c = Cipher.getInstance(ALGO);
+            c.init(Cipher.ENCRYPT_MODE, key);
+            byte[] encVal = c.doFinal(data.getBytes());
+            return Base64.getEncoder().encodeToString(encVal);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -29,13 +34,19 @@ public class Crypto {
      * @param ciphertext is a string
      * @return the decrypted string
      */
-    public static String decrypt(String ciphertext, BigInteger sharedSecret) throws Exception {
-        Key key = generateKey(sharedSecret.toByteArray());
-        Cipher c = Cipher.getInstance(ALGO);
-        c.init(Cipher.DECRYPT_MODE, key);
-        byte[] decordedValue = Base64.getDecoder().decode(ciphertext);
-        byte[] decValue = c.doFinal(decordedValue);
-        return new String(decValue);
+    public static String decrypt(String ciphertext, BigInteger sharedSecret) {
+        try {
+            Key key = generateKey(sharedSecret.toByteArray());
+            Cipher c = Cipher.getInstance(ALGO);
+            c.init(Cipher.DECRYPT_MODE, key);
+            byte[] decordedValue = Base64.getDecoder().decode(ciphertext);
+            byte[] decValue = c.doFinal(decordedValue);
+            return new String(decValue);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     private static Key generateKey(byte[] key) {

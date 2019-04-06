@@ -32,7 +32,7 @@ public class MessageDelegator extends SubscribeCallback {
         MessageHandler handler = handlers.get(type);
 
         if (handler != null) {
-            handler.handleMessage(data, pubnub);
+            handler.handleMessage(data, pubnub, message.getPublisher());
         }
     }
 

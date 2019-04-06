@@ -2,6 +2,7 @@ package edu.saddleback.tictactoe.multiplayer.handlers;
 
 import com.google.gson.JsonObject;
 import com.pubnub.api.PubNub;
+import com.pubnub.api.PubNubException;
 import com.sauljohnson.mayo.DiffieHellmanKeyGenerator;
 import edu.saddleback.tictactoe.multiplayer.MessageHandler;
 
@@ -17,7 +18,7 @@ public class ConnectHandler implements MessageHandler {
     }
 
     @Override
-    public void handleMessage(JsonObject data, PubNub pubnub) {
+    public void handleMessage(JsonObject data, PubNub pubnub, String clientId) {
         BigInteger userPubkey = data.get("publicKey").getAsBigInteger();
         BigInteger sharedSecret = DiffieHellmanKeyGenerator.generateSharedKey(userPubkey, privateKey);
 
@@ -25,19 +26,24 @@ public class ConnectHandler implements MessageHandler {
         System.out.println("Server public is " + this.publicKey.toString());
         System.out.println("Shared secret is " + sharedSecret.toString());
 
-        pubnub.publish()
-                .message(getMessage(sharedSecret))
-                .channel("main");
+        broadcastPublicKey(pubnub);
     }
 
-    private JsonObject getMessage(BigInteger sharedSecret) {
-        JsonObject object = new JsonObject();
-        object.addProperty("type", "sharedSecret");
+    private void broadcastPublicKey(PubNub pubnub) {
+        JsonObject msg = new JsonObject();
+        msg.addProperty("type", "serverPub");
 
         JsonObject data = new JsonObject();
-        data.addProperty("secret", sharedSecret);
-        object.add("data", data);
+        data.addProperty("publicKey", this.publicKey);
+        msg.add("data", data);
 
-        return object;
+        try {
+            pubnub.publish()
+                    .channel("main")
+                    .message(msg)
+                    .sync();
+        } catch (PubNubException e) {
+            e.printStackTrace();
+        }
     }
 }
