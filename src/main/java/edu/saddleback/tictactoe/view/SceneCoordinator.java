@@ -49,6 +49,18 @@ public class SceneCoordinator {
     }
 
     /**
+     * Fetches the lobby scene.
+     * @throws Exception
+     */
+    public void showLobbyScene() throws Exception{
+
+        URL url = new File("src/main/res/layout/lobby.fxml").toURL();
+        Parent layout = FXMLLoader.load(url);
+        this.window.setScene(new Scene(layout));
+
+    }
+
+    /**
      * Fetches the game scene.
      * @throws Exception
      */

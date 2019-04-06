@@ -1,9 +1,7 @@
 package edu.saddleback.tictactoe.view;
 
-import edu.saddleback.tictactoe.decision.Node;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
 import edu.saddleback.tictactoe.controller.GameController;
 
 /**
@@ -34,7 +32,9 @@ public class LoginView {
     public void onLoginClicked(){
 
         if(true){//<-SEARCH THROUGH DATABASE IF THE USERNAME AND PASSWORD MATCH AN ACCOUNT, ELSE ERROR
-
+            try{
+                TicTacToeApplication.getCoordinator().showLobbyScene();
+            }catch(Exception ex){System.out.println("OOF");}
             //Login to the server and join the lobby, show lobby screen
 
         }else{
