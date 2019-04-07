@@ -41,8 +41,8 @@ public class ServerConnection {
 
         this.sharedSecret.subscribe(System.out::println);
 
-        connect();
         waitForServerPub();
+        connect();
     }
 
     private void connect() {
@@ -86,9 +86,7 @@ public class ServerConnection {
             public void presence(PubNub pubnub, PNPresenceEventResult presence) {}
         });
 
-        this.pubnub.subscribe()
-                .channels(Arrays.asList("main"))
-                .execute();
+        this.pubnub.subscribe().channels(Arrays.asList("main")).execute();
     }
 
     public void login(String username, String password) {

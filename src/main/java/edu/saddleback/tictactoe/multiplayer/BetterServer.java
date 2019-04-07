@@ -32,12 +32,6 @@ public class BetterServer {
     private int currentGameID = 1;
 
     public BetterServer(){
-        pnConfiguration = new PNConfiguration();
-        pnConfiguration.setPublishKey(pubKey);
-        pnConfiguration.setSubscribeKey(subKey);
-        pnConfiguration.setSecure(false);
-
-        pubNub = new PubNub(pnConfiguration);
     }
 
 //    public BetterServer(int port){
