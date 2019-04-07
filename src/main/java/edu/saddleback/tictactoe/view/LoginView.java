@@ -99,25 +99,61 @@ public class LoginView {
 
     public void onCreateAccountClicked(){
 
-        if(!usernameTextField.getText().equals("") && !passwordTextField.getText().equals("")){
+        String initialUsername = usernameTextField.getText();
 
-            //ADD A LISTENER THAT LISTENS IF THE ACCOUNT ALREADY EXISTS, ONLY DO THE BELOW STUFF IF IT DOES NOT EXIST
-//        errorText.setText("***error-account already exists***");
-//        errorText.setVisible(true);
+        if(!initialUsername.equals("") && !passwordTextField.getText().equals("")) {
 
-            conn.signup(usernameTextField.getText(), passwordTextField.getText());
-            try{
-                TicTacToeApplication.getCoordinator().showLobbyScene();
-                System.out.println("Good login");
-            }catch(Exception ex){System.out.println("OOF");}
+            conn.signup(initialUsername, passwordTextField.getText());
 
-        }else{
+            conn.getPubNub().addListener(new SubscribeCallback() {
+                @Override
+                public void status(PubNub pubnub, PNStatus status) {
+                }
 
-            errorText.setText("***error-missing credentials***");
-            errorText.setVisible(true);
+                @Override
+                public void message(PubNub pubnub, PNMessageResult message) {
 
+                    String messageType = message.getMessage().getAsJsonObject().get("type").getAsString();//Message type
+                    JsonObject data = message.getMessage().getAsJsonObject().get("data").getAsJsonObject();
+                    String userN = data.get("username").getAsString();//Returned username
+                    System.out.println(userN);
+                    if (userN.equals(usernameTextField.getText()) && messageType.equals("accountCreated")) {//Success
+                        System.out.println("SUCCESS ENTERED");
+                        conn.login(usernameTextField.getText(), passwordTextField.getText());
+
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    TicTacToeApplication.getCoordinator().showLobbyScene();
+                                    System.out.println("Good login");
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        });
+
+                    } else if (userN.equals(usernameTextField.getText()) && messageType.equals("accountExists")) {
+                        System.out.println("EXISTS ENTERED");
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                errorText.setText("***error-account already exists***");
+                                errorText.setVisible(true);
+                            }
+                        });
+
+                    }
+
+                }
+
+                @Override
+                public void presence(PubNub pubnub, PNPresenceEventResult presence) {
+                }
+            });
+
+            conn.getPubNub().subscribe().channels(Arrays.asList("main")).execute();
         }
-
     }
 
 }
