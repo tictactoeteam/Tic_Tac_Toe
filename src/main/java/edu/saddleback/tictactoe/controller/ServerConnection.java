@@ -109,6 +109,25 @@ public class ServerConnection {
         }
     }
 
+    public void signup(String username, String password) {
+        JsonObject msg = new JsonObject();
+        msg.addProperty("type", "signup");
+
+        JsonObject data = new JsonObject();
+        data.addProperty("username", Crypto.encrypt(username, sharedSecret.get()));
+        data.addProperty("password", Crypto.encrypt(password, sharedSecret.get()));
+        msg.add("data", data);
+
+        try {
+            this.pubnub.publish()
+                    .channel("main")
+                    .message(msg)
+                    .sync();
+        } catch (PubNubException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static ServerConnection getInstance() {
         if (instance == null) {
             instance = new ServerConnection();

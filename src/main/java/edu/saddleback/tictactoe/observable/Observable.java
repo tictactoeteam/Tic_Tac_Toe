@@ -17,7 +17,6 @@ public class Observable<E> {
     }
 
     public void set(E object) {
-        System.out.println("SETTING " + object);
         this.object = object;
         this.listeners.forEach(eListener -> eListener.update(object));
     }
