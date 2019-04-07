@@ -9,6 +9,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER" prefHeight="200.0" prefWidth="600.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.tictactoe.view.LoginView">
    <children>
@@ -37,6 +38,9 @@
             <Insets />
          </VBox.margin>
       </HBox>
-      <Label fx:id="errorText" textFill="RED" visible="false" />
+      <Label fx:id="errorText" textFill="RED" visible="false">
+         <font>
+            <Font size="24.0" />
+         </font></Label>
    </children>
 </VBox>

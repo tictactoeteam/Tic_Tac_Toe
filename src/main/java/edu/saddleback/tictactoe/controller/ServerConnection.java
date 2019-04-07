@@ -116,4 +116,7 @@ public class ServerConnection {
 
         return instance;
     }
+
+    public PubNub getPubNub(){return pubnub;}
+
 }
