@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" fx:controller="edu.saddleback.tictactoe.view.LobbyView" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.tictactoe.view.LobbyView">
    <bottom>
       <HBox alignment="CENTER" prefHeight="56.0" prefWidth="700.0" BorderPane.alignment="CENTER">
          <children>
@@ -26,7 +26,7 @@
          <children>
             <ImageView fitHeight="114.0" fitWidth="394.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/images/tictactoe2.png" />
+                  <Image url="@../images/tictactoe2.png" />
                </image>
             </ImageView>
             <Label alignment="CENTER" text="Available Games">
