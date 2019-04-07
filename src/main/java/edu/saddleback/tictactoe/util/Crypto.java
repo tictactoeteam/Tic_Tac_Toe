@@ -50,6 +50,12 @@ public class Crypto {
     }
 
     private static Key generateKey(byte[] key) {
+        byte[] trimmed = new byte[32];
+
+        for (int i = 0; i < trimmed.length; i++) {
+            trimmed[i] = key[i];
+        }
+
         return new SecretKeySpec(key, ALGO);
     }
 }
