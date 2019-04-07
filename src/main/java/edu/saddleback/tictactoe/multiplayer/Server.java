@@ -5,6 +5,7 @@ import com.pubnub.api.PubNub;
 import com.sauljohnson.mayo.DiffieHellmanKeyGenerator;
 import edu.saddleback.tictactoe.multiplayer.handlers.ConnectHandler;
 import edu.saddleback.tictactoe.multiplayer.handlers.LoginHandler;
+import edu.saddleback.tictactoe.multiplayer.handlers.SignupHandler;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -46,6 +47,7 @@ public class Server {
     public void start() {
         this.delegator.addHandler("connect", new ConnectHandler(this, privateKey, publicKey));
         this.delegator.addHandler("login", new LoginHandler(this));
+        this.delegator.addHandler("signup", new SignupHandler())
         pubnub.subscribe().channels(Arrays.asList("main")).execute();
     }
 }

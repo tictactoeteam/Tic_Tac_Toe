@@ -2,11 +2,15 @@ package edu.saddleback.tictactoe.multiplayer.handlers;
 
 import com.google.gson.JsonObject;
 import com.pubnub.api.PubNub;
+import com.pubnub.api.PubNubException;
+import edu.saddleback.tictactoe.db.PlayerDao;
+import edu.saddleback.tictactoe.model.Player;
 import edu.saddleback.tictactoe.multiplayer.MessageHandler;
 import edu.saddleback.tictactoe.multiplayer.Server;
 import edu.saddleback.tictactoe.util.Crypto;
 
 import java.math.BigInteger;
+import java.sql.SQLException;
 
 public class LoginHandler implements MessageHandler {
     private Server server;
@@ -25,7 +29,58 @@ public class LoginHandler implements MessageHandler {
         String username = Crypto.decrypt(encryptedUsername, sharedSecret);
         String password = Crypto.decrypt(encryptedPassword, sharedSecret);
 
-        System.out.println("Encrypted " + encryptedUsername + " " + encryptedPassword);
-        System.out.println("Trying to login " + username + " " + password);
+        try {
+            Player player = PlayerDao.getPlayerByUsername(username);
+            if (player == null) {
+                sendBadLogin(pubnub, username);
+                return;
+            }
+
+            if (!player.checkPassword(password)) {
+                sendBadLogin(pubnub, username);
+                return;
+            }
+
+            sendLoggedIn(pubnub, username);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendLoggedIn(PubNub pubnub, String username) {
+        JsonObject msg = new JsonObject();
+        msg.addProperty("type", "loggedIn");
+
+        JsonObject data = new JsonObject();
+        data.addProperty("username", username);
+
+        msg.add("data", data);
+
+        try {
+            pubnub.publish()
+                    .channel("main")
+                    .message(msg)
+                    .sync();
+        } catch (PubNubException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendBadLogin(PubNub pubnub, String username) {
+        JsonObject msg = new JsonObject();
+        msg.addProperty("type", "badLogin");
+
+        JsonObject data = new JsonObject();
+        data.addProperty("username", username);
+        msg.add("data", data);
+
+        try {
+            pubnub.publish()
+                    .channel("main")
+                    .message(msg)
+                    .sync();
+        } catch (PubNubException e) {
+            e.printStackTrace();
+        }
     }
 }
