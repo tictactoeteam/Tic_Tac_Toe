@@ -1,10 +1,12 @@
 package edu.saddleback.tictactoe.controller;
 
-import edu.saddleback.tictactoe.model.BoardMove;
-import edu.saddleback.tictactoe.model.Board;
-import edu.saddleback.tictactoe.model.GamePiece;
+import com.google.gson.JsonObject;
+import com.sun.nio.sctp.SctpSocketOption;
+import edu.saddleback.tictactoe.model.*;
 import edu.saddleback.tictactoe.observable.Observable;
 import edu.saddleback.tictactoe.view.GridBox;
+
+import java.sql.SQLOutput;
 
 /**
  * This class represents a controller for all data and ui functions for the game controller grid pane.
@@ -78,5 +80,17 @@ public class GameController {
 
     public void setBoard(Board board){
         this.board.set(board);
+    }
+
+
+    public void applyJsonMove(JsonObject move){
+        Board temp = this.board.get();
+        try {
+            JsonMove.convertToBoardMove(move).applyTo(temp);
+            this.board.set(temp);
+        }catch(GridAlreadyChosenException ex){
+            System.out.println("This shouldn't happen!!!! Validation of the move on the server is faulty!!");
+            System.out.println("Or the conversion from Json to BoardMove is faulty-one or the other");
+        }
     }
 }
