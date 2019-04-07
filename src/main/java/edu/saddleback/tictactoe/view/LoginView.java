@@ -45,57 +45,78 @@ public class LoginView {
 
     public void onLoginClicked(){
 
-        conn.login(usernameTextField.getText(), passwordTextField.getText());
+        if(!usernameTextField.getText().equals("") && !passwordTextField.getText().equals("")){
 
-        conn.getPubNub().addListener(new SubscribeCallback() {
-            @Override
-            public void status(PubNub pubnub, PNStatus status) {}
+            conn.login(usernameTextField.getText(), passwordTextField.getText());
 
-            @Override
-            public void message(PubNub pubnub, PNMessageResult message) {
+            conn.getPubNub().addListener(new SubscribeCallback() {
+                @Override
+                public void status(PubNub pubnub, PNStatus status) {}
+                @Override
+                public void message(PubNub pubnub, PNMessageResult message) {
 
-                String messageType = message.getMessage().getAsJsonObject().get("type").getAsString();//Message type
-                JsonObject data = message.getMessage().getAsJsonObject().get("data").getAsJsonObject();
-                String userN = data.get("username").getAsString();//Returned username
+                    String messageType = message.getMessage().getAsJsonObject().get("type").getAsString();//Message type
+                    JsonObject data = message.getMessage().getAsJsonObject().get("data").getAsJsonObject();
+                    String userN = data.get("username").getAsString();//Returned username
 
-                if (userN.equals(usernameTextField.getText()) && messageType.equals("loggedIn")){//Success
+                    if (userN.equals(usernameTextField.getText()) && messageType.equals("loggedIn")){//Success
 
-                    try{
-                        TicTacToeApplication.getCoordinator().showLobbyScene();
-                        System.out.println("Good login");
-                    }catch(Exception ex){System.out.println("OOF");}
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try{
+                                        TicTacToeApplication.getCoordinator().showLobbyScene();
+                                        System.out.println("Good login");
+                                    }catch(Exception ex){ex.printStackTrace();}
+                                }
+                            });
 
-                }else if(userN.equals(usernameTextField.getText()) && messageType.equals("badLogin")) {
+                    }else if(userN.equals(usernameTextField.getText()) && messageType.equals("badLogin")) {
 
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            errorText.setText("***error-invalid credentials***");
-                            errorText.setVisible(true);
-                        }
-                    });
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                errorText.setText("***error-invalid credentials***");
+                                errorText.setVisible(true);
+                            }
+                        });
+
+                    }
 
                 }
 
-            }
+                @Override
+                public void presence(PubNub pubnub, PNPresenceEventResult presence) {}
+            });
 
-            @Override
-            public void presence(PubNub pubnub, PNPresenceEventResult presence) {}
-        });
+            conn.getPubNub().subscribe().channels(Arrays.asList("main")).execute();
 
-        conn.getPubNub().subscribe().channels(Arrays.asList("main")).execute();
+        }else{
+
+            errorText.setText("***error-missing credentials***");
+            errorText.setVisible(true);
+
+        }
 
     }
 
     public void onCreateAccountClicked(){
 
-        if(true) {//<-SEARCH THROUGH DATABASE AND CREATE ACCOUNT IF ACCOUNT DOES NOT EXIST
+        if(!usernameTextField.getText().equals("") && !passwordTextField.getText().equals("")){
 
-            //Add account to the database, login to the server and join the lobby, show lobby screen
+            //ADD A LISTENER THAT LISTENS IF THE ACCOUNT ALREADY EXISTS, ONLY DO THE BELOW STUFF IF IT DOES NOT EXIST
+//        errorText.setText("***error-account already exists***");
+//        errorText.setVisible(true);
+
+            conn.signup(usernameTextField.getText(), passwordTextField.getText());
+            try{
+                TicTacToeApplication.getCoordinator().showLobbyScene();
+                System.out.println("Good login");
+            }catch(Exception ex){System.out.println("OOF");}
 
         }else{
 
-            errorText.setText("***error-account already exists***");
+            errorText.setText("***error-missing credentials***");
             errorText.setVisible(true);
 
         }
