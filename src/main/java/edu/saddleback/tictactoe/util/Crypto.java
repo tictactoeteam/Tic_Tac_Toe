@@ -56,6 +56,6 @@ public class Crypto {
             trimmed[i] = key[i];
         }
 
-        return new SecretKeySpec(key, ALGO);
+        return new SecretKeySpec(trimmed, ALGO);
     }
 }

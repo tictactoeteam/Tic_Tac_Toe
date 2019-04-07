@@ -5,16 +5,19 @@ import com.pubnub.api.PubNub;
 import com.pubnub.api.PubNubException;
 import com.sauljohnson.mayo.DiffieHellmanKeyGenerator;
 import edu.saddleback.tictactoe.multiplayer.MessageHandler;
+import edu.saddleback.tictactoe.multiplayer.Server;
 
 import java.math.BigInteger;
 
 public class ConnectHandler implements MessageHandler {
     private BigInteger privateKey;
     private BigInteger publicKey;
+    private Server server;
 
-    public ConnectHandler(BigInteger privateKey, BigInteger publicKey) {
+    public ConnectHandler(Server server, BigInteger privateKey, BigInteger publicKey) {
         this.privateKey = privateKey;
         this.publicKey = publicKey;
+        this.server = server;
     }
 
     @Override
@@ -22,9 +25,7 @@ public class ConnectHandler implements MessageHandler {
         BigInteger userPubkey = data.get("publicKey").getAsBigInteger();
         BigInteger sharedSecret = DiffieHellmanKeyGenerator.generateSharedKey(userPubkey, privateKey);
 
-        System.out.println("Server private is " + this.privateKey.toString());
-        System.out.println("Server public is " + this.publicKey.toString());
-        System.out.println("Shared secret is " + sharedSecret.toString());
+        server.addSharedSecret(clientId, sharedSecret);
 
         broadcastPublicKey(pubnub);
     }

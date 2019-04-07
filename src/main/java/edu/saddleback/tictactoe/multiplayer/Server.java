@@ -44,7 +44,7 @@ public class Server {
     }
 
     public void start() {
-        this.delegator.addHandler("connect", new ConnectHandler(privateKey, publicKey));
+        this.delegator.addHandler("connect", new ConnectHandler(this, privateKey, publicKey));
         this.delegator.addHandler("login", new LoginHandler(this));
         pubnub.subscribe().channels(Arrays.asList("main")).execute();
     }
