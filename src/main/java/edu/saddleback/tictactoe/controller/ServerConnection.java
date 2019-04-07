@@ -9,6 +9,7 @@ import com.pubnub.api.models.consumer.PNStatus;
 import com.pubnub.api.models.consumer.pubsub.PNMessageResult;
 import com.pubnub.api.models.consumer.pubsub.PNPresenceEventResult;
 import com.sauljohnson.mayo.DiffieHellmanKeyGenerator;
+import edu.saddleback.tictactoe.observable.Observable;
 import edu.saddleback.tictactoe.util.Crypto;
 
 import java.math.BigInteger;
@@ -22,7 +23,7 @@ public class ServerConnection {
     private BigInteger dhPrivateKey;
     private BigInteger dhPublicKey;
 
-    private BigInteger sharedSecret;
+    private Observable<BigInteger> sharedSecret;
 
     private PubNub pubnub;
 
@@ -35,6 +36,10 @@ public class ServerConnection {
 
         this.dhPrivateKey = DiffieHellmanKeyGenerator.generatePrivateKey();
         this.dhPublicKey = DiffieHellmanKeyGenerator.generatePublicKey(this.dhPrivateKey);
+
+        this.sharedSecret = new Observable<>();
+
+        this.sharedSecret.subscribe(System.out::println);
 
         connect();
         waitForServerPub();
@@ -73,8 +78,8 @@ public class ServerConnection {
 
                 JsonObject data = message.getMessage().getAsJsonObject().get("data").getAsJsonObject();
                 BigInteger serverPub = data.get("publicKey").getAsBigInteger();
-                sharedSecret = DiffieHellmanKeyGenerator.generateSharedKey(serverPub, dhPrivateKey);
-                System.out.println("shared secret: " + sharedSecret);
+                BigInteger secret = DiffieHellmanKeyGenerator.generateSharedKey(serverPub, dhPrivateKey);
+                sharedSecret.set(secret);
             }
 
             @Override
@@ -91,8 +96,8 @@ public class ServerConnection {
         msg.addProperty("type", "login");
 
         JsonObject data = new JsonObject();
-        data.addProperty("username", Crypto.encrypt(username, sharedSecret));
-        data.addProperty("password", Crypto.encrypt(password, sharedSecret));
+        data.addProperty("username", Crypto.encrypt(username, sharedSecret.get()));
+        data.addProperty("password", Crypto.encrypt(password, sharedSecret.get()));
 
         msg.add("data", data);
 
