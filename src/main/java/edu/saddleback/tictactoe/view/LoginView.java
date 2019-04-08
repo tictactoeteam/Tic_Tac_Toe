@@ -101,6 +101,7 @@ public class LoginView {
 
         String initialUsername = usernameTextField.getText();
 
+
         if(!initialUsername.equals("") && !passwordTextField.getText().equals("")) {
 
             conn.signup(initialUsername, passwordTextField.getText());
@@ -116,8 +117,8 @@ public class LoginView {
                     String messageType = message.getMessage().getAsJsonObject().get("type").getAsString();//Message type
                     JsonObject data = message.getMessage().getAsJsonObject().get("data").getAsJsonObject();
                     String userN = data.get("username").getAsString();//Returned username
-                    System.out.println(userN);
-                    if (userN.equals(usernameTextField.getText()) && messageType.equals("accountCreated")) {//Success
+                    System.out.println("Returned UserN: " + userN);
+                    if (userN.equals(initialUsername) && messageType.equals("accountCreated")) {//Success
                         System.out.println("SUCCESS ENTERED");
                         conn.login(usernameTextField.getText(), passwordTextField.getText());
 

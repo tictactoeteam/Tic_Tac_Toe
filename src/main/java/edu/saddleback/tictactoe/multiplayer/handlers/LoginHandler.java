@@ -8,7 +8,6 @@ import edu.saddleback.tictactoe.model.Player;
 import edu.saddleback.tictactoe.multiplayer.MessageHandler;
 import edu.saddleback.tictactoe.multiplayer.Server;
 import edu.saddleback.tictactoe.util.Crypto;
-
 import java.math.BigInteger;
 import java.sql.SQLException;
 
