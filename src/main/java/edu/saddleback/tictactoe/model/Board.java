@@ -1,6 +1,7 @@
 package edu.saddleback.tictactoe.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -10,6 +11,9 @@ public class Board implements Serializable, Cloneable, Comparable<Board> {
     private static final long serialVersionUID = 1549991971L;
 
     private GamePiece[][] board;
+    private short[] history;
+
+
     private int turnNumber;
 
     /**
@@ -25,6 +29,8 @@ public class Board implements Serializable, Cloneable, Comparable<Board> {
                 this.board[i][j] = null;
             }
         }
+
+        this.history = new short[9];
     }
 
     /**
@@ -80,6 +86,7 @@ public class Board implements Serializable, Cloneable, Comparable<Board> {
     public synchronized void set(int row, int col, GamePiece piece) throws GridAlreadyChosenException {
         if (board[row][col] == null) {
             board[row][col] = piece;
+            history [turnNumber] = (short)(3*row + col);
             turnNumber++;
         } else {
             throw new GridAlreadyChosenException(row, col);
@@ -93,7 +100,12 @@ public class Board implements Serializable, Cloneable, Comparable<Board> {
             }
         }
 
+        this.history = Arrays.copyOf(board.history, 9);
         this.turnNumber = board.getTurnNumber();
+    }
+
+    public short[] getHistory(){
+        return history;
     }
 
     /**

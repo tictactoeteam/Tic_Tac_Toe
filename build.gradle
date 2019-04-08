@@ -5,9 +5,12 @@ plugins {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
+    implementation 'com.google.code.gson:gson:2.8.5'
+    compile "com.github.lambdacasserole:mayo:v1.0"
     compile group: 'com.pubnub', name: 'pubnub-gson', version: '4.22.0-beta'
     compile "org.mindrot:jbcrypt:0.3m"
     compile group: 'org.postgresql', name: 'postgresql', version: '9.3-1100-jdbc4'

@@ -2,6 +2,7 @@ package edu.saddleback.tictactoe;
 
 import edu.saddleback.tictactoe.db.DbConnection;
 import edu.saddleback.tictactoe.multiplayer.BetterServer;
+import edu.saddleback.tictactoe.multiplayer.Server;
 import edu.saddleback.tictactoe.view.TicTacToeApplication;
 import javafx.application.Application;
 
@@ -20,8 +21,8 @@ public class Main {
             DbConnection.runMigrations();
         }
         if (args.contains("--server")) {
-            BetterServer server = new BetterServer();
-            server.fireTheServer();
+            Server server = new Server();
+            server.start();
         } else {
             Application.launch(TicTacToeApplication.class, a);
         }

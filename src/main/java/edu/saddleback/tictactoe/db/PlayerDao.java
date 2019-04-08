@@ -4,6 +4,7 @@ import edu.saddleback.tictactoe.model.Player;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class PlayerDao {
     public static final String PLAYER_TABLE = "players";
@@ -62,7 +63,7 @@ public class PlayerDao {
         prepared.setString(1, player.getUsername());
         prepared.setString(2, player.getHashedPassword());
         prepared.setString(3, String.valueOf(player.isDisabled()));
-        prepared.setString(4, player.getId());
+        prepared.setString(4, player.getId().toString());
 
         int rowsAffected = prepared.executeUpdate();
 
@@ -73,7 +74,7 @@ public class PlayerDao {
 
     public static Player extractPlayer(ResultSet rs) throws SQLException {
         Player player = new Player();
-        player.setId(rs.getString("id"));
+        player.setId(UUID.fromString(rs.getString("id")));
         player.setUsername(rs.getString("username"));
         player.setHashedPassword(rs.getString("password"));
         player.setDisabled(Boolean.parseBoolean(rs.getString("disabled")));

@@ -2,29 +2,31 @@ package edu.saddleback.tictactoe.model;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Game {
-    private String id;
+    private UUID id;
     private Player playerX;
     private Player playerO;
 
     private byte[] moves;
 
-    public Game(Player playerX, Player playerO, byte[] moves) {
+    public Game(UUID id, Player playerX, Player playerO, byte[] moves) {
+        this.id = id;
         this.playerX = playerX;
         this.playerO = playerO;
         this.moves = moves;
     }
 
     public Game(Player playerX, Player playerO) {
-        this(playerX, playerO, new byte[9]);
+        this(UUID.randomUUID(), playerX, playerO, new byte[9]);
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

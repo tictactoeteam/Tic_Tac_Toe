@@ -61,8 +61,6 @@ public class BoardView extends GridPane {
         }
 
         this.getChildren().add(boardGPane);
-        controller.addBoardListener(this::onUpdate);
-
     }
 
     /**

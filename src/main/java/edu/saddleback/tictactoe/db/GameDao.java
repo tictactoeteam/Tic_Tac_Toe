@@ -8,12 +8,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class GameDao {
     public static final String GAMES_TABLE = "games";
     private static Connection connection = DbConnection.getConnection();
 
-    public static Game getGameById(String id) throws SQLException {
+    public static Game getGameById(UUID id) throws SQLException {
         String statement = "SELECT g.id, g.moves, " +
                 "player_x, px.username AS player_x_username, player_o, po.username AS player_o_username" +
                 "FROM " + GAMES_TABLE + " g " +
@@ -22,7 +23,7 @@ public class GameDao {
                 "WHERE g.id=?";
 
         PreparedStatement prepared = connection.prepareStatement(statement);
-        prepared.setString(1, id);
+        prepared.setString(1, id.toString());
 
         ResultSet rs = prepared.executeQuery();
 
@@ -51,8 +52,8 @@ public class GameDao {
     public static void insertGame(Game game) throws SQLException {
         String statement = "INSERT INTO " + GAMES_TABLE + " (player_x, player_o, moves) VALUES (?, ?, ?)";
         PreparedStatement prepared = connection.prepareStatement(statement);
-        prepared.setString(1, game.getPlayerX().getId());
-        prepared.setString(2, game.getPlayerO().getId());
+        prepared.setString(1, game.getPlayerX().getId().toString());
+        prepared.setString(2, game.getPlayerO().getId().toString());
 
         Byte[] moves = new Byte[game.getMoves().length];
         for (int i = 0; i < game.getMoves().length; i++) {
@@ -71,8 +72,8 @@ public class GameDao {
     public static void updateGame(Game game) throws SQLException {
         String statement = "UPDATE " + GAMES_TABLE + " SET player_x=?, player_o=?, moves=? WHERE id=?";
         PreparedStatement prepared = connection.prepareStatement(statement);
-        prepared.setString(1, game.getPlayerX().getId());
-        prepared.setString(2, game.getPlayerO().getId());
+        prepared.setString(1, game.getPlayerX().getId().toString());
+        prepared.setString(2, game.getPlayerO().getId().toString());
 
         Byte[] moves = new Byte[game.getMoves().length];
         for (int i = 0; i < game.getMoves().length; i++) {
@@ -80,7 +81,7 @@ public class GameDao {
         }
 
         prepared.setArray(3, connection.createArrayOf("smallint", moves));
-        prepared.setString(4, game.getId());
+        prepared.setString(4, game.getId().toString());
 
         int rowsAffected = prepared.executeUpdate();
 
@@ -89,10 +90,10 @@ public class GameDao {
         }
     }
 
-    public static void deleteGame(String id) throws SQLException {
+    public static void deleteGame(UUID id) throws SQLException {
         String statement = "DELETE FROM " + GAMES_TABLE + "WHERE id=?";
         PreparedStatement prepared = connection.prepareStatement(statement);
-        prepared.setString(1, id);
+        prepared.setString(1, id.toString());
 
         int rowsAffected = prepared.executeUpdate(statement);
 
@@ -105,16 +106,17 @@ public class GameDao {
         String playerXId = rs.getString("player_x");
         String playerXName = rs.getString("player_x_username");
         Player playerX = new Player();
-        playerX.setId(playerXId);
+        playerX.setId(UUID.fromString(playerXId));
         playerX.setUsername(playerXName);
 
         String playerOId = rs.getString("player_o");
         String playerOName = rs.getString("player_o_username");
         Player playerO = new Player();
-        playerO.setId(playerOId);
+        playerO.setId(UUID.fromString(playerOId));
         playerO.setUsername(playerOName);
 
+        UUID id = UUID.fromString(rs.getString("id"));
         byte[] moves = (byte[]) rs.getArray("moves").getArray();
-        return new Game(playerX, playerO, moves);
+        return new Game(id, playerX, playerO, moves);
     }
 }

@@ -1,11 +1,13 @@
 package edu.saddleback.tictactoe.view;
 
-import edu.saddleback.tictactoe.controller.GameController;
+import edu.saddleback.tictactoe.controller.ServerConnection;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+
+import edu.saddleback.tictactoe.controller.GameController;
 
 /**
  * Launches the application, interacts with the scene controller to handle swapping scenes.
@@ -13,6 +15,8 @@ import java.io.IOException;
 public class TicTacToeApplication extends Application {
     private static SceneCoordinator coordinator;
     private static Stage Window;
+
+    private static ServerConnection conection;
 
     /**
      * Allows the game controller to be accessed by each scene.
@@ -25,6 +29,17 @@ public class TicTacToeApplication extends Application {
      * @return
      */
     public static SceneCoordinator getCoordinator(){return coordinator;}
+
+    /**
+     * Allows for the window sizes to be changes.
+     * @param weidth
+     * @param height
+     */
+    public static void setWindowSize(double weidth, double height){
+
+        Window.setWidth(weidth);
+        Window.setHeight(height);
+    }
 
     /**
      * Effectively resets the application
@@ -56,6 +71,7 @@ public class TicTacToeApplication extends Application {
         Window.setHeight(475);
         Window.show();
 
+        conection = ServerConnection.getInstance();
         coordinator = new SceneCoordinator(Window);
 
         coordinator.showLoginScene();

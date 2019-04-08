@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -42,8 +41,19 @@ public class SceneCoordinator {
      * @throws Exception
      */
     public void showLoginScene() throws IOException {
-
         URL url = new File("src/main/res/layout/login.fxml").toURL();
+        Parent layout = FXMLLoader.load(url);
+        this.window.setScene(new Scene(layout));
+
+    }
+
+    /**
+     * Fetches the lobby scene.
+     * @throws Exception
+     */
+    public void showLobbyScene() throws Exception{
+
+        URL url = new File("src/main/res/layout/lobby.fxml").toURL();
         Parent layout = FXMLLoader.load(url);
         this.window.setScene(new Scene(layout));
 
