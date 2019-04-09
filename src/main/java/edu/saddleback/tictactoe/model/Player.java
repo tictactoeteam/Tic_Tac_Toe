@@ -72,7 +72,9 @@ public class Player {
     }
 
     @Override
-    public String toString(){return username;}
+    public String toString(){
+        return username;
+        }
 
     @Override
     public boolean equals(Object o) {

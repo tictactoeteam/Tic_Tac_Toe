@@ -21,32 +21,24 @@ public class SignupHandler implements MessageHandler {
     @Override
     public void handleMessage(JsonObject data, PubNub pubnub, String clientId) {
         BigInteger sharedSecret = server.getSharedSecret(clientId);
-        System.out.println("HERE");
+
         String encryptedUsername = data.get("username").getAsString();
         String encryptedPassword = data.get("password").getAsString();
-        System.out.println("ENCRYPTED: " + encryptedUsername);/////////////////
+
         String username = Crypto.decrypt(encryptedUsername, sharedSecret);
         String password = Crypto.decrypt(encryptedPassword, sharedSecret);
-        System.out.println("DECRYPTED: " + username);////////////////////////////////////
         try{
-
-            Player tmpPlayer = PlayerDao.getPlayerByUsername(username);
-            if(tmpPlayer == null){//Not in database yet
-
-                Player player = new Player();
-                player.setUsername(username);
-                player.setPassword(password);
-                PlayerDao.insertPlayer(player);
-                sendAccountCreated(pubnub, username);
-                return;
-
-            }else{//Already in database
-
+            Player player = PlayerDao.getPlayerByUsername(username);
+            if(player != null) { // Found player in database
                 sendAccountExists(pubnub, username);
                 return;
-
             }
 
+            player = new Player();
+            player.setUsername(username);
+            player.setPassword(password);
+            PlayerDao.insertPlayer(player);
+            sendAccountCreated(pubnub, username);
         }catch (SQLException e) {
             e.printStackTrace();
         }

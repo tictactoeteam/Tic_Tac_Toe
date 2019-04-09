@@ -23,7 +23,10 @@ public class ServerConnection {
     private BigInteger dhPrivateKey;
     private BigInteger dhPublicKey;
 
+    private String attemptedUsername;
+
     private Observable<BigInteger> sharedSecret;
+    private Observable<Boolean> loggedIn;
 
     private PubNub pubnub;
 
@@ -38,11 +41,50 @@ public class ServerConnection {
         this.dhPublicKey = DiffieHellmanKeyGenerator.generatePublicKey(this.dhPrivateKey);
 
         this.sharedSecret = new Observable<>();
+        this.loggedIn = new Observable<>();
 
         this.sharedSecret.subscribe(System.out::println);
 
         waitForServerPub();
         connect();
+        registerLoginStatusListener();
+    }
+
+    private void registerLoginStatusListener() {
+        pubnub.addListener(new SubscribeCallback() {
+            @Override
+            public void status(PubNub pubnub, PNStatus status) {}
+            @Override
+            public void message(PubNub pubnub, PNMessageResult message) {
+                String type = message.getMessage().getAsJsonObject().get("type").getAsString();//Message type
+                JsonObject data = message.getMessage().getAsJsonObject().get("data").getAsJsonObject();
+
+                if (!Arrays.asList("loggedIn", "accountCreated", "badLogin", "accountExists").contains(type)) {
+                    return;
+                }
+
+                String username = data.get("username").getAsString();
+
+                if (type.equals("loggedIn") && username.equals(attemptedUsername)) {
+                    loggedIn.set(true);
+                }
+
+                if (type.equals("accountCreated") && username.equals(attemptedUsername)) {
+                    loggedIn.set(true);
+                }
+
+                if (type.equals("badLogin") && username.equals(attemptedUsername)) {
+                    loggedIn.set(false);
+                }
+
+                if (type.equals("accountExists") && username.equals(attemptedUsername)) {
+                    loggedIn.set(false);
+                }
+            }
+
+            @Override
+            public void presence(PubNub pubnub, PNPresenceEventResult presence) {}
+        });
     }
 
     private void connect() {
@@ -90,6 +132,7 @@ public class ServerConnection {
     }
 
     public void login(String username, String password) {
+        this.attemptedUsername = username;
         JsonObject msg = new JsonObject();
         msg.addProperty("type", "login");
 
@@ -126,6 +169,10 @@ public class ServerConnection {
         } catch (PubNubException e) {
             e.printStackTrace();
         }
+    }
+
+    public Observable<Boolean> getLoggedInObservable() {
+        return loggedIn;
     }
 
     public static ServerConnection getInstance() {
