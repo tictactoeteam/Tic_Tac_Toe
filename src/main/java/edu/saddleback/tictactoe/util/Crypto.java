@@ -39,8 +39,8 @@ public class Crypto {
             Key key = generateKey(sharedSecret.toByteArray());
             Cipher c = Cipher.getInstance(ALGO);
             c.init(Cipher.DECRYPT_MODE, key);
-            byte[] decordedValue = Base64.getDecoder().decode(ciphertext);
-            byte[] decValue = c.doFinal(decordedValue);
+            byte[] decodedValue = Base64.getDecoder().decode(ciphertext);
+            byte[] decValue = c.doFinal(decodedValue);
             return new String(decValue);
         } catch (Exception e) {
             e.printStackTrace();

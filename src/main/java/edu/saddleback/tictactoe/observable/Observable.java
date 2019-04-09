@@ -14,6 +14,7 @@ public class Observable<E> {
         if (object != null) {
             listener.update(object);
         }
+        listeners.add(listener);
     }
 
     public void set(E object) {
