@@ -31,7 +31,6 @@ public class SignupHandler implements MessageHandler {
         try{
 
             Player tmpPlayer = PlayerDao.getPlayerByUsername(username);
-            System.out.println("Player found: " + tmpPlayer.toString());
             if(tmpPlayer == null){//Not in database yet
 
                 Player player = new Player();
