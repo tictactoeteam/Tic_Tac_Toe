@@ -9,6 +9,11 @@ import com.pubnub.api.models.consumer.PNStatus;
 import com.pubnub.api.models.consumer.pubsub.PNMessageResult;
 import com.pubnub.api.models.consumer.pubsub.PNPresenceEventResult;
 import com.sauljohnson.mayo.DiffieHellmanKeyGenerator;
+import edu.saddleback.tictactoe.controller.handlers.LoginHandler;
+import edu.saddleback.tictactoe.controller.handlers.RegisterHandler;
+import edu.saddleback.tictactoe.controller.handlers.ServerPubHandler;
+import edu.saddleback.tictactoe.model.JsonMove;
+import edu.saddleback.tictactoe.multiplayer.MessageDelegator;
 import edu.saddleback.tictactoe.observable.Observable;
 import edu.saddleback.tictactoe.util.Crypto;
 
@@ -19,6 +24,8 @@ public class ServerConnection {
     private static String pubkey = System.getenv("TTT_PUBNUB_PUBLISH");
     private static String subkey = System.getenv("TTT_PUBNUB_SUBSCRIBE");
     private static ServerConnection instance;
+
+    private MessageDelegator delegator;
 
     private BigInteger dhPrivateKey;
     private BigInteger dhPublicKey;
@@ -43,7 +50,10 @@ public class ServerConnection {
         this.sharedSecret = new Observable<>();
         this.loggedIn = new Observable<>();
 
-        this.sharedSecret.subscribe(System.out::println);
+        this.delegator = new MessageDelegator();
+        this.delegator.addHandler("loginResponse", new LoginHandler(loggedIn, attemptedUsername));
+        this.delegator.addHandler("registerResponse", new RegisterHandler());
+        this.delegator.addHandler("serverPub", new ServerPubHandler());
 
         waitForServerPub();
         connect();
@@ -181,6 +191,19 @@ public class ServerConnection {
         }
 
         return instance;
+    }
+
+    public void sendMessage(int row, int col){
+        JsonObject msg = JsonMove.convertToJson(row, col);
+
+        try{
+            this.pubnub.publish()
+                    .channel("main")
+                    .message(msg)
+                    .sync();
+        }catch(PubNubException e){
+            e.printStackTrace();
+        }
     }
 
     public PubNub getPubNub(){return pubnub;}

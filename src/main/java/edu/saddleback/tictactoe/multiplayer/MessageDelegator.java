@@ -20,6 +20,12 @@ public class MessageDelegator extends SubscribeCallback {
         handlers.put(type, handler);
     }
 
+    public void addHandler(String[] types, MessageHandler handler) {
+        for (int i=0; i<types.length; ++i){
+            handlers.put(types[i], handler);
+        }
+    }
+
     @Override
     public void status(PubNub pubnub, PNStatus status) {
     }

@@ -8,7 +8,12 @@ public class JsonMove {
 
     private JsonMove(int row, int col){
         theMove = new JsonObject();
-        theMove.add("makeMove", new JsonPrimitive(col + row*3));
+
+        theMove.addProperty("type" , "makeMove");
+        JsonObject data = new JsonObject();
+        data.addProperty("position", row*3+col);
+        theMove.add("data", data);
+
     }
 
     private JsonObject getTheMove(){
