@@ -53,6 +53,6 @@ public class Server {
         this.delegator.addHandler("connect", new ConnectHandler(this, privateKey, publicKey));
         this.delegator.addHandler("login", new LoginHandler(this));
         this.delegator.addHandler("signup", new SignupHandler(this));
-        pubnub.subscribe().channels(Arrays.asList("main")).execute();
+        pubnub.subscribe().channels(Arrays.asList("main")).withPresence().execute();
     }
 }

@@ -135,7 +135,28 @@ public class ServerConnection {
             }
 
             @Override
-            public void presence(PubNub pubnub, PNPresenceEventResult presence) {}
+            public void presence(PubNub pubnub, PNPresenceEventResult presence) {
+                if (presence.getEvent().equals("join")) {
+                    System.out.println("Player joined");
+                    presence.getHereNowRefresh();
+                    presence.getUuid(); // 175c2c67-b2a9-470d-8f4b-1db94f90e39e
+                    presence.getTimestamp(); // 1345546797
+                    presence.getOccupancy(); // 2
+                }
+                else if(presence.getEvent().equals("leave")){
+                    System.out.println("Player left");
+                    presence.getUuid(); // 175c2c67-b2a9-470d-8f4b-1db94f90e39e
+                    presence.getTimestamp(); // 1345546797
+                    presence.getOccupancy(); // 2
+                }
+                else{
+                    System.out.println("Timed out");
+                    presence.getUuid(); // 175c2c67-b2a9-470d-8f4b-1db94f90e39e
+                    presence.getTimestamp(); // 1345546797
+                    presence.getOccupancy(); // 2
+                }
+                System.out.println(pubnub.hereNow());
+            }
         });
 
         this.pubnub.subscribe().channels(Arrays.asList("main")).execute();

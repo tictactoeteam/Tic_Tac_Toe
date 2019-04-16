@@ -62,8 +62,7 @@ public class MessageDelegator extends SubscribeCallback {
             presence.getUuid(); // 175c2c67-b2a9-470d-8f4b-1db94f90e39e
             presence.getTimestamp(); // 1345546797
             presence.getOccupancy(); // 2
-
-            
         }
+        System.out.println(pubnub.hereNow());
     }
 }
