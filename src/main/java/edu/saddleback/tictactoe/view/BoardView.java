@@ -59,7 +59,6 @@ public class BoardView extends GridPane {
 
             }
         }
-
         this.getChildren().add(boardGPane);
     }
 

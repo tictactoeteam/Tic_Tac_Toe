@@ -24,13 +24,13 @@
                <fx:define>
                   <ToggleGroup fx:id="toggleGroup" />
                </fx:define>
-               <children>
-                  <RadioButton fx:id="radioEasy" mnemonicParsing="false" onAction="#handleEasy" prefHeight="30.0" prefWidth="60.0" text="Easy" toggleGroup="$toggleGroup" />
-                  <RadioButton fx:id="radioBillMode" mnemonicParsing="false" onAction="#handleBillMode" prefHeight="30.0" prefWidth="100.0" text="Mr. Bill Mode" toggleGroup="$toggleGroup" />
-               </children>
+               <!--<children>-->
+                  <!--<RadioButton fx:id="radioEasy" mnemonicParsing="false" onAction="#handleEasy" prefHeight="30.0" prefWidth="60.0" text="Easy" toggleGroup="$toggleGroup" />-->
+                  <!--<RadioButton fx:id="radioBillMode" mnemonicParsing="false" onAction="#handleBillMode" prefHeight="30.0" prefWidth="100.0" text="Mr. Bill Mode" toggleGroup="$toggleGroup" />-->
+               <!--</children>-->
 
             </HBox>
-            <BoardView alignment="CENTER" prefWidth="280" prefHeight="280" maxWidth="280" />
+            <BoardView fx:id="thisBoard" alignment="CENTER" prefWidth="280" prefHeight="280" maxWidth="280" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" />
             <Button fx:id="resetButton" mnemonicParsing="false" onMouseClicked="#onResetClicked" text="Reset"/>
          </children>

@@ -2,11 +2,14 @@ package edu.saddleback.tictactoe.controller;
 
 import com.google.gson.JsonObject;
 import com.sun.nio.sctp.SctpSocketOption;
+import edu.saddleback.tictactoe.controller.handlers.MoveHandler;
 import edu.saddleback.tictactoe.model.*;
+import edu.saddleback.tictactoe.multiplayer.MessageDelegator;
 import edu.saddleback.tictactoe.observable.Observable;
 import edu.saddleback.tictactoe.view.GridBox;
 
 import java.sql.SQLOutput;
+import java.util.UUID;
 
 /**
  * This class represents a controller for all data and ui functions for the game controller grid pane.
@@ -15,8 +18,12 @@ public class GameController {
 
     private Observable<Board> board;
 
+
+    private UUID playerID = UUID.randomUUID();
     private String winnerName = null;
     private String loserName = null;
+
+    private MessageDelegator delegator = new MessageDelegator();
 
     public String getWinnerName(){return winnerName;}
     public String getLoserName(){return loserName;}
@@ -26,6 +33,7 @@ public class GameController {
      */
     public GameController() {
         this.board = new Observable<>();
+        delegator.addHandler("move", new MoveHandler());
     }
 
     /**

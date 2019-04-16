@@ -26,7 +26,7 @@ public class JsonMove {
 
 
     public static BoardMove convertToBoardMove(JsonObject moveResponse){
-        int position = moveResponse.get("data").getAsJsonObject().get("position").getAsInt();
+        int position = moveResponse.get("position").getAsInt();
         GamePiece piece;
         if (moveResponse.get("data").getAsJsonObject().get("player").getAsString() == "X")
             piece = GamePiece.X;

@@ -3,6 +3,7 @@ package edu.saddleback.tictactoe.view;
 import edu.saddleback.tictactoe.controller.GameController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
@@ -21,6 +22,8 @@ public class GameView{
     Text player2Name;
     @FXML
     Button resetButton;
+    @FXML
+    BoardView thisBoard;
 
     /**
      * Deletes the same file and closes the application.
@@ -36,7 +39,9 @@ public class GameView{
     protected void initialize(){
 
         controller = TicTacToeApplication.getController();
+        thisBoard = new BoardView();
 
     }
+
 
 }

@@ -36,14 +36,19 @@ public class LobbyView {
     public void onLogoutClicked(){
 
         //Kill server connection
-
-        try{
-
-            TicTacToeApplication.getCoordinator().showLoginScene();
-
-        }catch(IOException ex){
-            System.out.println("Big 'ol OOF");
+        try {
+            TicTacToeApplication.getCoordinator().showGameScene();
+        }catch(Exception ex){
+            System.out.println("Try something else");
         }
+
+//        try{
+//
+//            TicTacToeApplication.getCoordinator().showLoginScene();
+//
+//        }catch(IOException ex){
+//            System.out.println("Big 'ol OOF");
+//        }
 
     }
 
