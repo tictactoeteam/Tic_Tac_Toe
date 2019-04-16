@@ -3,12 +3,14 @@ package edu.saddleback.tictactoe.multiplayer;
 import com.pubnub.api.PNConfiguration;
 import com.pubnub.api.PubNub;
 import com.sauljohnson.mayo.DiffieHellmanKeyGenerator;
+import edu.saddleback.tictactoe.model.Game;
 import edu.saddleback.tictactoe.multiplayer.handlers.ConnectHandler;
 import edu.saddleback.tictactoe.multiplayer.handlers.LoginHandler;
 import edu.saddleback.tictactoe.multiplayer.handlers.SignupHandler;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Vector;
 
 public class Server {
     private String pubKey = System.getenv("TTT_PUBNUB_PUBLISH");
@@ -17,11 +19,14 @@ public class Server {
     private PNConfiguration pnConfiguration;
     private MessageDelegator delegator;
 
+    private Vector<Game> gamesPlayed;
+
     private BigInteger privateKey;
     private BigInteger publicKey;
     private HashMap<String, BigInteger> sharedSecrets;
 
     public Server() {
+        gamesPlayed = new Vector<>();
         this.pnConfiguration = new PNConfiguration();
         this.pnConfiguration.setPublishKey(pubKey);
         this.pnConfiguration.setSubscribeKey(subKey);
@@ -44,6 +49,7 @@ public class Server {
     }
 
     public void start() {
+        this.delegator.addHandler("connect", new ConnectHandler(this, privateKey, publicKey));
         this.delegator.addHandler("connect", new ConnectHandler(this, privateKey, publicKey));
         this.delegator.addHandler("login", new LoginHandler(this));
         this.delegator.addHandler("signup", new SignupHandler(this));
