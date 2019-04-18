@@ -1,10 +1,12 @@
 package edu.saddleback.tictactoe.view;
 
 import edu.saddleback.tictactoe.controller.GameController;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * This object interacts with the lobby page, handles all error checking, and establishes which type of game is to be
@@ -17,6 +19,7 @@ public class LobbyView {
     private ListView gameListView;
     @FXML
     private Button logoutButton;
+
 
     /**
      * Initializes the controller in the lobby view
@@ -42,14 +45,11 @@ public class LobbyView {
             System.out.println("Try something else");
         }
 
-//        try{
-//
-//            TicTacToeApplication.getCoordinator().showLoginScene();
-//
-//        }catch(IOException ex){
-//            System.out.println("Big 'ol OOF");
-//        }
+    }
 
+    public void populateTable(ObservableList<String> userList){
+        ListView gameListView = new ListView();
+        gameListView.setItems(userList);
     }
 
 }

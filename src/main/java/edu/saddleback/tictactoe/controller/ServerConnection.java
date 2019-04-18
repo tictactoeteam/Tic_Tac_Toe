@@ -4,8 +4,12 @@ import com.google.gson.JsonObject;
 import com.pubnub.api.PNConfiguration;
 import com.pubnub.api.PubNub;
 import com.pubnub.api.PubNubException;
+import com.pubnub.api.callbacks.PNCallback;
 import com.pubnub.api.callbacks.SubscribeCallback;
 import com.pubnub.api.models.consumer.PNStatus;
+import com.pubnub.api.models.consumer.presence.PNHereNowChannelData;
+import com.pubnub.api.models.consumer.presence.PNHereNowOccupantData;
+import com.pubnub.api.models.consumer.presence.PNHereNowResult;
 import com.pubnub.api.models.consumer.pubsub.PNMessageResult;
 import com.pubnub.api.models.consumer.pubsub.PNPresenceEventResult;
 import com.sauljohnson.mayo.DiffieHellmanKeyGenerator;
@@ -16,8 +20,12 @@ import edu.saddleback.tictactoe.model.JsonMove;
 import edu.saddleback.tictactoe.multiplayer.MessageDelegator;
 import edu.saddleback.tictactoe.observable.Observable;
 import edu.saddleback.tictactoe.util.Crypto;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import edu.saddleback.tictactoe.view.LobbyView;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ServerConnection {
@@ -34,6 +42,10 @@ public class ServerConnection {
 
     private Observable<BigInteger> sharedSecret;
     private Observable<Boolean> loggedIn;
+
+    private LobbyView lobbyViewer;
+    public ObservableList myUserList = FXCollections.observableArrayList();
+
 
     private PubNub pubnub;
 
@@ -142,6 +154,7 @@ public class ServerConnection {
                     presence.getUuid(); // 175c2c67-b2a9-470d-8f4b-1db94f90e39e
                     presence.getTimestamp(); // 1345546797
                     presence.getOccupancy(); // 2
+
                 }
                 else if(presence.getEvent().equals("leave")){
                     System.out.println("Player left");
@@ -156,10 +169,11 @@ public class ServerConnection {
                     presence.getOccupancy(); // 2
                 }
                 System.out.println(pubnub.hereNow());
+                hereNow();
             }
         });
-
-        this.pubnub.subscribe().channels(Arrays.asList("main")).execute();
+//This is where the presence execution has to go.
+        this.pubnub.subscribe().channels(Arrays.asList("main")).withPresence().execute();
     }
 
     public void login(String username, String password) {
@@ -229,4 +243,34 @@ public class ServerConnection {
 
     public PubNub getPubNub(){return pubnub;}
 
+    public void hereNow(){
+        this.pubnub.hereNow()
+                .channels(Arrays.asList("main"))
+                .includeUUIDs(true)
+                .async(new PNCallback<PNHereNowResult>() {
+                    @Override
+                    public void onResponse(PNHereNowResult result, PNStatus status) {
+                        if (status.isError()) {
+                            // handle error
+                            return;
+                        }
+                        for (PNHereNowChannelData channelData : result.getChannels().values()) {
+                            System.out.println("---");
+                            System.out.println("channel:" + channelData.getChannelName());
+                            System.out.println("occupancy: " + channelData.getOccupancy());
+                            System.out.println("occupants:");
+                            for (PNHereNowOccupantData occupant : channelData.getOccupants()) {
+                                System.out.println("uuid: " + occupant.getUuid() + " state: " + occupant.getState());
+                                myUserList.add(occupant.getUuid()); //this adds an element to the list
+                            }
+                        }
+                        lobbyViewer.populateTable(myUserList);
+                    }
+                });
+
+
+    }
+
 }
+
+
