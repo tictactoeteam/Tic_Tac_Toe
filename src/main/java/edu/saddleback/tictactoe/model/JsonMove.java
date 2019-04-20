@@ -37,6 +37,8 @@ public class JsonMove {
         int row = position%3;
         int col = position/3;
 
+        System.out.println("Row: "+ row +"\nCol: " + col + "\nPiece: " + piece);
+
         return new BoardMove(row, col, piece);
     }
 }

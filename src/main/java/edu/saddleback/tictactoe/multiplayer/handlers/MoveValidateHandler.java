@@ -49,6 +49,7 @@ public class MoveValidateHandler implements MessageHandler {
 
         }catch(GridAlreadyChosenException ex){
             msg.addProperty("type", "move");
+            msg.add("data", new JsonObject());
         }
 
         try{
