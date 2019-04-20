@@ -264,7 +264,11 @@ public class ServerConnection {
                                 myUserList.add(occupant.getUuid()); //this adds an element to the list
                             }
                         }
-                        lobbyViewer.populateTable(myUserList);
+                        try {
+                            lobbyViewer.populateTable(myUserList);
+                        }catch(NullPointerException ex){
+                            System.out.println("We Got NullPointer, we ignore for now");
+                        }
                     }
                 });
 
