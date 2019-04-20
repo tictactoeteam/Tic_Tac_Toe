@@ -17,6 +17,9 @@ public class MoveValidateHandler implements MessageHandler {
 
     @Override
     public void handleMessage(JsonObject data, PubNub pubnub, String clientId) {
+
+        System.out.println("MESSAGE RECEIVED!!!");
+        System.out.println("Board Before: " + board);;
         int pos = data.get("position").getAsInt();
 
         int row = pos/3;
@@ -34,8 +37,10 @@ public class MoveValidateHandler implements MessageHandler {
         try{
             move.applyTo(board);
 
+            System.out.println("Board After: " + board);
+
             msg = new JsonObject();
-            msg.addProperty("type", "move");
+            msg.addProperty("type", "moveResp");
             JsonObject dt = new JsonObject();
             dt.addProperty("position", pos);
             dt.addProperty("piece", data.get("piece").getAsString());
@@ -44,6 +49,7 @@ public class MoveValidateHandler implements MessageHandler {
 
         }catch(GridAlreadyChosenException ex){
             msg.addProperty("type", "move");
+            msg.add("data", new JsonObject());
         }
 
         try{

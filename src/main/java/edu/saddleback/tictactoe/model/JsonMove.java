@@ -9,9 +9,10 @@ public class JsonMove {
     private JsonMove(int row, int col){
         theMove = new JsonObject();
 
-        theMove.addProperty("type" , "makeMove");
+        theMove.addProperty("type" , "move");
         JsonObject data = new JsonObject();
         data.addProperty("position", row*3+col);
+        data.addProperty("piece", "X");
         theMove.add("data", data);
 
     }
@@ -35,6 +36,8 @@ public class JsonMove {
 
         int row = position%3;
         int col = position/3;
+
+        System.out.println("Row: "+ row +"\nCol: " + col + "\nPiece: " + piece);
 
         return new BoardMove(row, col, piece);
     }

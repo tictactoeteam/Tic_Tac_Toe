@@ -73,7 +73,7 @@ public class ServerConnection {
         this.loggedIn = new Observable<>();
 
         this.delegator = new MessageDelegator();
-        this.delegator.addHandler("loginResponse", new LoginHandler(loggedIn, attemptedUsername));
+        //this.delegator.addHandler("loginResponse", new LoginHandler(loggedIn, attemptedUsername));
         this.delegator.addHandler("registerResponse", new RegisterHandler());
         this.delegator.addHandler("serverPub", new ServerPubHandler());
 
