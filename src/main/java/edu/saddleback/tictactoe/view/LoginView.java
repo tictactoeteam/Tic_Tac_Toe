@@ -49,6 +49,7 @@ public class LoginView {
     }
 
     public void onCreateAccountClicked(){
+
         String username = usernameTextField.getText();
         if(!username.equals("") && !passwordTextField.getText().equals("")) {
             conn.signup(username, passwordTextField.getText());

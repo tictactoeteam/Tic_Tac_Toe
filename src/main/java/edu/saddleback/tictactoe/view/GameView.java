@@ -22,13 +22,11 @@ public class GameView{
     Text player2Name;
     @FXML
     Button resetButton;
-    @FXML
-    BoardView thisBoard;
 
     /**
      * Deletes the same file and closes the application.
      */
-    public void onResetClicked() throws Exception {
+    public void onResetClicked(){
         controller.resetGame();
     }
 
@@ -39,7 +37,6 @@ public class GameView{
     protected void initialize(){
 
         controller = TicTacToeApplication.getController();
-        thisBoard = new BoardView();
 
     }
 

@@ -22,12 +22,11 @@ public class GridBox extends Pane {
         gridIndex = index;
 
         //Sets up grid box and its image
-        setMaxHeight(GridBox.SIZE_PX);
-        setMaxWidth(GridBox.SIZE_PX);
-        background = new ImageView(new Image("file:src/images/blank.png"));
+        setHeight(GridBox.SIZE_PX);
+        setWidth(GridBox.SIZE_PX);
+        background = new ImageView(new Image("file:src/main/res/images/blank.png"));
         background.fitHeightProperty().bind(heightProperty());
         background.fitWidthProperty().bind(heightProperty());
-
         this.getChildren().add(background);
 
     }
@@ -50,11 +49,4 @@ public class GridBox extends Pane {
      */
     public int getGridRowIndex(){return gridIndex / 3; }
 
-    /**
-     * Changes the gridBox's image displayed.
-     * @param path
-     */
-    public void setGridImage(String path){
-        background = new ImageView(new Image(path));
-    }
 }
