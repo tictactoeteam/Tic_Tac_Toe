@@ -36,6 +36,7 @@ public class LobbyView {
     public void initialize() {
 
         controller = TicTacToeApplication.getController();
+        conn = ServerConnection.getInstance();
         populateTable();
         System.out.println("Running lobbyview intialize");
         //FILL THE LIST VIEW WITH THE AVAILABLE GAMES

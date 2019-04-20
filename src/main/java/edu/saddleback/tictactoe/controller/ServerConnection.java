@@ -43,10 +43,6 @@ public class ServerConnection {
 
     private String attemptedUsername;
 
-    //Do we need these for lobbyview? How do we get access to lobbyview?
-    private SceneCoordinator sceneCoordinator;
-    private GameController gameController;
-
     private Observable<BigInteger> sharedSecret;
     private Observable<Boolean> loggedIn;
 
@@ -56,8 +52,6 @@ public class ServerConnection {
 
     private ServerConnection() {
         PNConfiguration config = new PNConfiguration();
-        sceneCoordinator = TicTacToeApplication.getCoordinator();
-        gameController = TicTacToeApplication.getController();
 
         config.setPublishKey(pubkey);
         config.setSubscribeKey(subkey);
