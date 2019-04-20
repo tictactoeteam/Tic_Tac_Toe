@@ -31,7 +31,7 @@ public class Server {
         this.pnConfiguration = new PNConfiguration();
         this.pnConfiguration.setPublishKey(pubKey);
         this.pnConfiguration.setSubscribeKey(subKey);
-        this.pnConfiguration.setUuid("someUsername"); //Get the users display name for the UUID
+        //this.pnConfiguration.setUuid("someUsername"); //Get the users display name for the UUID
         this.pubnub = new PubNub(pnConfiguration);
         this.delegator = new MessageDelegator();
         pubnub.addListener(this.delegator);

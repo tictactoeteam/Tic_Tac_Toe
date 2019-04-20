@@ -172,7 +172,6 @@ public class ServerConnection {
                     presence.getTimestamp(); // 1345546797
                     presence.getOccupancy(); // 2
                 }
-                System.out.println(pubnub.hereNow());
                 hereNow();
             }
         });
@@ -252,6 +251,7 @@ public class ServerConnection {
     public PubNub getPubNub(){return pubnub;}
 
     public void hereNow(){
+        myUserList.clear();
         this.pubnub.hereNow()
                 .channels(Arrays.asList("main"))
                 .includeUUIDs(true)

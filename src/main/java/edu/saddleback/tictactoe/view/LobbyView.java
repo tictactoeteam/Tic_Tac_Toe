@@ -49,18 +49,16 @@ public class LobbyView {
      */
     public void onLogoutClicked(){
 
-        //Kill server connection
-        populateTable();
-
-//        try {
-//            TicTacToeApplication.getCoordinator().showGameScene();
-//        }catch(Exception ex){
-//            System.out.println("Try something else");
-//        }
+        try {
+            TicTacToeApplication.getCoordinator().showGameScene();
+        }catch(Exception ex){
+            System.out.println("Try something else");
+        }
 
     }
 
     public void populateTable(){
+        gameListView.getItems().clear();
         ObservableList<String> items =FXCollections.observableArrayList (conn.getObservableList());
         gameListView.setItems(items);
     }
