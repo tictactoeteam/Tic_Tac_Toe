@@ -12,6 +12,7 @@ public class JsonMove {
         theMove.addProperty("type" , "makeMove");
         JsonObject data = new JsonObject();
         data.addProperty("position", row*3+col);
+        data.addProperty("piece", "X");
         theMove.add("data", data);
 
     }
