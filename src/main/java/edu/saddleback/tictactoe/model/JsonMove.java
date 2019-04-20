@@ -9,7 +9,7 @@ public class JsonMove {
     private JsonMove(int row, int col){
         theMove = new JsonObject();
 
-        theMove.addProperty("type" , "makeMove");
+        theMove.addProperty("type" , "move");
         JsonObject data = new JsonObject();
         data.addProperty("position", row*3+col);
         data.addProperty("piece", "X");

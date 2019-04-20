@@ -33,7 +33,7 @@ public class GameController {
      */
     public GameController() {
         this.board = new Observable<>();
-        delegator.addHandler("move", new MoveHandler());
+        delegator.addHandler("moveResp", new MoveHandler());
     }
 
     /**

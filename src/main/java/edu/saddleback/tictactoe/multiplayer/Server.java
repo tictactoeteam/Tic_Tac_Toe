@@ -54,7 +54,7 @@ public class Server {
         this.delegator.addHandler("connect", new ConnectHandler(this, privateKey, publicKey));
         this.delegator.addHandler("login", new LoginHandler(this));
         this.delegator.addHandler("signup", new SignupHandler(this));
-        this.delegator.addHandler("makeMove", new MoveValidateHandler());
+        this.delegator.addHandler("move", new MoveValidateHandler());
         pubnub.subscribe().channels(Arrays.asList("main")).withPresence().execute();
     }
 }
