@@ -20,9 +20,11 @@ import edu.saddleback.tictactoe.model.JsonMove;
 import edu.saddleback.tictactoe.multiplayer.MessageDelegator;
 import edu.saddleback.tictactoe.observable.Observable;
 import edu.saddleback.tictactoe.util.Crypto;
+import edu.saddleback.tictactoe.view.SceneCoordinator;
+import edu.saddleback.tictactoe.view.TicTacToeApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import edu.saddleback.tictactoe.view.LobbyView;
+import javafx.application.Platform;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -35,24 +37,32 @@ public class ServerConnection {
 
     private MessageDelegator delegator;
 
+
     private BigInteger dhPrivateKey;
     private BigInteger dhPublicKey;
 
     private String attemptedUsername;
 
+    //Do we need these for lobbyview? How do we get access to lobbyview?
+    private SceneCoordinator sceneCoordinator;
+    private GameController gameController;
+
     private Observable<BigInteger> sharedSecret;
     private Observable<Boolean> loggedIn;
 
-    private LobbyView lobbyViewer;
-    public ObservableList myUserList = FXCollections.observableArrayList();
-
+    public ObservableList myUserList;
 
     private PubNub pubnub;
 
     private ServerConnection() {
         PNConfiguration config = new PNConfiguration();
+        sceneCoordinator = TicTacToeApplication.getCoordinator();
+        gameController = TicTacToeApplication.getController();
+
         config.setPublishKey(pubkey);
         config.setSubscribeKey(subkey);
+
+        myUserList = FXCollections.observableArrayList();
 
         this.pubnub = new PubNub(config);
 
@@ -228,6 +238,10 @@ public class ServerConnection {
         return instance;
     }
 
+    public ObservableList<String> getObservableList(){
+        return myUserList;
+    }
+
     public void sendMessage(int row, int col){
         JsonObject msg = JsonMove.convertToJson(row, col);
 
@@ -264,7 +278,6 @@ public class ServerConnection {
                                 myUserList.add(occupant.getUuid()); //this adds an element to the list
                             }
                         }
-                        lobbyViewer.populateTable(myUserList);
                     }
                 });
 
