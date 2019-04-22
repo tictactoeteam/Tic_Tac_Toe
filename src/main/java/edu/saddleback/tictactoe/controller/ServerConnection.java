@@ -31,6 +31,7 @@ import javafx.application.Platform;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.TooManyListenersException;
 
 public class ServerConnection {
     private static String pubkey = System.getenv("TTT_PUBNUB_PUBLISH");
@@ -42,10 +43,11 @@ public class ServerConnection {
     private BigInteger dhPublicKey;
     private String attemptedUsername;
     private Observable<BigInteger> sharedSecret;
+    private PubNub pubnub;
+
     private Observable<Boolean> loggedIn;
     public ObservableList myUserList;
-
-    private PubNub pubnub;
+    private Observable<Boolean> gameStart;
     
 
     private ServerConnection() {
@@ -61,8 +63,9 @@ public class ServerConnection {
         this.dhPrivateKey = DiffieHellmanKeyGenerator.generatePrivateKey();
         this.dhPublicKey = DiffieHellmanKeyGenerator.generatePublicKey(this.dhPrivateKey);
 
-        this.sharedSecret = new Observable<>();
-        this.loggedIn = new Observable<>();
+        sharedSecret = new Observable<>();
+        loggedIn = new Observable<>();
+        gameStart = new Observable<>();
 
         this.delegator = new MessageDelegator();
         //this.delegator.addHandler("loginResponse", new LoginHandler(loggedIn, attemptedUsername));
@@ -72,8 +75,12 @@ public class ServerConnection {
         waitForServerPub();
         connect();
         registerLoginStatusListener();
+        registerChallengeListener();
     }
 
+    /**
+     * Listener for login status
+     */
     private void registerLoginStatusListener() {
         pubnub.addListener(new SubscribeCallback() {
             @Override
@@ -109,6 +116,52 @@ public class ServerConnection {
             @Override
             public void presence(PubNub pubnub, PNPresenceEventResult presence) {}
         });
+    }
+
+    /**
+     * Listener for challenge status
+     */
+    private void registerChallengeListener(){
+        pubnub.addListener(new SubscribeCallback() {
+            @Override
+            public void status(PubNub pubnub, PNStatus status) {}
+            @Override
+            public void message(PubNub pubnub, PNMessageResult message) {
+
+                String type = message.getMessage().getAsJsonObject().get("type").getAsString();
+                JsonObject data = message.getMessage().getAsJsonObject().get("data").getAsJsonObject();
+
+                if (!Arrays.asList("challengeAccepted").contains(type)) {
+                    return;
+                }
+
+                String player1Name = data.get("player1Username").getAsString();
+                String player2Name = data.get("player2username").getAsString();
+
+                if(type.equals("challengedAccepted") && attemptedUsername.equals(player1Name)){ //YOU ARE THE 'X'
+
+                    TicTacToeApplication.getController().setPlayer1Name(player1Name);
+                    TicTacToeApplication.getController().setPlayer2Name(player2Name);
+
+                    gameStart.set(true);
+
+                }
+
+                if(type.equals("challengedAccepted") && attemptedUsername.equals(player2Name)){ //YOU ARE THE 'O'
+
+                    TicTacToeApplication.getController().setPlayer1Name(player2Name);
+                    TicTacToeApplication.getController().setPlayer2Name(player1Name);
+
+                    gameStart.set(true);
+
+                }
+
+            }
+            @Override
+            public void presence(PubNub pubnub, PNPresenceEventResult presence){}
+        });
+
+
     }
 
     private void connect() {
@@ -246,6 +299,10 @@ public class ServerConnection {
     public Observable<Boolean> getLoggedInObservable() {
         return loggedIn;
     }
+    public Observable<Boolean> getGameStartObservable() {
+        return gameStart;
+    }
+
 
     public static ServerConnection getInstance() {
         if (instance == null) {

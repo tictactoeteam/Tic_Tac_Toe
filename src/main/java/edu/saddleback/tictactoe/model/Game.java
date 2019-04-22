@@ -7,12 +7,26 @@ import java.util.UUID;
 public class Game {
     private UUID id;
     private String  playerX;
+    private Player playerObjectX;
     private String playerO;
+    private Player playerObjectO;
 
     private byte[] moves;
 
 
     private Board board;
+
+    public Game(UUID id, Player playerX, Player playerO, byte[] moves) {
+        this.id = id;
+        this.playerObjectX = playerX;
+        this.playerObjectO = playerO;
+        this.moves = moves;
+
+        this.board = new Board();
+
+        this.playerX = playerObjectX.getUsername();
+        this.playerO = playerObjectO.getUsername();
+    }
 
     public Game(UUID id, String playerX, String playerO, byte[] moves) {
         this.id = id;
@@ -20,6 +34,10 @@ public class Game {
         this.playerO = playerO;
         this.board = new Board();
         this.moves = moves;
+        playerObjectX = new Player();
+        playerObjectX.setUsername(playerX);
+        playerObjectO = new Player();
+        playerObjectO.setUsername(playerO);
     }
 
     public Game(String playerX, String playerO) {
@@ -34,16 +52,16 @@ public class Game {
         this.id = id;
     }
 
-    public String getPlayerX() {
-        return playerX;
+    public Player getPlayerX() {
+        return playerObjectX;
     }
 
     public void setPlayerX(String playerX) {
         this.playerX = playerX;
     }
 
-    public String getPlayerO() {
-        return playerO;
+    public Player getPlayerO() {
+        return playerObjectO;
     }
 
     public void setPlayerO(String playerO) {

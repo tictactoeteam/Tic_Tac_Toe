@@ -37,6 +37,8 @@ public class GameView{
     protected void initialize(){
 
         controller = TicTacToeApplication.getController();
+        player1Name.setText(controller.getPlayer1Name());
+        player2Name.setText(controller.getPlayer2Name());
 
     }
 

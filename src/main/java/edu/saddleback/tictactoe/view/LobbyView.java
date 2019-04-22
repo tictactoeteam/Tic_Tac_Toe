@@ -40,6 +40,19 @@ public class LobbyView {
 
         controller = TicTacToeApplication.getController();
         conn = ServerConnection.getInstance();
+
+        conn.getGameStartObservable().subscribe((onGameStarted) ->{
+
+            if (onGameStarted.equals(true)) {
+                try {
+                    TicTacToeApplication.getCoordinator().showGameScene();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
+
         populateTable();
         instance = this;
         System.out.println("Running lobbyview intialize");

@@ -18,7 +18,8 @@ public class GameController {
 
     private Observable<Board> board;
 
-
+    private String player1Name;
+    private String player2Name;
     private UUID playerID = UUID.randomUUID();
     private String winnerName = null;
     private String loserName = null;
@@ -29,6 +30,10 @@ public class GameController {
 
     public String getWinnerName(){return winnerName;}
     public String getLoserName(){return loserName;}
+    public String getPlayer1Name(){return player1Name;}
+    public String getPlayer2Name(){return player2Name;}
+    public void setPlayer1Name(String name){player1Name = name;}
+    public void setPlayer2Name(String name){player2Name = name;}
 
     /**
      * Reads game data if a file exists, otherwise initializes a new board.
