@@ -68,6 +68,9 @@ public class LobbyView {
 
     }
 
+    /**
+     * Repopulates the listview with all current pending players connected to the server
+     */
     public void populateTable(){
 
         Platform.runLater(new Runnable() {
@@ -79,6 +82,15 @@ public class LobbyView {
             }
         });
 
+
+    }
+
+    /**
+     * Runs when a name in the listview is clicked, and attempts to start a game
+     */
+    public void onListClicked(){
+
+        System.out.println("Player Name: " + gameListView.getSelectionModel().getSelectedItem().toString());
 
     }
 

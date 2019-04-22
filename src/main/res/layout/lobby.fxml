@@ -19,7 +19,7 @@
       </HBox>
    </bottom>
    <center>
-      <ListView fx:id="gameListView" maxHeight="400.0" maxWidth="250.0" prefHeight="344.0" prefWidth="250.0" BorderPane.alignment="CENTER" />
+      <ListView fx:id="gameListView" maxHeight="400.0" maxWidth="250.0" onMouseClicked="#onListClicked" prefHeight="344.0" prefWidth="250.0" BorderPane.alignment="CENTER" />
    </center>
    <top>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">

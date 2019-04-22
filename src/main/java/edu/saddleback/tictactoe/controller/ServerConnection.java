@@ -37,19 +37,15 @@ public class ServerConnection {
     private static ServerConnection instance;
 
     private MessageDelegator delegator;
-
-
     private BigInteger dhPrivateKey;
     private BigInteger dhPublicKey;
-
     private String attemptedUsername;
-
     private Observable<BigInteger> sharedSecret;
     private Observable<Boolean> loggedIn;
-
     public ObservableList myUserList;
 
     private PubNub pubnub;
+    
 
     private ServerConnection() {
         PNConfiguration config = new PNConfiguration();
