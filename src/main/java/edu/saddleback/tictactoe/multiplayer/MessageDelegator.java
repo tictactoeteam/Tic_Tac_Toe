@@ -46,6 +46,7 @@ public class MessageDelegator extends SubscribeCallback {
     public void presence(PubNub pubnub, PNPresenceEventResult presence) {
         if (presence.getEvent().equals("join")) {
             System.out.println("Player joined");
+            System.out.println(presence.getUuid());
             presence.getHereNowRefresh();
             presence.getUuid(); // 175c2c67-b2a9-470d-8f4b-1db94f90e39e
             presence.getTimestamp(); // 1345546797
@@ -53,6 +54,7 @@ public class MessageDelegator extends SubscribeCallback {
         }
         else if(presence.getEvent().equals("leave")){
             System.out.println("Player left");
+            System.out.println(presence.getUuid());
             presence.getUuid(); // 175c2c67-b2a9-470d-8f4b-1db94f90e39e
             presence.getTimestamp(); // 1345546797
             presence.getOccupancy(); // 2
