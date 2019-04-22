@@ -16,6 +16,7 @@ import com.sauljohnson.mayo.DiffieHellmanKeyGenerator;
 import edu.saddleback.tictactoe.controller.handlers.LoginHandler;
 import edu.saddleback.tictactoe.controller.handlers.RegisterHandler;
 import edu.saddleback.tictactoe.controller.handlers.ServerPubHandler;
+import edu.saddleback.tictactoe.model.GamePiece;
 import edu.saddleback.tictactoe.model.JsonMove;
 import edu.saddleback.tictactoe.multiplayer.MessageDelegator;
 import edu.saddleback.tictactoe.observable.Observable;
@@ -258,8 +259,23 @@ public class ServerConnection {
         return myUserList;
     }
 
-    public void sendMessage(int row, int col){
-        JsonObject msg = JsonMove.convertToJson(row, col);
+    public void sendMessage(int row, int col, GamePiece piece){
+//        JsonObject msg = JsonMove.convertToJson(row, col,);
+
+        JsonObject msg = new JsonObject();
+        msg.addProperty("type", "move");
+
+        JsonObject data = new JsonObject();
+        data.addProperty("position", row*3+col);
+
+        String p = "X";
+        if (piece== GamePiece.O){
+            p = "O";
+        }
+        data.addProperty("piece", p);
+        msg.add("data", data);
+
+
 
         try{
             this.pubnub.publish()
