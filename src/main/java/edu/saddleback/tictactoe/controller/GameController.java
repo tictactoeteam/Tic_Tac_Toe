@@ -23,6 +23,8 @@ public class GameController {
     private String winnerName = null;
     private String loserName = null;
 
+    private GamePiece myPiece;
+
     private MessageDelegator delegator = new MessageDelegator();
 
     public String getWinnerName(){return winnerName;}
@@ -91,6 +93,10 @@ public class GameController {
         this.board.set(board);
     }
 
+
+    public void setMyPiece(GamePiece piece){
+        myPiece = piece;
+    }
 
     public void applyJsonMove(JsonObject move){
         Board temp = this.board.get();

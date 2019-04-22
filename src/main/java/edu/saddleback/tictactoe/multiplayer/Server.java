@@ -47,13 +47,21 @@ public class Server {
         return this.sharedSecrets.get(clientId);
     }
 
+    public void createGame(String player1, String player2){
+        gamesPlayed.add(new Game(player1,player2));
+    }
+
+    public Game findGame(String player1, String player2){
+        return null;
+    }
+
     public void start() {
         this.delegator.addHandler("connect", new ConnectHandler(this, privateKey, publicKey));
         this.delegator.addHandler("connect", new ConnectHandler(this, privateKey, publicKey));
         this.delegator.addHandler("login", new LoginHandler(this));
         this.delegator.addHandler("signup", new SignupHandler(this));
         this.delegator.addHandler("move", new MoveValidateHandler());
-        this.delegator.addHandler("challenge", new ChallengeHandler());
+        this.delegator.addHandler("challenge", new ChallengeHandler(this));
         pubnub.subscribe().channels(Arrays.asList("main")).withPresence().execute();
     }
 }

@@ -6,19 +6,23 @@ import java.util.UUID;
 
 public class Game {
     private UUID id;
-    private Player playerX;
-    private Player playerO;
+    private String  playerX;
+    private String playerO;
 
     private byte[] moves;
 
-    public Game(UUID id, Player playerX, Player playerO, byte[] moves) {
+
+    private Board board;
+
+    public Game(UUID id, String playerX, String playerO, byte[] moves) {
         this.id = id;
         this.playerX = playerX;
         this.playerO = playerO;
+        this.board = new Board();
         this.moves = moves;
     }
 
-    public Game(Player playerX, Player playerO) {
+    public Game(String playerX, String playerO) {
         this(UUID.randomUUID(), playerX, playerO, new byte[9]);
     }
 
@@ -30,19 +34,19 @@ public class Game {
         this.id = id;
     }
 
-    public Player getPlayerX() {
+    public String getPlayerX() {
         return playerX;
     }
 
-    public void setPlayerX(Player playerX) {
+    public void setPlayerX(String playerX) {
         this.playerX = playerX;
     }
 
-    public Player getPlayerO() {
+    public String getPlayerO() {
         return playerO;
     }
 
-    public void setPlayerO(Player playerO) {
+    public void setPlayerO(String playerO) {
         this.playerO = playerO;
     }
 
