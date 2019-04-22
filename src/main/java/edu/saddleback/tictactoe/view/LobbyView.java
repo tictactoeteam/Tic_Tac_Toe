@@ -105,6 +105,7 @@ public class LobbyView {
 
         //PRETEND THIS IS THE USERNAME vvvv
         String opponent = gameListView.getSelectionModel().getSelectedItem().toString();
+        conn.challenge("kai", "toma");
 
     }
 

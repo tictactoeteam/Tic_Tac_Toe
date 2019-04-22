@@ -136,25 +136,30 @@ public class ServerConnection {
                 }
 
                 String player1Name = data.get("player1Username").getAsString();
-                String player2Name = data.get("player2username").getAsString();
+                String player2Name = data.get("player2Username").getAsString();
 
-                if(type.equals("challengedAccepted") && attemptedUsername.equals(player1Name)){ //YOU ARE THE 'X'
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(type.equals("challengeAccepted") && attemptedUsername.equals(player1Name)){ //YOU ARE THE 'X'
+                            System.out.println("CASE1" + player1Name + "   " + player2Name);
+                            TicTacToeApplication.getController().setPlayer1Name(player1Name);
+                            TicTacToeApplication.getController().setPlayer2Name(player2Name);
 
-                    TicTacToeApplication.getController().setPlayer1Name(player1Name);
-                    TicTacToeApplication.getController().setPlayer2Name(player2Name);
+                            gameStart.set(true);
 
-                    gameStart.set(true);
+                        }
 
-                }
+                        if(type.equals("challengeAccepted") && attemptedUsername.equals(player2Name)){ //YOU ARE THE 'O'
+                            System.out.println("CASE2" + player1Name + "   " + player2Name);
+                            TicTacToeApplication.getController().setPlayer1Name(player2Name);
+                            TicTacToeApplication.getController().setPlayer2Name(player1Name);
 
-                if(type.equals("challengedAccepted") && attemptedUsername.equals(player2Name)){ //YOU ARE THE 'O'
+                            gameStart.set(true);
 
-                    TicTacToeApplication.getController().setPlayer1Name(player2Name);
-                    TicTacToeApplication.getController().setPlayer2Name(player1Name);
-
-                    gameStart.set(true);
-
-                }
+                        }
+                    }
+                });
 
             }
             @Override
