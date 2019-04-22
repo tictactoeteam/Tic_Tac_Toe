@@ -2,6 +2,7 @@ package edu.saddleback.tictactoe.view;
 
 import edu.saddleback.tictactoe.controller.GameController;
 import edu.saddleback.tictactoe.controller.ServerConnection;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -22,6 +23,8 @@ public class LobbyView {
 
     private ServerConnection conn;
 
+    private static LobbyView instance = null;
+
     @FXML
     private ListView gameListView;
     @FXML
@@ -38,10 +41,18 @@ public class LobbyView {
         controller = TicTacToeApplication.getController();
         conn = ServerConnection.getInstance();
         populateTable();
+        instance = this;
         System.out.println("Running lobbyview intialize");
         //FILL THE LIST VIEW WITH THE AVAILABLE GAMES
         TicTacToeApplication.setWindowSize(700, 700);
 
+    }
+
+    public static void updateInstance(){
+        if(instance == null){
+            return;
+        }
+        instance.populateTable();
     }
 
     /**
@@ -58,9 +69,17 @@ public class LobbyView {
     }
 
     public void populateTable(){
-        gameListView.getItems().clear();
-        ObservableList<String> items =FXCollections.observableArrayList (conn.getObservableList());
-        gameListView.setItems(items);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                gameListView.getItems().clear();
+                ObservableList<String> items = FXCollections.observableArrayList(conn.getObservableList());
+                gameListView.setItems(items);
+            }
+        });
+
+
     }
 
 

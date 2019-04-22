@@ -20,6 +20,7 @@ import edu.saddleback.tictactoe.model.JsonMove;
 import edu.saddleback.tictactoe.multiplayer.MessageDelegator;
 import edu.saddleback.tictactoe.observable.Observable;
 import edu.saddleback.tictactoe.util.Crypto;
+import edu.saddleback.tictactoe.view.LobbyView;
 import edu.saddleback.tictactoe.view.SceneCoordinator;
 import edu.saddleback.tictactoe.view.TicTacToeApplication;
 import javafx.collections.FXCollections;
@@ -272,6 +273,10 @@ public class ServerConnection {
                                 myUserList.add(occupant.getUuid()); //this adds an element to the list
                             }
                         }
+
+
+                        LobbyView.updateInstance();
+
                     }
                 });
 
