@@ -90,7 +90,8 @@ public class LobbyView {
      */
     public void onListClicked(){
 
-        System.out.println("Player Name: " + gameListView.getSelectionModel().getSelectedItem().toString());
+        //PRETEND THIS IS THE USERNAME vvvv
+        String opponent = gameListView.getSelectionModel().getSelectedItem().toString();
 
     }
 

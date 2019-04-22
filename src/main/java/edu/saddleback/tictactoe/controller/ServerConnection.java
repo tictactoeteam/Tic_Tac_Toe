@@ -216,6 +216,32 @@ public class ServerConnection {
         }
     }
 
+    /**
+     * Sends a message to the server that two players want to start a game.
+     * @param player1Name
+     * @param player2Name
+     */
+    public void challenge(String player1Name, String player2Name){
+
+        JsonObject msg = new JsonObject();
+        msg.addProperty("type", "challenge");
+
+        JsonObject data = new JsonObject();
+        data.addProperty("player1Username", Crypto.encrypt(player1Name, sharedSecret.get()));
+        data.addProperty("player2Username", Crypto.encrypt(player2Name, sharedSecret.get()));
+        msg.add("data", data);
+
+        try {
+            this.pubnub.publish()
+                    .channel("main")
+                    .message(msg)
+                    .sync();
+        } catch (PubNubException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public Observable<Boolean> getLoggedInObservable() {
         return loggedIn;
     }
