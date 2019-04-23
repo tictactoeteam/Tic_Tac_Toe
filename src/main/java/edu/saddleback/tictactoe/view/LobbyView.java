@@ -20,15 +20,15 @@ import java.util.List;
 public class LobbyView {
 
     private GameController controller;
-
     private ServerConnection conn;
-
     private static LobbyView instance = null;
 
     @FXML
     private ListView gameListView;
     @FXML
     private Button logoutButton;
+    @FXML
+    private Button historyButton;
 
     private ObservableList<String> items = FXCollections.observableArrayList();
 
@@ -106,6 +106,12 @@ public class LobbyView {
         //PRETEND THIS IS THE USERNAME vvvv
         String opponent = gameListView.getSelectionModel().getSelectedItem().toString();
         conn.challenge("kai", "toma");
+
+    }
+
+    public void onHistoryClicked(){
+
+
 
     }
 
