@@ -304,6 +304,28 @@ public class ServerConnection {
 
     }
 
+    /**
+     * Sends a message to the server to retrieve all stored games.
+     */
+    public void getAllGamesMessage(){
+
+        JsonObject msg = new JsonObject();
+        msg.addProperty("type", "getAllGames");
+        JsonObject data = new JsonObject();
+        data.addProperty("test", "CRAP");
+        msg.add("data", data);
+
+        try {
+            this.pubnub.publish()
+                    .channel("main")
+                    .message(msg)
+                    .sync();
+        } catch (PubNubException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public Observable<Boolean> getLoggedInObservable() {
         return loggedIn;
     }
