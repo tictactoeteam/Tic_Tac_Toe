@@ -1,6 +1,8 @@
 package edu.saddleback.tictactoe.controller;
 
 import com.google.gson.JsonObject;
+import com.pubnub.api.PNConfiguration;
+import com.pubnub.api.PubNub;
 import com.sun.nio.sctp.SctpSocketOption;
 import edu.saddleback.tictactoe.controller.handlers.MoveHandler;
 import edu.saddleback.tictactoe.model.*;
@@ -26,6 +28,7 @@ public class GameController {
 
     private GamePiece myPiece;
 
+
     private MessageDelegator delegator = new MessageDelegator();
 
     public String getWinnerName(){return winnerName;}
@@ -40,7 +43,10 @@ public class GameController {
      */
     public GameController() {
         this.board = new Observable<>();
+        this.board.set(new Board());
         delegator.addHandler("moveResp", new MoveHandler(this));
+
+        ServerConnection.getInstance().getPubNub().addListener(this.delegator);
     }
 
     /**
@@ -104,9 +110,16 @@ public class GameController {
     }
 
 
+    public Observable<Board> getBoard(){
+        return board;
+    }
+
+
     public void applyMove(BoardMove move){
         try {
-            move.applyTo(board.get());
+            board.set(move.applyTo(board.get()));
+
+            System.out.println(board.get());
         }catch(GridAlreadyChosenException ex){
             System.out.println("This shouldn't happen!!!");
         }

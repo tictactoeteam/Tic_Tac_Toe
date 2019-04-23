@@ -21,12 +21,22 @@ public class MoveHandler implements MessageHandler {
         String player1 = data.get("player1").getAsString();
         String player2 = data.get("player2").getAsString();
 
+        System.out.println(player1);
+        System.out.println(player2);
+
+        System.out.println(controller.getPlayer1Name().equals(player1)
+                && controller.getPlayer2Name().equals(player2)
+                ||
+                controller.getPlayer1Name().equals(player2)
+                        && controller.getPlayer2Name().equals(player1));
+
         if (controller.getPlayer1Name().equals(player1)
         && controller.getPlayer2Name().equals(player2)
         ||
         controller.getPlayer1Name().equals(player2)
         && controller.getPlayer2Name().equals(player1)){
 
+            System.out.println("HERE!!!");
 
             BoardMove move;
 

@@ -5,6 +5,7 @@ import edu.saddleback.tictactoe.model.Board;
 import edu.saddleback.tictactoe.model.GamePiece;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 /**
@@ -61,6 +62,7 @@ public class BoardView extends GridPane {
         }
 
         this.getChildren().add(boardGPane);
+        controller.getBoard().subscribe(this::onUpdate);
     }
 
     /**
@@ -71,15 +73,17 @@ public class BoardView extends GridPane {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
 
-                String path;
+                Image image;
                 if(board.get(i, j) == GamePiece.X)
-                    path = getClass().getResource("/images/x.png").toString();
+                    image = new Image("file:src/main/res/images/x.png");
                 else if(board.get(i, j) == GamePiece.O)
-                    path = getClass().getResource("/images/o.png").toString();
+                    image = new Image("file:src/main/res/images/o.png");
                 else
-                    path = getClass().getResource("/images/blank.png").toString();
+                    image = new Image("file:src/main/res/images/blank.png");
 
-                grid[i][j].getBackgroundImageView().setImage(new Image(path));
+
+
+                grid[i][j].getBackgroundImageView().setImage(image);
 
             }
         }
