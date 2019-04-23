@@ -33,7 +33,7 @@ public class MoveValidateHandler implements MessageHandler {
             int col = pos % 3;
 
             GamePiece piece;
-            if (data.get("piece").getAsString() == "X") {
+            if (data.get("piece").getAsString().equals("X")) {
                 piece = GamePiece.X;
             } else {
                 piece = GamePiece.O;
@@ -53,6 +53,9 @@ public class MoveValidateHandler implements MessageHandler {
                 JsonObject dt = new JsonObject();
                 dt.addProperty("position", pos);
                 dt.addProperty("piece", data.get("piece").getAsString());
+                dt.addProperty("player1", data.get("player1").getAsString());
+                dt.addProperty("player2", data.get("player2").getAsString());
+
 
                 msg.add("data", dt);
 

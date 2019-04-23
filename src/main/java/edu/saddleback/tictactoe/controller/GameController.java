@@ -40,7 +40,7 @@ public class GameController {
      */
     public GameController() {
         this.board = new Observable<>();
-        delegator.addHandler("moveResp", new MoveHandler());
+        delegator.addHandler("moveResp", new MoveHandler(this));
     }
 
     /**
@@ -103,14 +103,23 @@ public class GameController {
         myPiece = piece;
     }
 
-    public void applyJsonMove(JsonObject move){
-        Board temp = this.board.get();
+
+    public void applyMove(BoardMove move){
         try {
-            JsonMove.convertToBoardMove(move).applyTo(temp);
-            this.board.set(temp);
+            move.applyTo(board.get());
         }catch(GridAlreadyChosenException ex){
-            System.out.println("This shouldn't happen!!!! Validation of the move on the server is faulty!!");
-            System.out.println("Or the conversion from Json to BoardMove is faulty-one or the other");
+            System.out.println("This shouldn't happen!!!");
         }
     }
+
+//    public void applyJsonMove(JsonObject move){
+//        Board temp = this.board.get();
+//        try {
+//            JsonMove.convertToBoardMove(move).applyTo(temp);
+//            this.board.set(temp);
+//        }catch(GridAlreadyChosenException ex){
+//            System.out.println("This shouldn't happen!!!! Validation of the move on the server is faulty!!");
+//            System.out.println("Or the conversion from Json to BoardMove is faulty-one or the other");
+//        }
+//    }
 }

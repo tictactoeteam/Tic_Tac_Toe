@@ -145,6 +145,8 @@ public class ServerConnection {
                             TicTacToeApplication.getController().setPlayer1Name(player1Name);
                             TicTacToeApplication.getController().setPlayer2Name(player2Name);
 
+                            TicTacToeApplication.getController().setMyPiece(GamePiece.X);
+
                             gameStart.set(true);
 
                         }
@@ -152,6 +154,8 @@ public class ServerConnection {
                         if(type.equals("challengeAccepted") && attemptedUsername.equals(player2Name)){ //YOU ARE THE 'O'
                             TicTacToeApplication.getController().setPlayer1Name(player2Name);
                             TicTacToeApplication.getController().setPlayer2Name(player1Name);
+
+                            TicTacToeApplication.getController().setMyPiece(GamePiece.O);
 
                             gameStart.set(true);
 
