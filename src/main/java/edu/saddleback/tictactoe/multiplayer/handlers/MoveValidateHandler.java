@@ -44,6 +44,11 @@ public class MoveValidateHandler implements MessageHandler {
             BoardMove move = new BoardMove(row, col, piece);
             JsonObject msg = new JsonObject();
             try {
+                if (piece == GamePiece.O && board.isXTurn()
+                || piece == GamePiece.X && board.isOTurn()){
+                    throw new NotYourTurnException();
+                }
+
                 move.applyTo(board);
 
                 System.out.println("Board After: " + board);
@@ -60,6 +65,10 @@ public class MoveValidateHandler implements MessageHandler {
                 msg.add("data", dt);
 
             } catch (GridAlreadyChosenException ex) {
+                msg.addProperty("type", "moveResp");
+                msg.add("data", new JsonObject());
+            }
+            catch(NotYourTurnException ex){
                 msg.addProperty("type", "moveResp");
                 msg.add("data", new JsonObject());
             }

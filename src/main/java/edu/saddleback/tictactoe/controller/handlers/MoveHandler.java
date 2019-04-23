@@ -24,11 +24,6 @@ public class MoveHandler implements MessageHandler {
         System.out.println(player1);
         System.out.println(player2);
 
-        System.out.println(controller.getPlayer1Name().equals(player1)
-                && controller.getPlayer2Name().equals(player2)
-                ||
-                controller.getPlayer1Name().equals(player2)
-                        && controller.getPlayer2Name().equals(player1));
 
         if (controller.getPlayer1Name().equals(player1)
         && controller.getPlayer2Name().equals(player2)
