@@ -58,7 +58,7 @@ public class GameController {
     public void onGridClicked(GridBox gridBox){
 //        GamePiece piece = board.get().isXTurn() ? GamePiece.X : GamePiece.O;
 //        BoardMove currentMove = new BoardMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
-        ServerConnection.getInstance().sendMessage(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), myPiece);
+        ServerConnection.getInstance().sendMessage(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), myPiece, player1Name, player2Name);
     }
 
     public void resetGame() {

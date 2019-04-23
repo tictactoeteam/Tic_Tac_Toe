@@ -142,7 +142,6 @@ public class ServerConnection {
                     @Override
                     public void run() {
                         if(type.equals("challengeAccepted") && attemptedUsername.equals(player1Name)){ //YOU ARE THE 'X'
-                            System.out.println("CASE1" + player1Name + "   " + player2Name);
                             TicTacToeApplication.getController().setPlayer1Name(player1Name);
                             TicTacToeApplication.getController().setPlayer2Name(player2Name);
 
@@ -151,7 +150,6 @@ public class ServerConnection {
                         }
 
                         if(type.equals("challengeAccepted") && attemptedUsername.equals(player2Name)){ //YOU ARE THE 'O'
-                            System.out.println("CASE2" + player1Name + "   " + player2Name);
                             TicTacToeApplication.getController().setPlayer1Name(player2Name);
                             TicTacToeApplication.getController().setPlayer2Name(player1Name);
 
@@ -321,7 +319,7 @@ public class ServerConnection {
         return myUserList;
     }
 
-    public void sendMessage(int row, int col, GamePiece piece){
+    public void sendMessage(int row, int col, GamePiece piece, String player1, String player2){
 //        JsonObject msg = JsonMove.convertToJson(row, col,);
 
         JsonObject msg = new JsonObject();
@@ -334,7 +332,13 @@ public class ServerConnection {
         if (piece== GamePiece.O){
             p = "O";
         }
+
+
+        System.out.println("PIECE USED: "+ p);
         data.addProperty("piece", p);
+        data.addProperty("player1", player1);
+        data.addProperty("player2", player2);
+
         msg.add("data", data);
 
 
