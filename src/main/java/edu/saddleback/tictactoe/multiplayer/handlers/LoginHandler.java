@@ -40,6 +40,7 @@ public class LoginHandler implements MessageHandler {
                 return;
             }
 
+
             sendLoggedIn(pubnub, username);
         } catch (SQLException e) {
             e.printStackTrace();

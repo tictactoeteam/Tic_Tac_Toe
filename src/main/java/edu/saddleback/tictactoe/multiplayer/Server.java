@@ -9,6 +9,7 @@ import edu.saddleback.tictactoe.multiplayer.handlers.*;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.Vector;
 
 public class Server {
@@ -20,12 +21,15 @@ public class Server {
 
     private Vector<Game> gamesPlayed;
 
+    private HashMap<String, String> userMap;
+
     private BigInteger privateKey;
     private BigInteger publicKey;
     private HashMap<String, BigInteger> sharedSecrets;
 
     public Server() {
         gamesPlayed = new Vector<>();
+        userMap = new HashMap<>();
         this.pnConfiguration = new PNConfiguration();
         this.pnConfiguration.setPublishKey(pubKey);
         this.pnConfiguration.setSubscribeKey(subKey);
@@ -53,6 +57,18 @@ public class Server {
 
     public Game findGame(String player1, String player2){
         return null;
+    }
+
+    public void addToUsers(String id, String username){
+        userMap.put(id, username);
+    }
+
+    public String findUser(String id){
+        return userMap.get(id);
+    }
+
+    public void removeUser(String id){
+        userMap.remove(id);
     }
 
     public void start() {

@@ -48,17 +48,19 @@ public class ServerConnection {
     private Observable<Boolean> loggedIn;
     public ObservableList myUserList;
     private Observable<Boolean> gameStart;
+    private PNConfiguration pnConfig;
     
 
-    private ServerConnection() {
-        PNConfiguration config = new PNConfiguration();
+    private ServerConnection(String UUID) {
+        this.pnConfig = new PNConfiguration();
 
-        config.setPublishKey(pubkey);
-        config.setSubscribeKey(subkey);
+        pnConfig.setPublishKey(pubkey);
+        pnConfig.setSubscribeKey(subkey);
+        pnConfig.setUuid(UUID);
 
         myUserList = FXCollections.observableArrayList();
 
-        this.pubnub = new PubNub(config);
+        this.pubnub = new PubNub(pnConfig);
 
         this.dhPrivateKey = DiffieHellmanKeyGenerator.generatePrivateKey();
         this.dhPublicKey = DiffieHellmanKeyGenerator.generatePublicKey(this.dhPrivateKey);
@@ -308,10 +310,9 @@ public class ServerConnection {
         return gameStart;
     }
 
-
-    public static ServerConnection getInstance() {
+    public static ServerConnection getInstance(String UUID) {
         if (instance == null) {
-            instance = new ServerConnection();
+            instance = new ServerConnection(UUID);
         }
 
         return instance;

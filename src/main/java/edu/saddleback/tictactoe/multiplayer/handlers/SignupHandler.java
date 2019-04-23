@@ -37,6 +37,9 @@ public class SignupHandler implements MessageHandler {
             player = new Player();
             player.setUsername(username);
             player.setPassword(password);
+            //We need a way of setting the pubnub id to this setID method... see if we can get the pubnub id in this
+            //function of the cleint currently connected
+          //  player.setId();
             PlayerDao.insertPlayer(player);
             sendAccountCreated(pubnub, username);
         }catch (SQLException e) {

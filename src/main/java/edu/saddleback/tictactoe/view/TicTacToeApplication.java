@@ -71,7 +71,6 @@ public class TicTacToeApplication extends Application {
         Window.setHeight(475);
         Window.show();
 
-        conection = ServerConnection.getInstance();
         coordinator = new SceneCoordinator(Window);
 
         coordinator.showLoginScene();
