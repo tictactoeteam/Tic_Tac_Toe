@@ -4,14 +4,10 @@ import edu.saddleback.tictactoe.controller.GameController;
 import edu.saddleback.tictactoe.controller.ServerConnection;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This object interacts with the lobby page, handles all error checking, and establishes which type of game is to be
@@ -109,9 +105,16 @@ public class LobbyView {
 
     }
 
+    /**
+     * Shows the scene that will show all old games, the results, and their moves.
+     */
     public void onHistoryClicked(){
 
-
+        try {
+            TicTacToeApplication.getCoordinator().showHistoryScene();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

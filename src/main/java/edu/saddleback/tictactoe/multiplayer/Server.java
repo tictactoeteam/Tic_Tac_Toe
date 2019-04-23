@@ -62,6 +62,7 @@ public class Server {
         this.delegator.addHandler("signup", new SignupHandler(this));
         this.delegator.addHandler("move", new MoveValidateHandler());
         this.delegator.addHandler("challenge", new ChallengeHandler(this));
+        this.delegator.addHandler("getAllGames", new GameDaoHandler());
         pubnub.subscribe().channels(Arrays.asList("main")).withPresence().execute();
     }
 }
