@@ -20,14 +20,31 @@ public class LoginView {
     private TextField passwordTextField;
 
     public LoginView() {
-;
+
+        conn = ServerConnection.getInstance();
+        conn.getLoggedInObservable().subscribe((onLoginChanged) -> {
+            if (onLoginChanged.equals(true)) {
+                Platform.runLater(() -> {
+                    try {
+                        TicTacToeApplication.getCoordinator().showLobbyScene();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            } else {
+                Platform.runLater(() -> {
+                    errorText.setText("***error-bad login***");
+                    errorText.setVisible(true);
+                });
+            }
+        });
+
     }
 
     public void onLoginClicked() throws Exception {
         if(!usernameTextField.getText().equals("") && !passwordTextField.getText().equals("")){
-            conn = ServerConnection.getInstance();
             conn.login(usernameTextField.getText(), passwordTextField.getText());
-            TicTacToeApplication.getCoordinator().showLobbyScene();
+
         }else{
             errorText.setText("***error-missing credentials***");
             errorText.setVisible(true);
