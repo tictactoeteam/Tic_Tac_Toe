@@ -40,7 +40,7 @@ public class LoginHandler implements MessageHandler {
                 return;
             }
 
-
+            server.addToUsers(data.get("UUID").getAsString(), username);
             sendLoggedIn(pubnub, username);
         } catch (SQLException e) {
             e.printStackTrace();
