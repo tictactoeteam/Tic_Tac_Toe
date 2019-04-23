@@ -39,7 +39,7 @@ public class LobbyView {
     public void initialize() {
 
         controller = TicTacToeApplication.getController();
-        conn = ServerConnection.getInstance("lol");
+        conn = ServerConnection.getInstance();
 
         conn.getGameStartObservable().subscribe((onGameStarted) ->{
 

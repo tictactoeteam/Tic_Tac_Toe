@@ -35,6 +35,8 @@ public class MessageDelegator extends SubscribeCallback {
         String type = message.getMessage().getAsJsonObject().get("type").getAsString();
         JsonObject data = message.getMessage().getAsJsonObject().get("data").getAsJsonObject();
 
+        data.addProperty("UUID", message.getPublisher());
+
         MessageHandler handler = handlers.get(type);
 
         if (handler != null) {

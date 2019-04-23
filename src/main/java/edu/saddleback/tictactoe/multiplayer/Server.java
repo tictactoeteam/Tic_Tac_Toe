@@ -56,6 +56,12 @@ public class Server {
     }
 
     public Game findGame(String player1, String player2){
+        for (Game game : gamesPlayed){
+            if (game.getPlayerX().getUsername().equals(player1) && game.getPlayerO().getUsername().equals(player2)
+            ||  game.getPlayerO().getUsername().equals(player1) && game.getPlayerX().getUsername().equals(player2)){
+                return game;
+            }
+        }
         return null;
     }
 
@@ -76,7 +82,7 @@ public class Server {
         this.delegator.addHandler("connect", new ConnectHandler(this, privateKey, publicKey));
         this.delegator.addHandler("login", new LoginHandler(this));
         this.delegator.addHandler("signup", new SignupHandler(this));
-        this.delegator.addHandler("move", new MoveValidateHandler());
+        this.delegator.addHandler("move", new MoveValidateHandler(this));
         this.delegator.addHandler("challenge", new ChallengeHandler(this));
         pubnub.subscribe().channels(Arrays.asList("main")).withPresence().execute();
     }

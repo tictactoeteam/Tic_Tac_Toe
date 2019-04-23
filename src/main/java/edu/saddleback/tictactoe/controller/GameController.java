@@ -1,6 +1,8 @@
 package edu.saddleback.tictactoe.controller;
 
 import com.google.gson.JsonObject;
+import com.pubnub.api.PNConfiguration;
+import com.pubnub.api.PubNub;
 import com.sun.nio.sctp.SctpSocketOption;
 import edu.saddleback.tictactoe.controller.handlers.MoveHandler;
 import edu.saddleback.tictactoe.model.*;
@@ -26,6 +28,7 @@ public class GameController {
 
     private GamePiece myPiece;
 
+
     private MessageDelegator delegator = new MessageDelegator();
 
     public String getWinnerName(){return winnerName;}
@@ -40,7 +43,10 @@ public class GameController {
      */
     public GameController() {
         this.board = new Observable<>();
-        delegator.addHandler("moveResp", new MoveHandler());
+        this.board.set(new Board());
+        delegator.addHandler("moveResp", new MoveHandler(this));
+
+        ServerConnection.getInstance().getPubNub().addListener(this.delegator);
     }
 
     /**
@@ -59,8 +65,7 @@ public class GameController {
 //        GamePiece piece = board.get().isXTurn() ? GamePiece.X : GamePiece.O;
 //        BoardMove currentMove = new BoardMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
 
-   //Had to comment this out for now
-        //ServerConnection.getInstance().sendMessage(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), myPiece);
+        ServerConnection.getInstance().sendMessage(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), myPiece, player1Name, player2Name);
     }
 
     public void resetGame() {
@@ -105,14 +110,30 @@ public class GameController {
         myPiece = piece;
     }
 
-    public void applyJsonMove(JsonObject move){
-        Board temp = this.board.get();
+
+    public Observable<Board> getBoard(){
+        return board;
+    }
+
+
+    public void applyMove(BoardMove move){
         try {
-            JsonMove.convertToBoardMove(move).applyTo(temp);
-            this.board.set(temp);
+            board.set(move.applyTo(board.get()));
+
+            System.out.println(board.get());
         }catch(GridAlreadyChosenException ex){
-            System.out.println("This shouldn't happen!!!! Validation of the move on the server is faulty!!");
-            System.out.println("Or the conversion from Json to BoardMove is faulty-one or the other");
+            System.out.println("This shouldn't happen!!!");
         }
     }
+
+//    public void applyJsonMove(JsonObject move){
+//        Board temp = this.board.get();
+//        try {
+//            JsonMove.convertToBoardMove(move).applyTo(temp);
+//            this.board.set(temp);
+//        }catch(GridAlreadyChosenException ex){
+//            System.out.println("This shouldn't happen!!!! Validation of the move on the server is faulty!!");
+//            System.out.println("Or the conversion from Json to BoardMove is faulty-one or the other");
+//        }
+//    }
 }

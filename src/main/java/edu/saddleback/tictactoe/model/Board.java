@@ -108,6 +108,7 @@ public class Board implements Serializable, Cloneable, Comparable<Board> {
         return history;
     }
 
+
     /**
      * Used for console testing of the evaluators.
      * @return

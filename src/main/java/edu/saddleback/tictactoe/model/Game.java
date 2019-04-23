@@ -64,6 +64,10 @@ public class Game {
         return playerObjectO;
     }
 
+    public Board getBoard(){
+        return board;
+    }
+
     public void setPlayerO(String playerO) {
         this.playerO = playerO;
     }

@@ -14,8 +14,9 @@ public class BoardMove implements Serializable {
     }
 
 
-    public void applyTo(Board board) throws GridAlreadyChosenException{
+    public Board applyTo(Board board) throws GridAlreadyChosenException{
         board.set(row, col, piece);
+        return board;
     }
 
     public static BoardMove fromTwoBoards(Board before, Board after){

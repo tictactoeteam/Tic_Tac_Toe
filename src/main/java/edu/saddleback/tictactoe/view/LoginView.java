@@ -25,7 +25,7 @@ public class LoginView {
 
     public void onLoginClicked() throws Exception {
         if(!usernameTextField.getText().equals("") && !passwordTextField.getText().equals("")){
-            conn = ServerConnection.getInstance(usernameTextField.getText());
+            conn = ServerConnection.getInstance();
             conn.login(usernameTextField.getText(), passwordTextField.getText());
             TicTacToeApplication.getCoordinator().showLobbyScene();
         }else{
