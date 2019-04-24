@@ -11,6 +11,9 @@ import edu.saddleback.tictactoe.util.Crypto;
 import java.math.BigInteger;
 import java.sql.SQLException;
 
+/**
+ * Handles the possible signup messages and responds.
+ */
 public class SignupHandler implements MessageHandler {
     private Server server;
 

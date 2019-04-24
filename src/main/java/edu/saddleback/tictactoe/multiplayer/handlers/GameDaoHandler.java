@@ -9,6 +9,9 @@ import edu.saddleback.tictactoe.model.Game;
 import edu.saddleback.tictactoe.multiplayer.MessageHandler;
 import java.sql.SQLException;
 
+/**
+ * Handles the game database data request message, and resturns the requested data.
+ */
 public class GameDaoHandler implements MessageHandler {
 
     @Override

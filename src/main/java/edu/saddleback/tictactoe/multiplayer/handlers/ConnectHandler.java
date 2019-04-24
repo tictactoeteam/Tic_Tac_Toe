@@ -6,9 +6,11 @@ import com.pubnub.api.PubNubException;
 import com.sauljohnson.mayo.DiffieHellmanKeyGenerator;
 import edu.saddleback.tictactoe.multiplayer.MessageHandler;
 import edu.saddleback.tictactoe.multiplayer.Server;
-
 import java.math.BigInteger;
 
+/**
+ * Handles the connect message, saves the shared secrets, and broadcasts the public key.
+ */
 public class ConnectHandler implements MessageHandler {
     private BigInteger privateKey;
     private BigInteger publicKey;

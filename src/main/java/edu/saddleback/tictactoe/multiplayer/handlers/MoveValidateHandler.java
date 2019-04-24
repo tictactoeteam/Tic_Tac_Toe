@@ -7,10 +7,12 @@ import edu.saddleback.tictactoe.model.*;
 import edu.saddleback.tictactoe.multiplayer.MessageHandler;
 import edu.saddleback.tictactoe.multiplayer.Server;
 
+/**
+ * Handles the move validation messages and send a response message.
+ */
 public class MoveValidateHandler implements MessageHandler {
+
     private Server server;
-
-
     public MoveValidateHandler(Server server){
        this.server = server;
     }
@@ -21,9 +23,9 @@ public class MoveValidateHandler implements MessageHandler {
         System.out.println("MESSAGE RECEIVED!!!");
 
         try {
+
             Game game = server.findGame(data.get("player1").getAsString(), data.get("player2").getAsString());
             Board board = game.getBoard();
-
 
             System.out.println("Board Before: " + board);
 
@@ -87,4 +89,5 @@ public class MoveValidateHandler implements MessageHandler {
         }
 
     }
+
 }

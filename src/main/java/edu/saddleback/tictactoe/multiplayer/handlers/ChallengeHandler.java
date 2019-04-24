@@ -7,6 +7,9 @@ import edu.saddleback.tictactoe.multiplayer.MessageHandler;
 import edu.saddleback.tictactoe.multiplayer.Server;
 import edu.saddleback.tictactoe.util.Crypto;
 
+/**
+ * Handles the challenge messages and returns the usernames of the game.
+ */
 public class ChallengeHandler implements MessageHandler {
 
     private Server server;
