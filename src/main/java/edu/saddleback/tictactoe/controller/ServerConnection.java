@@ -31,6 +31,7 @@ import javafx.application.Platform;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.TooManyListenersException;
 
 public class ServerConnection {
@@ -41,12 +42,16 @@ public class ServerConnection {
     private MessageDelegator delegator;
     private BigInteger dhPrivateKey;
     private BigInteger dhPublicKey;
-    private String attemptedUsername;
+    private String attemptedUsername = "noName";
     private Observable<BigInteger> sharedSecret;
     private PubNub pubnub;
 
+    private HashMap<String, String> usernames;
+    private boolean visibleInLobby;
+
+
     private Observable<Boolean> loggedIn;
-    public ObservableList myUserList;
+    private ObservableList<String> myUserList;
     private Observable<Boolean> gameStart;
     private PNConfiguration pnConfig;
     
@@ -58,6 +63,8 @@ public class ServerConnection {
         pnConfig.setSubscribeKey(subkey);
 
         myUserList = FXCollections.observableArrayList();
+        usernames = new HashMap<>();
+        visibleInLobby = false;
 
         this.pubnub = new PubNub(pnConfig);
 
@@ -73,10 +80,14 @@ public class ServerConnection {
         this.delegator.addHandler("registerResponse", new RegisterHandler());
         this.delegator.addHandler("serverPub", new ServerPubHandler());
 
+
+
         waitForServerPub();
         connect();
         registerLoginStatusListener();
         registerChallengeListener();
+        registerHashMapFiller();
+        registerUserUpdater();
     }
 
     /**
@@ -99,18 +110,24 @@ public class ServerConnection {
 
                 if (type.equals("loggedIn") && username.equals(attemptedUsername)) {
                     loggedIn.set(true);
+                    visibleInLobby = true;
                 }
 
                 if (type.equals("accountCreated") && username.equals(attemptedUsername)) {
                     loggedIn.set(true);
+                    visibleInLobby = true;
                 }
 
                 if (type.equals("badLogin") && username.equals(attemptedUsername)) {
                     loggedIn.set(false);
+                    visibleInLobby = false;
+                    attemptedUsername = "noName";
                 }
 
                 if (type.equals("accountExists") && username.equals(attemptedUsername)) {
                     loggedIn.set(false);
+                    visibleInLobby = false;
+                    attemptedUsername = "noName";
                 }
             }
 
@@ -148,6 +165,8 @@ public class ServerConnection {
 
                             TicTacToeApplication.getController().setMyPiece(GamePiece.X);
 
+                            visibleInLobby = false;
+
                             gameStart.set(true);
 
                         }
@@ -157,6 +176,8 @@ public class ServerConnection {
                             TicTacToeApplication.getController().setPlayer2Name(player1Name);
 
                             TicTacToeApplication.getController().setMyPiece(GamePiece.O);
+
+                            visibleInLobby = false;
 
                             gameStart.set(true);
 
@@ -211,6 +232,8 @@ public class ServerConnection {
 
             @Override
             public void presence(PubNub pubnub, PNPresenceEventResult presence) {
+
+                gimmeUsers();
                 if (presence.getEvent().equals("join")) {
                     System.out.println("Player joined");
                     presence.getHereNowRefresh();
@@ -411,6 +434,152 @@ public class ServerConnection {
                 });
 
 
+    }
+
+
+
+    public synchronized void addUser(String uuid, String username){
+        usernames.put(uuid, username);
+    }
+
+//    public synchronized void removeUser(String uuid){
+//        usernames.remove(uuid);
+//    }
+
+    public synchronized String getUsername(String uuid){
+        return usernames.get(uuid);
+    }
+
+
+    public void gimmeUsers(){
+        usernames = new HashMap<>();
+        JsonObject msg = new JsonObject();
+        msg.addProperty("type", "gimmeUsers");
+
+        JsonObject data = new JsonObject();
+        data.addProperty("requester", attemptedUsername);
+
+        msg.add("data", data);
+
+        try {
+            pubnub.publish()
+                    .channel("main")
+                    .message(msg)
+                    .sync();
+        }catch(PubNubException ex){
+            ex.printStackTrace();
+        }
+    }
+
+
+    public void registerHashMapFiller(){
+        pubnub.addListener(new SubscribeCallback() {
+            @Override
+            public void status(PubNub pubnub, PNStatus status) {
+
+            }
+
+            @Override
+            public void message(PubNub pubnub, PNMessageResult message) {
+                String type = message.getMessage().getAsJsonObject().get("type").getAsString();
+                JsonObject data = message.getMessage().getAsJsonObject().get("data").getAsJsonObject();
+
+                if (!type.equals("takeMyUsername")){
+                    return;
+                }
+
+
+                if (!visibleInLobby){
+                    return;
+                }
+
+                if (attemptedUsername.equals("noName")){
+                    return;
+                }
+
+                String responderUsername = data.get("username").getAsString();
+                String responderUUID = message.getPublisher();
+                String requester = data.get("requester").getAsString();
+
+                if (!requester.equals(attemptedUsername)){
+                    return;
+                }
+
+                if (responderUsername.equals("noName")){
+                    return;
+                }
+
+                addUser(responderUUID, responderUsername);
+            }
+
+            @Override
+            public void presence(PubNub pubnub, PNPresenceEventResult presence) {
+
+            }
+        });
+    }
+
+
+
+    public void registerUserUpdater(){
+        pubnub.addListener(new SubscribeCallback() {
+            @Override
+            public void status(PubNub pubnub, PNStatus status) {
+
+            }
+
+            @Override
+            public void message(PubNub pubnub, PNMessageResult message) {
+                String type = message.getMessage().getAsJsonObject().get("type").getAsString();
+                JsonObject data = message.getMessage().getAsJsonObject().get("data").getAsJsonObject();
+
+                if (!type.equals("gimmeUsers")){
+                    return;
+                }
+
+                if (!visibleInLobby){
+                    return;
+                }
+
+
+                if (attemptedUsername.equals("noName")){
+                    return;
+                }
+
+                String requester = data.get("requester").getAsString();
+
+                if (requester.equals(attemptedUsername)){
+                    return;
+                }
+
+                if (requester.equals("noName")){
+                    return;
+                }
+
+
+                JsonObject msg = new JsonObject();
+                msg.addProperty("type", "takeMyUsername");
+
+
+                JsonObject dt = new JsonObject();
+                dt.addProperty("username", attemptedUsername);
+                dt.addProperty("requester", requester);
+                msg.add("data", dt);
+                try {
+                    pubnub.publish()
+                            .channel("main")
+                            .message(msg)
+                            .sync();
+                }catch(PubNubException ex){
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void presence(PubNub pubnub, PNPresenceEventResult presence) {
+
+            }
+        });
     }
 
 }

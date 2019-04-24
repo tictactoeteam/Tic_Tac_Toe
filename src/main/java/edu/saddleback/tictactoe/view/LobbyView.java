@@ -87,7 +87,12 @@ public class LobbyView {
             public void run() {
                 gameListView.getItems().clear();
                 ObservableList<String> items = FXCollections.observableArrayList(conn.getObservableList());
-                gameListView.setItems(items);
+
+                ObservableList<String> usernames = FXCollections.observableArrayList();
+                for (String id : items){
+                    usernames.add(conn.getUsername(id));
+                }
+                gameListView.setItems(usernames);
             }
         });
 
