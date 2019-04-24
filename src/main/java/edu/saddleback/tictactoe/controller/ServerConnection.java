@@ -177,10 +177,6 @@ public class ServerConnection {
 
                         }
 
-                        if (type.equals("challengeAccepted") && !attemptedUsername.equals(player2Name) && !attemptedUsername.equals(player1Name)){
-                            gimmeUsers();
-                        }
-
                     }
                 });
 

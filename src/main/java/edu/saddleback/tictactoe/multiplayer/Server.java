@@ -25,10 +25,13 @@ public class Server {
     private BigInteger publicKey;
     private HashMap<String, BigInteger> sharedSecrets;
 
+    private HashMap<String, String> users;
+
     /**
      * Constructor
      */
     public Server() {
+        users = new HashMap<>();
         gamesPlayed = new Vector<>();
         this.pnConfiguration = new PNConfiguration();
         this.pnConfiguration.setPublishKey(pubKey);
@@ -40,6 +43,18 @@ public class Server {
         this.privateKey = DiffieHellmanKeyGenerator.generatePrivateKey();
         this.publicKey = DiffieHellmanKeyGenerator.generatePublicKey(this.privateKey);
         this.sharedSecrets = new HashMap<>();
+    }
+
+    public void addUser(String uuid, String username){
+        users.put(uuid, username);
+    }
+
+    public void removeUser(String uuid){
+        users.remove(uuid);
+    }
+
+    public String findUser(String uuid){
+        return users.get(uuid);
     }
 
     /**
