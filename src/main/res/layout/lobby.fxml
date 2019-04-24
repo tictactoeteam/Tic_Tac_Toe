@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -35,6 +36,11 @@
                   <Font size="18.0" />
                </font>
             </Label>
+            <Button fx:id="challengeMrBill" mnemonicParsing="false" onMouseClicked="#onMrBillClicked" text="Challenge Mr. Bill">
+               <VBox.margin>
+                  <Insets top="25.0" />
+               </VBox.margin>
+            </Button>
          </children>
       </VBox>
    </top>

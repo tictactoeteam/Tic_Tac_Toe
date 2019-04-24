@@ -24,6 +24,8 @@ public class LobbyView {
     private Button logoutButton;
     @FXML
     private Button historyButton;
+    @FXML
+    private Button challengeMrBill;
     private ObservableList<String> items = FXCollections.observableArrayList();
 
 
@@ -107,9 +109,7 @@ public class LobbyView {
      */
     public void onListClicked(){
 
-        //PRETEND THIS IS THE USERNAME vvvv
-        String opponent = gameListView.getSelectionModel().getSelectedItem().toString();
-        conn.challenge( opponent, conn.getAttemptedUsername());
+        conn.challenge(gameListView.getSelectionModel().getSelectedItem().toString(), conn.getAttemptedUsername());
 
     }
 
@@ -123,6 +123,15 @@ public class LobbyView {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+    /**
+     * Challenges Mr. Bill to a game
+     */
+    public  void onMrBillClicked(){
+
+        //PUT ALL THE CRAP IN HERE
 
     }
 
