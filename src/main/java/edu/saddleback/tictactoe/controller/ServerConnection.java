@@ -13,52 +13,47 @@ import com.pubnub.api.models.consumer.presence.PNHereNowResult;
 import com.pubnub.api.models.consumer.pubsub.PNMessageResult;
 import com.pubnub.api.models.consumer.pubsub.PNPresenceEventResult;
 import com.sauljohnson.mayo.DiffieHellmanKeyGenerator;
-import edu.saddleback.tictactoe.controller.handlers.LoginHandler;
-import edu.saddleback.tictactoe.controller.handlers.RegisterHandler;
-import edu.saddleback.tictactoe.controller.handlers.ServerPubHandler;
 import edu.saddleback.tictactoe.model.GamePiece;
-import edu.saddleback.tictactoe.model.JsonMove;
 import edu.saddleback.tictactoe.multiplayer.MessageDelegator;
 import edu.saddleback.tictactoe.observable.Observable;
 import edu.saddleback.tictactoe.util.Crypto;
 import edu.saddleback.tictactoe.view.LobbyView;
-import edu.saddleback.tictactoe.view.SceneCoordinator;
 import edu.saddleback.tictactoe.view.TicTacToeApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.application.Platform;
-
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.TooManyListenersException;
 
+/**
+ * This class handles the client to server connection and interactions. Many server responses to the received messages
+ * will interact with this class, which will in turn update the client UI. SINGLETON
+ */
 public class ServerConnection {
+
     private static String pubkey = System.getenv("TTT_PUBNUB_PUBLISH");
     private static String subkey = System.getenv("TTT_PUBNUB_SUBSCRIBE");
     private static ServerConnection instance;
-
     private MessageDelegator delegator;
     private BigInteger dhPrivateKey;
     private BigInteger dhPublicKey;
     private String attemptedUsername = "noName";
     private Observable<BigInteger> sharedSecret;
     private PubNub pubnub;
-
     private HashMap<String, String> usernames;
     private boolean visibleInLobby;
-
-
     private Observable<Boolean> loggedIn;
     private ObservableList<String> myUserList;
     private Observable<Boolean> gameStart;
     private PNConfiguration pnConfig;
-    
 
+    /**
+     * Constructor: builds the secure connection, establishes listeners for message responses from the server.
+     */
     private ServerConnection() {
-        this.pnConfig = new PNConfiguration();
 
+        this.pnConfig = new PNConfiguration();
         pnConfig.setPublishKey(pubkey);
         pnConfig.setSubscribeKey(subkey);
 
@@ -76,11 +71,6 @@ public class ServerConnection {
         gameStart = new Observable<>();
 
         this.delegator = new MessageDelegator();
-        //this.delegator.addHandler("loginResponse", new LoginHandler(loggedIn, attemptedUsername));
-        this.delegator.addHandler("registerResponse", new RegisterHandler());
-        this.delegator.addHandler("serverPub", new ServerPubHandler());
-
-
 
         waitForServerPub();
         connect();
@@ -105,7 +95,6 @@ public class ServerConnection {
                 if (!Arrays.asList("loggedIn", "accountCreated", "badLogin", "accountExists").contains(type)) {
                     return;
                 }
-
 
                 gimmeUsers();
 
@@ -200,9 +189,11 @@ public class ServerConnection {
             public void presence(PubNub pubnub, PNPresenceEventResult presence){}
         });
 
-
     }
 
+    /**
+     * Sends the "connect" message
+     */
     private void connect() {
         JsonObject msg = new JsonObject();
         msg.addProperty("type", "connect");
@@ -222,6 +213,9 @@ public class ServerConnection {
         }
     }
 
+    /**
+     * Handles outputting the PubNub presence info to the console.
+     */
     private void waitForServerPub() {
         this.pubnub.addListener(new SubscribeCallback() {
             @Override
@@ -267,10 +261,16 @@ public class ServerConnection {
                 hereNow();
             }
         });
-//This is where the presence execution has to go.
+
         this.pubnub.subscribe().channels(Arrays.asList("main")).withPresence().execute();
+
     }
 
+    /**
+     * Sends the "login" message with the encrypted username and password.
+     * @param username
+     * @param password
+     */
     public void login(String username, String password) {
         this.attemptedUsername = username;
         JsonObject msg = new JsonObject();
@@ -292,6 +292,11 @@ public class ServerConnection {
         }
     }
 
+    /**
+     * Sends the "signup" message with the encrypted username and password.
+     * @param username
+     * @param password
+     */
     public void signup(String username, String password) {
         JsonObject msg = new JsonObject();
         msg.addProperty("type", "signup");
@@ -359,13 +364,26 @@ public class ServerConnection {
 
     }
 
+    /**
+     * Returns loggedIn Observable boolean.
+     * @return
+     */
     public Observable<Boolean> getLoggedInObservable() {
         return loggedIn;
     }
+
+    /**
+     * Returns the gameStart Observable boolean.
+     * @return
+     */
     public Observable<Boolean> getGameStartObservable() {
         return gameStart;
     }
 
+    /**
+     * Returns an instance of the ServerConnection.
+     * @return
+     */
     public static ServerConnection getInstance() {
         if (instance == null) {
             instance = new ServerConnection();
@@ -374,10 +392,22 @@ public class ServerConnection {
         return instance;
     }
 
+    /**
+     * Returns the myUserList ObservableList
+     * @return
+     */
     public ObservableList<String> getObservableList(){
         return myUserList;
     }
 
+    /**
+     * Sends the move message with the players' usernames and the move object.
+     * @param row
+     * @param col
+     * @param piece
+     * @param player1
+     * @param player2
+     */
     public void sendMessage(int row, int col, GamePiece piece, String player1, String player2){
 //        JsonObject msg = JsonMove.convertToJson(row, col,);
 
@@ -409,8 +439,15 @@ public class ServerConnection {
         }
     }
 
+    /**
+     * Returns the pubnub object.
+     * @return
+     */
     public PubNub getPubNub(){return pubnub;}
 
+    /**
+     * Runs whenever someone joins or leaves the "main" pubnub channel.
+     */
     public void hereNow(){
         myUserList.clear();
         this.pubnub.hereNow()
@@ -441,8 +478,11 @@ public class ServerConnection {
 
     }
 
-
-
+    /**
+     * Adds a username and its UUID to the LobbyView table data structure.
+     * @param uuid
+     * @param username
+     */
     public synchronized void addUser(String uuid, String username){
 
         System.out.println("PUTTING A USER IN A MAP: ");
@@ -455,12 +495,19 @@ public class ServerConnection {
 //        usernames.remove(uuid);
 //    }
 
+    /**
+     * Returns the username associated with the given UUID.
+     * @param uuid
+     * @return
+     */
     public synchronized String getUsername(String uuid){
         System.out.println("RETREIVED USESNAME: " + usernames.get(uuid));
         return usernames.get(uuid);
     }
 
-
+    /**
+     * Sends a message to all relevant users to send their usernames for the LobbyView table.
+     */
     public void gimmeUsers(){
         usernames = new HashMap<>();
         JsonObject msg = new JsonObject();
@@ -483,7 +530,9 @@ public class ServerConnection {
         }
     }
 
-
+    /**
+     * Handles receiving a "takeMyUsername" message that will update the client's LobbyView table data structure.
+     */
     public void registerHashMapFiller(){
         pubnub.addListener(new SubscribeCallback() {
             @Override
@@ -531,8 +580,9 @@ public class ServerConnection {
         });
     }
 
-
-
+    /**
+     * Handles receiving the "gimmeUsers" message that will send this client's username to the requesting user.
+     */
     public void registerUserUpdater(){
         pubnub.addListener(new SubscribeCallback() {
             @Override
@@ -594,6 +644,10 @@ public class ServerConnection {
         });
     }
 
+    /**
+     * Returns the attempted username.
+     * @return
+     */
     public String getAttemptedUsername(){
         return attemptedUsername;
     }

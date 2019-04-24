@@ -1,16 +1,10 @@
 package edu.saddleback.tictactoe.controller;
 
-import com.google.gson.JsonObject;
-import com.pubnub.api.PNConfiguration;
-import com.pubnub.api.PubNub;
-import com.sun.nio.sctp.SctpSocketOption;
 import edu.saddleback.tictactoe.controller.handlers.MoveHandler;
 import edu.saddleback.tictactoe.model.*;
 import edu.saddleback.tictactoe.multiplayer.MessageDelegator;
 import edu.saddleback.tictactoe.observable.Observable;
 import edu.saddleback.tictactoe.view.GridBox;
-
-import java.sql.SQLOutput;
 import java.util.UUID;
 
 /**
@@ -25,12 +19,10 @@ public class GameController {
     private UUID playerID = UUID.randomUUID();
     private String winnerName = null;
     private String loserName = null;
-
     private GamePiece myPiece;
-
-
     private MessageDelegator delegator = new MessageDelegator();
 
+    //Getters and Setters
     public String getWinnerName(){return winnerName;}
     public String getLoserName(){return loserName;}
     public String getPlayer1Name(){return player1Name;}

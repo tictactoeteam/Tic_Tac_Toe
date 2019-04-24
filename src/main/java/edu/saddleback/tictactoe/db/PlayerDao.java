@@ -1,15 +1,24 @@
 package edu.saddleback.tictactoe.db;
 
 import edu.saddleback.tictactoe.model.Player;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * The logic behind the player database that handles all upkeeping.
+ */
 public class PlayerDao {
+
     public static final String PLAYER_TABLE = "players";
     private static Connection connection = DbConnection.getConnection();
 
+    /**
+     * Returns the player from a given ID
+     * @param id
+     * @return
+     * @throws SQLException
+     */
     public static Player getPlayerById(String id) throws SQLException {
         String statement = "SELECT * FROM " + PLAYER_TABLE + " WHERE id=?";
         PreparedStatement prepared = connection.prepareStatement(statement);
@@ -20,6 +29,12 @@ public class PlayerDao {
         return rs.next() ? extractPlayer(rs) : null;
     }
 
+    /**
+     * Returns a player by its username.
+     * @param username
+     * @return
+     * @throws SQLException
+     */
     public static Player getPlayerByUsername(String username) throws SQLException {
         String statement = "SELECT * FROM " + PLAYER_TABLE + " WHERE username=?";
         PreparedStatement prepared = connection.prepareStatement(statement);
@@ -30,6 +45,11 @@ public class PlayerDao {
         return rs.next() ? extractPlayer(rs) : null;
     }
 
+    /**
+     * Returns all player data.
+     * @return
+     * @throws SQLException
+     */
     public static Player[] getAllPlayers() throws SQLException {
         String statement = "SELECT * FROM " + PLAYER_TABLE;
         PreparedStatement prepared = connection.prepareStatement(statement);
@@ -44,6 +64,11 @@ public class PlayerDao {
         return players.toArray(new Player[players.size()]);
     }
 
+    /**
+     * Inserts a new player into the database.
+     * @param player
+     * @throws SQLException
+     */
     public static void insertPlayer(Player player) throws SQLException {
         String statement = "INSERT INTO " + PLAYER_TABLE + " (username, password) VALUES (?, ?)";
         PreparedStatement prepared = connection.prepareStatement(statement);
@@ -57,6 +82,11 @@ public class PlayerDao {
         }
     }
 
+    /**
+     * Updates a player in the database.
+     * @param player
+     * @throws SQLException
+     */
     public static void updatePlayer(Player player) throws SQLException {
         String statement = "UPDATE " + PLAYER_TABLE + " SET username=?, password=?, disabled=? WHERE id=?";
         PreparedStatement prepared = connection.prepareStatement(statement);
