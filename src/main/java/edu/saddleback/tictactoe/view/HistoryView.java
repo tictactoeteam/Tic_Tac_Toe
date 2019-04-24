@@ -8,31 +8,30 @@ import com.pubnub.api.models.consumer.PNStatus;
 import com.pubnub.api.models.consumer.pubsub.PNMessageResult;
 import com.pubnub.api.models.consumer.pubsub.PNPresenceEventResult;
 import edu.saddleback.tictactoe.controller.ServerConnection;
+import javafx.beans.property.IntegerPropertyBase;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+
 
 public class HistoryView {
 
     private ServerConnection conn;
 
     @FXML
-    private TableView moveTable;
+    private TableView<TableViewObject> moveTable;
     @FXML
     private ListView gameTable;
     @FXML
     private Button lobbyButton;
-    @FXML
-    private Label winnerLabel;
-    @FXML
-    private Label loserLabel;
 
     private ArrayList<String> playerXNames;
     private ArrayList<String> playerONames;
@@ -95,11 +94,38 @@ public class HistoryView {
     }
 
     /**
-     * When a game is selected, the moves, winner, and loser will be shown in the TableView
+     * When a game is selected the players and the moves, in order, will be shown in the TableView.
      */
     public void onGameClicked(){
 
+        String gameClicked = gameTable.getSelectionModel().getSelectedItem().toString();
+        int i = 0;
+        int foundIndex = -1;
+        while(i < playerXNames.size() && foundIndex == -1){
 
+            if(gameClicked.contains(playerXNames.get(i)) && gameClicked.contains(playerONames.get(i))){
+                foundIndex = i;
+            }
+            i++;
+
+        }
+        //foundIndex now contains the correct selected game's index
+
+        //Fills the table with the data
+        ObservableList<TableViewObject> data = FXCollections.observableArrayList();
+        for(int j = 0; j < allGameMoves.get(foundIndex).size(); j++){
+            data.add(new TableViewObject(j, allGameMoves.get(foundIndex).get(j).intValue()));
+        }
+        moveTable.setItems(data);
+
+        //Assigns the columns their data
+        TableColumn<TableViewObject, Integer> moveNumberCol = new TableColumn("Move Number");
+        moveNumberCol.setMinWidth(100);
+        moveNumberCol.setCellValueFactory(new PropertyValueFactory<>("moveNumberValue"));
+        TableColumn<TableViewObject, Integer> moveDataCol = new TableColumn<>("Move Index");
+        moveDataCol.setMinWidth(100);
+        moveDataCol.setCellValueFactory(new PropertyValueFactory<>("moveIndexValue"));
+        moveTable.getColumns().addAll(moveNumberCol, moveDataCol);
 
     }
 
@@ -114,6 +140,24 @@ public class HistoryView {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * Object for filling the tableview.
+     */
+    public static class TableViewObject {
+        private final SimpleIntegerProperty moveNumberProperty ;
+        private final SimpleIntegerProperty moveIndexProperty ;
+        public TableViewObject(Integer moveNum, Integer moveIndex) {
+            this.moveNumberProperty = new SimpleIntegerProperty(moveNum) ;
+            this.moveIndexProperty = new SimpleIntegerProperty(moveIndex);
+        }
+        public SimpleIntegerProperty getMoveNumberValue() {
+            return moveNumberProperty;
+        }
+        public SimpleIntegerProperty getMoveIndexValue() {
+            return moveIndexProperty;
+        }
     }
 
 }
