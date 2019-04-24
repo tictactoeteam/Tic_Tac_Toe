@@ -3,6 +3,7 @@ package edu.saddleback.tictactoe.multiplayer.handlers;
 import com.google.gson.JsonObject;
 import com.pubnub.api.PubNub;
 import com.pubnub.api.PubNubException;
+import edu.saddleback.tictactoe.decision.AdvancedEvaluator;
 import edu.saddleback.tictactoe.model.*;
 import edu.saddleback.tictactoe.multiplayer.MessageHandler;
 import edu.saddleback.tictactoe.multiplayer.Server;
@@ -13,6 +14,9 @@ import edu.saddleback.tictactoe.multiplayer.Server;
 public class MoveValidateHandler implements MessageHandler {
 
     private Server server;
+    private AdvancedEvaluator winnerChecker;
+
+
     public MoveValidateHandler(Server server){
        this.server = server;
     }

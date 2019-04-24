@@ -154,7 +154,7 @@ public class ServerConnection {
                 String type = message.getMessage().getAsJsonObject().get("type").getAsString();
                 JsonObject data = message.getMessage().getAsJsonObject().get("data").getAsJsonObject();
 
-                if (!Arrays.asList("challengeAccepted").contains(type)) {
+                if (!Arrays.asList("challengeAccepted", "challengeDenied").contains(type)) {
                     return;
                 }
 
@@ -185,6 +185,16 @@ public class ServerConnection {
                             visibleInLobby = false;
 
                             gameStart.set(true);
+
+                        }
+
+                        if (type.equals("challengeDenied") && attemptedUsername.equals(player1Name) ||
+                                type.equals("challengeDenied") && attemptedUsername.equals(player2Name)){
+
+                            if(gameStart.get())
+                                visibleInLobby = false;
+                            gimmeUsers();
+
 
                         }
                     }

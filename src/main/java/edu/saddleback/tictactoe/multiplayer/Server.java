@@ -85,6 +85,15 @@ public class Server {
         return null;
     }
 
+
+    public Game findGame(String player){
+        for (Game game : gamesPlayed){
+            if (game.getPlayerO().getUsername().equals(player) || game.getPlayerX().getUsername().equals(player))
+                return game;
+        }
+        return null;
+    }
+
     /**
      * Registers all message handlers and subscribes the server to the "main" pubnub channel.
      */
