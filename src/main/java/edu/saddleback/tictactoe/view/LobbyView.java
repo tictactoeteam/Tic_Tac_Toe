@@ -70,11 +70,12 @@ public class LobbyView {
      */
     public void onLogoutClicked(){
 
-        try {
-            TicTacToeApplication.getCoordinator().showGameScene();
-        }catch(Exception ex){
-            System.out.println("Try something else");
-        }
+        LobbyView.updateInstance();
+//        try {
+//            TicTacToeApplication.getCoordinator().showGameScene();
+//        }catch(Exception ex){
+//            System.out.println("Try something else");
+//        }
 
     }
 

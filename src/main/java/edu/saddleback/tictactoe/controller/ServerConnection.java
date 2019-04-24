@@ -106,16 +106,21 @@ public class ServerConnection {
                     return;
                 }
 
+
+                gimmeUsers();
+
                 String username = data.get("username").getAsString();
 
                 if (type.equals("loggedIn") && username.equals(attemptedUsername)) {
                     loggedIn.set(true);
                     visibleInLobby = true;
+                    gimmeUsers();
                 }
 
                 if (type.equals("accountCreated") && username.equals(attemptedUsername)) {
                     loggedIn.set(true);
                     visibleInLobby = true;
+                    gimmeUsers();
                 }
 
                 if (type.equals("badLogin") && username.equals(attemptedUsername)) {
@@ -434,6 +439,10 @@ public class ServerConnection {
 
 
     public synchronized void addUser(String uuid, String username){
+
+        System.out.println("PUTTING A USER IN A MAP: ");
+        System.out.println("UUID: " + uuid);
+        System.out.println("USERNAME: " + username);
         usernames.put(uuid, username);
     }
 
@@ -455,6 +464,8 @@ public class ServerConnection {
         data.addProperty("requester", attemptedUsername);
 
         msg.add("data", data);
+
+        System.out.println("REQUESTER (ME): " + attemptedUsername);
 
         try {
             pubnub.publish()
