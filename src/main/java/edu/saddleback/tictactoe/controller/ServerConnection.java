@@ -571,6 +571,7 @@ public class ServerConnection {
                 }
 
                 addUser(responderUUID, responderUsername);
+                LobbyView.updateInstance();
             }
 
             @Override
