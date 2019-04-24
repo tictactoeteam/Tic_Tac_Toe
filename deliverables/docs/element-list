@@ -1,7 +1,12 @@
-module:Tic.Tac.Toe
 edu.saddleback.tictactoe
 edu.saddleback.tictactoe.controller
+edu.saddleback.tictactoe.controller.handlers
+edu.saddleback.tictactoe.db
+edu.saddleback.tictactoe.db.migrations
 edu.saddleback.tictactoe.decision
 edu.saddleback.tictactoe.model
+edu.saddleback.tictactoe.multiplayer
+edu.saddleback.tictactoe.multiplayer.handlers
 edu.saddleback.tictactoe.observable
+edu.saddleback.tictactoe.util
 edu.saddleback.tictactoe.view
