@@ -2,7 +2,6 @@ package edu.saddleback.tictactoe.db;
 
 import edu.saddleback.tictactoe.model.Game;
 import edu.saddleback.tictactoe.model.Player;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,10 +9,21 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * The logic behind the game database that stores all game history, builds, updates, removes etc. games. Fetches as
+ * well.
+ */
 public class GameDao {
+
     public static final String GAMES_TABLE = "games";
     private static Connection connection = DbConnection.getConnection();
 
+    /**
+     * Returns a game by its UUID
+     * @param id
+     * @return
+     * @throws SQLException
+     */
     public static Game getGameById(UUID id) throws SQLException {
         String statement = "SELECT g.id, g.moves, " +
                 "player_x, px.username AS player_x_username, player_o, po.username AS player_o_username" +
@@ -30,6 +40,11 @@ public class GameDao {
         return rs.next() ? extractGame(rs) : null;
     }
 
+    /**
+     * Returns all game data(for history scene tables)
+     * @return
+     * @throws SQLException
+     */
     public static Game[] getAllGames() throws SQLException {
         String statement = "SELECT g.id, g.moves, " +
                 "player_x, px.username AS player_x_username, player_o, po.username AS player_o_username" +
@@ -49,6 +64,11 @@ public class GameDao {
         return games.toArray(new Game[games.size()]);
     }
 
+    /**
+     * Inserts a game.
+     * @param game
+     * @throws SQLException
+     */
     public static void insertGame(Game game) throws SQLException {
         String statement = "INSERT INTO " + GAMES_TABLE + " (player_x, player_o, moves) VALUES (?, ?, ?)";
         PreparedStatement prepared = connection.prepareStatement(statement);
@@ -69,6 +89,11 @@ public class GameDao {
         }
     }
 
+    /**
+     * Updates a game.
+     * @param game
+     * @throws SQLException
+     */
     public static void updateGame(Game game) throws SQLException {
         String statement = "UPDATE " + GAMES_TABLE + " SET player_x=?, player_o=?, moves=? WHERE id=?";
         PreparedStatement prepared = connection.prepareStatement(statement);
@@ -90,6 +115,11 @@ public class GameDao {
         }
     }
 
+    /**
+     * Deletes a game.
+     * @param id
+     * @throws SQLException
+     */
     public static void deleteGame(UUID id) throws SQLException {
         String statement = "DELETE FROM " + GAMES_TABLE + "WHERE id=?";
         PreparedStatement prepared = connection.prepareStatement(statement);
@@ -102,6 +132,12 @@ public class GameDao {
         }
     }
 
+    /**
+     * Returns a game.
+     * @param rs
+     * @return
+     * @throws SQLException
+     */
     private static Game extractGame(ResultSet rs) throws SQLException {
         String playerXId = rs.getString("player_x");
         String playerXName = rs.getString("player_x_username");

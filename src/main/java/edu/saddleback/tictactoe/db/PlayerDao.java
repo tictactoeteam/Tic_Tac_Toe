@@ -72,6 +72,12 @@ public class PlayerDao {
         }
     }
 
+    /**
+     * Returns a player from the database.
+     * @param rs
+     * @return
+     * @throws SQLException
+     */
     public static Player extractPlayer(ResultSet rs) throws SQLException {
         Player player = new Player();
         player.setId(UUID.fromString(rs.getString("id")));

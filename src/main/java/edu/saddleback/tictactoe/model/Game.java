@@ -4,18 +4,25 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Represents a current game in the server.
+ */
 public class Game {
     private UUID id;
     private String  playerX;
     private Player playerObjectX;
     private String playerO;
     private Player playerObjectO;
-
     private byte[] moves;
-
-
     private Board board;
 
+    /**
+     * Constructor
+     * @param id
+     * @param playerX
+     * @param playerO
+     * @param moves
+     */
     public Game(UUID id, Player playerX, Player playerO, byte[] moves) {
         this.id = id;
         this.playerObjectX = playerX;
@@ -28,6 +35,13 @@ public class Game {
         this.playerO = playerObjectO.getUsername();
     }
 
+    /**
+     * Constructor
+     * @param id
+     * @param playerX
+     * @param playerO
+     * @param moves
+     */
     public Game(UUID id, String playerX, String playerO, byte[] moves) {
         this.id = id;
         this.playerX = playerX;
@@ -40,50 +54,101 @@ public class Game {
         playerObjectO.setUsername(playerO);
     }
 
+    /**
+     * Constructor
+     * @param playerX
+     * @param playerO
+     */
     public Game(String playerX, String playerO) {
         this(UUID.randomUUID(), playerX, playerO, new byte[9]);
     }
 
+    /**
+     * Returns UUID
+     * @return
+     */
     public UUID getId() {
         return id;
     }
 
+    /**
+     * Sets UUID
+     * @param id
+     */
     public void setId(UUID id) {
         this.id = id;
     }
 
+    /**
+     * Gets playerX
+     * @return
+     */
     public Player getPlayerX() {
         return playerObjectX;
     }
 
+    /**
+     * Sets playerX
+     * @param playerX
+     */
     public void setPlayerX(String playerX) {
         this.playerX = playerX;
     }
 
+    /**
+     * Gets playerO
+     * @return
+     */
     public Player getPlayerO() {
         return playerObjectO;
     }
 
+    /**
+     * Gets the board
+     * @return
+     */
     public Board getBoard(){
         return board;
     }
 
+    /**
+     * Sets playerO
+     * @param playerO
+     */
     public void setPlayerO(String playerO) {
         this.playerO = playerO;
     }
 
+    /**
+     * Gets all the moves' indecies
+     * @return
+     */
     public byte[] getMoves() {
         return moves;
     }
 
+    /**
+     * Sets the move indexies
+     * @param moves
+     */
     public void setMoves(byte[] moves) {
         this.moves = moves;
     }
 
+    /**
+     * Gets a move
+     * @param turn
+     * @return
+     */
     public byte getMove(int turn) {
         return moves[turn];
     }
 
+    /**
+     * Sets a move
+     * @param turn
+     * @param move
+     */
     public void setMove(int turn, byte move) {
         this.moves[turn] = move;
     }

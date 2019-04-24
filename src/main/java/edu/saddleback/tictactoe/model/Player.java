@@ -2,16 +2,21 @@ package edu.saddleback.tictactoe.model;
 
 import java.util.Objects;
 import java.util.UUID;
-
 import org.mindrot.jbcrypt.BCrypt;
 
+/**
+ * Represents player information.
+ */
 public class Player {
+
     private UUID id;
     private String username;
     private String hashedPassword;
-
     private boolean disabled;
 
+    /**
+     * Constructor
+     */
     public Player() {
         this.id = UUID.randomUUID();
         this.username = "";
@@ -19,6 +24,12 @@ public class Player {
         this.disabled = false;
     }
 
+    /**
+     * Constructor
+     * @param id
+     * @param username
+     * @param password
+     */
     public Player(UUID id, String username, String password) {
         this.id = id;
         this.username = username;
@@ -34,6 +45,11 @@ public class Player {
         return username;
     }
 
+    /**
+     * True if password is correct.
+     * @param password
+     * @return
+     */
     public boolean checkPassword(String password) {
         // do not allow disabled users to log in
         if (this.disabled) {

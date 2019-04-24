@@ -451,6 +451,7 @@ public class ServerConnection {
 //    }
 
     public synchronized String getUsername(String uuid){
+        System.out.println("RETREIVED USESNAME: " + usernames.get(uuid));
         return usernames.get(uuid);
     }
 

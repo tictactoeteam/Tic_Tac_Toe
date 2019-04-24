@@ -22,12 +22,23 @@ public class BoardMove implements Serializable {
         this.piece = piece;
     }
 
-    
+    /**
+     *Applys move to the given board.
+     * @param board
+     * @return
+     * @throws GridAlreadyChosenException
+     */
     public Board applyTo(Board board) throws GridAlreadyChosenException{
         board.set(row, col, piece);
         return board;
     }
 
+    /**
+     *Returns the board move from two given boards.
+     * @param before
+     * @param after
+     * @return
+     */
     public static BoardMove fromTwoBoards(Board before, Board after){
         for (int i=0; i<3; ++i){
             for (int j=0; j<3; ++j){

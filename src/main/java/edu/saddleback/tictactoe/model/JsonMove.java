@@ -1,9 +1,12 @@
 package edu.saddleback.tictactoe.model;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 
+/**
+ * Represents a board move as a Json object
+ */
 public class JsonMove {
+
     private JsonObject theMove;
 
     private JsonMove(int row, int col){

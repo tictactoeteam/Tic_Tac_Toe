@@ -1,7 +1,8 @@
 package edu.saddleback.tictactoe.model;
 
-import edu.saddleback.tictactoe.decision.Node;
-
+/**
+ * Exception runs when it is not your turn.
+ */
 public class NotYourTurnException extends Exception {
     public NotYourTurnException(){
     }

@@ -3,6 +3,9 @@ package edu.saddleback.tictactoe.db.migrations;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Does something idk ask David
+ */
 public class Init implements Migration {
 
     @Override
