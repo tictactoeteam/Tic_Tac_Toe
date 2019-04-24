@@ -588,4 +588,8 @@ public class ServerConnection {
         });
     }
 
+    public String getAttemptedUsername(){
+        return attemptedUsername;
+    }
+
 }

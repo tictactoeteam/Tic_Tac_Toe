@@ -69,8 +69,8 @@ public class LobbyView {
      * Logs out of the server and goes back to the login page
      */
     public void onLogoutClicked(){
-
-        LobbyView.updateInstance();
+//
+//        LobbyView.updateInstance();
 //        try {
 //            TicTacToeApplication.getCoordinator().showGameScene();
 //        }catch(Exception ex){
@@ -107,7 +107,7 @@ public class LobbyView {
 
         //PRETEND THIS IS THE USERNAME vvvv
         String opponent = gameListView.getSelectionModel().getSelectedItem().toString();
-        conn.challenge("kai", "toma");
+        conn.challenge( opponent, conn.getAttemptedUsername());
 
     }
 
