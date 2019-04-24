@@ -70,7 +70,7 @@ public class LobbyView {
      */
     public void onLogoutClicked(){
 //
-//        LobbyView.updateInstance();
+        LobbyView.updateInstance();
 //        try {
 //            TicTacToeApplication.getCoordinator().showGameScene();
 //        }catch(Exception ex){
@@ -92,7 +92,9 @@ public class LobbyView {
 
                 ObservableList<String> usernames = FXCollections.observableArrayList();
                 for (String id : items){
-                    usernames.add(conn.getUsername(id));
+
+                    if (!(conn.getUsername(id) == null))
+                        usernames.add(conn.getUsername(id));
                 }
                 gameListView.setItems(usernames);
             }
