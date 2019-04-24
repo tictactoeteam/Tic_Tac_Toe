@@ -18,36 +18,41 @@ public class MoveHandler implements MessageHandler {
 
     @Override
     public void handleMessage(JsonObject data, PubNub pubnub, String clientId) {
-        String player1 = data.get("player1").getAsString();
-        String player2 = data.get("player2").getAsString();
 
-        System.out.println(player1);
-        System.out.println(player2);
+        try {
+            String player1 = data.get("player1").getAsString();
+            String player2 = data.get("player2").getAsString();
+
+            System.out.println(player1);
+            System.out.println(player2);
 
 
-        if (controller.getPlayer1Name().equals(player1)
-        && controller.getPlayer2Name().equals(player2)
-        ||
-        controller.getPlayer1Name().equals(player2)
-        && controller.getPlayer2Name().equals(player1)){
+            if (controller.getPlayer1Name().equals(player1)
+                    && controller.getPlayer2Name().equals(player2)
+                    ||
+                    controller.getPlayer1Name().equals(player2)
+                            && controller.getPlayer2Name().equals(player1)) {
 
-            System.out.println("HERE!!!");
+                System.out.println("HERE!!!");
 
-            BoardMove move;
+                BoardMove move;
 
-            int row = data.get("position").getAsInt() / 3;
-            int col = data.get("position").getAsInt() % 3;
+                int row = data.get("position").getAsInt() / 3;
+                int col = data.get("position").getAsInt() % 3;
 
-            GamePiece piece;
+                GamePiece piece;
 
-            if (data.get("piece").getAsString().equals("X"))
-                piece = GamePiece.X;
-            else
-                piece = GamePiece.O;
+                if (data.get("piece").getAsString().equals("X"))
+                    piece = GamePiece.X;
+                else
+                    piece = GamePiece.O;
 
-            move = new BoardMove(row, col, piece);
+                move = new BoardMove(row, col, piece);
 
-            controller.applyMove(move);
+                controller.applyMove(move);
+            }
+        }catch(NullPointerException ex){
+            System.out.println("Server invalidated your move, noob!");
         }
     }
 }
