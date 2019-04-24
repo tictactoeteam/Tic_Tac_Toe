@@ -188,15 +188,10 @@ public class ServerConnection {
 
                         }
 
-                        if (type.equals("challengeDenied") && attemptedUsername.equals(player1Name) ||
-                                type.equals("challengeDenied") && attemptedUsername.equals(player2Name)){
-
-                            if(gameStart.get())
-                                visibleInLobby = false;
+                        if (type.equals("challengeAccepted") && !attemptedUsername.equals(player2Name) && !attemptedUsername.equals(player1Name)){
                             gimmeUsers();
-
-
                         }
+
                     }
                 });
 

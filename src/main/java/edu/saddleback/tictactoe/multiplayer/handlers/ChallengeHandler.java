@@ -31,7 +31,6 @@ public class ChallengeHandler implements MessageHandler {
         }else {
             server.createGame(p1, p2);
             msg.addProperty("type", "challengeAccepted");
-
         }
         JsonObject dt = new JsonObject();
         dt.addProperty("player1Username", p1);
