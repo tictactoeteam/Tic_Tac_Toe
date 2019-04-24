@@ -84,6 +84,10 @@ public class Server {
         gamesPlayed.add(new Game(player1,player2));
     }
 
+    public void removeGame(Game game){
+        gamesPlayed.remove(game);
+    }
+
     /**
      * Returns a game from two given usernames.
      * @param player1
@@ -119,6 +123,7 @@ public class Server {
         this.delegator.addHandler("signup", new SignupHandler(this));
         this.delegator.addHandler("move", new MoveValidateHandler(this));
         this.delegator.addHandler("challenge", new ChallengeHandler(this));
+        this.delegator.addHandler("serverPub", new PeopleLeavingHandler(this));
         this.delegator.addHandler("getAllGames", new GameDaoHandler());
         pubnub.subscribe().channels(Arrays.asList("main")).withPresence().execute();
     }

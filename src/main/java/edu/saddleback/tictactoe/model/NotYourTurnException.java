@@ -3,8 +3,4 @@ package edu.saddleback.tictactoe.model;
 /**
  * Exception runs when it is not your turn.
  */
-public class NotYourTurnException extends Exception {
-    public NotYourTurnException(){
-    }
-
-}
+public class NotYourTurnException extends Exception {}

@@ -45,6 +45,7 @@ public class SignupHandler implements MessageHandler {
           //  player.setId();
             PlayerDao.insertPlayer(player);
             sendAccountCreated(pubnub, username);
+            server.addUser(data.get("UUID").getAsString(), username);
         }catch (SQLException e) {
             e.printStackTrace();
         }

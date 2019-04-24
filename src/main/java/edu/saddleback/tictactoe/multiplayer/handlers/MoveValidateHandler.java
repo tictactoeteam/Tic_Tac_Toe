@@ -49,19 +49,29 @@ public class MoveValidateHandler implements MessageHandler {
 
             BoardMove move = new BoardMove(row, col, piece);
             JsonObject msg = new JsonObject();
+            JsonObject dt = new JsonObject();
             try {
                 if (piece == GamePiece.O && board.isXTurn()
                 || piece == GamePiece.X && board.isOTurn()){
                     throw new NotYourTurnException();
                 }
 
+                if(winnerChecker.evaluate(board) > 0){
+                    throw new EndStateException(data.get("player1").getAsString(), data.get("player2").getAsString());
+                }
+                if (winnerChecker.evaluate(board) < 0){
+                    throw new EndStateException(data.get("player2").getAsString(), data.get("player1").getAsString());
+                }
+                if (board.getTurnNumber() == 9){
+                    throw new EndStateException();
+                }
+
                 move.applyTo(board);
 
                 System.out.println("Board After: " + board);
 
-                msg = new JsonObject();
                 msg.addProperty("type", "moveResp");
-                JsonObject dt = new JsonObject();
+
                 dt.addProperty("position", pos);
                 dt.addProperty("piece", data.get("piece").getAsString());
                 dt.addProperty("player1", data.get("player1").getAsString());
@@ -77,6 +87,18 @@ public class MoveValidateHandler implements MessageHandler {
             catch(NotYourTurnException ex){
                 msg.addProperty("type", "moveResp");
                 msg.add("data", new JsonObject());
+            }
+            catch(EndStateException ex){
+                if (ex.isDrawn()){
+                    msg.addProperty("type", "draw");
+                    msg.add("data", dt);
+                }
+                else{
+                    msg.addProperty("type", "winLos");
+                    dt.addProperty("winner", ex.getWinner());
+                    dt.addProperty("loser", ex.getLoser());
+                    msg.add("data", dt);
+                }
             }
 
             try {

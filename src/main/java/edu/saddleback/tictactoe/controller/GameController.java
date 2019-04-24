@@ -1,5 +1,6 @@
 package edu.saddleback.tictactoe.controller;
 
+import edu.saddleback.tictactoe.controller.handlers.EndStateHandler;
 import edu.saddleback.tictactoe.controller.handlers.MoveHandler;
 import edu.saddleback.tictactoe.model.*;
 import edu.saddleback.tictactoe.multiplayer.MessageDelegator;
@@ -37,6 +38,7 @@ public class GameController {
         this.board = new Observable<>();
         this.board.set(new Board());
         delegator.addHandler("moveResp", new MoveHandler(this));
+        delegator.addHandler("endState", new EndStateHandler(this));
 
         ServerConnection.getInstance().getPubNub().addListener(this.delegator);
     }
