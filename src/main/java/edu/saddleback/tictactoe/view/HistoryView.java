@@ -98,34 +98,37 @@ public class HistoryView {
      */
     public void onGameClicked(){
 
-        String gameClicked = gameTable.getSelectionModel().getSelectedItem().toString();
-        int i = 0;
-        int foundIndex = -1;
-        while(i < playerXNames.size() && foundIndex == -1){
+        try{
+            String gameClicked = gameTable.getSelectionModel().getSelectedItem().toString();
+            int i = 0;
+            int foundIndex = -1;
+            while(i < playerXNames.size() && foundIndex == -1){
 
-            if(gameClicked.contains(playerXNames.get(i)) && gameClicked.contains(playerONames.get(i))){
-                foundIndex = i;
+                if(gameClicked.contains(playerXNames.get(i)) && gameClicked.contains(playerONames.get(i))){
+                    foundIndex = i;
+                }
+                i++;
+
             }
-            i++;
+            //foundIndex now contains the correct selected game's index
 
-        }
-        //foundIndex now contains the correct selected game's index
+            //Fills the table with the data
+            ObservableList<TableViewObject> data = FXCollections.observableArrayList();
+            for(int j = 0; j < allGameMoves.get(foundIndex).size(); j++){
+                data.add(new TableViewObject(j, allGameMoves.get(foundIndex).get(j).intValue()));
+            }
+            moveTable.setItems(data);
 
-        //Fills the table with the data
-        ObservableList<TableViewObject> data = FXCollections.observableArrayList();
-        for(int j = 0; j < allGameMoves.get(foundIndex).size(); j++){
-            data.add(new TableViewObject(j, allGameMoves.get(foundIndex).get(j).intValue()));
-        }
-        moveTable.setItems(data);
+            //Assigns the columns their data
+            TableColumn<TableViewObject, Integer> moveNumberCol = new TableColumn("Move Number");
+            moveNumberCol.setMinWidth(100);
+            moveNumberCol.setCellValueFactory(new PropertyValueFactory<>("moveNumberValue"));
+            TableColumn<TableViewObject, Integer> moveDataCol = new TableColumn<>("Move Index");
+            moveDataCol.setMinWidth(100);
+            moveDataCol.setCellValueFactory(new PropertyValueFactory<>("moveIndexValue"));
+            moveTable.getColumns().addAll(moveNumberCol, moveDataCol);
 
-        //Assigns the columns their data
-        TableColumn<TableViewObject, Integer> moveNumberCol = new TableColumn("Move Number");
-        moveNumberCol.setMinWidth(100);
-        moveNumberCol.setCellValueFactory(new PropertyValueFactory<>("moveNumberValue"));
-        TableColumn<TableViewObject, Integer> moveDataCol = new TableColumn<>("Move Index");
-        moveDataCol.setMinWidth(100);
-        moveDataCol.setCellValueFactory(new PropertyValueFactory<>("moveIndexValue"));
-        moveTable.getColumns().addAll(moveNumberCol, moveDataCol);
+        }catch(NullPointerException ex){}
 
     }
 
@@ -161,3 +164,4 @@ public class HistoryView {
     }
 
 }
+
