@@ -3,7 +3,6 @@ package edu.saddleback.tictactoe.view;
 import edu.saddleback.tictactoe.controller.GameController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 

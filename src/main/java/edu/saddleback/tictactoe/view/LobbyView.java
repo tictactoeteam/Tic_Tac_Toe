@@ -18,19 +18,17 @@ public class LobbyView {
     private GameController controller;
     private ServerConnection conn;
     private static LobbyView instance = null;
-
     @FXML
     private ListView gameListView;
     @FXML
     private Button logoutButton;
     @FXML
     private Button historyButton;
-
     private ObservableList<String> items = FXCollections.observableArrayList();
 
 
     /**
-     * Initializes the controller in the lobby view
+     * Initializes the controller in the lobby view.
      */
     public void initialize() {
 
@@ -57,6 +55,9 @@ public class LobbyView {
 
     }
 
+    /**
+     * Allows for dynamic lobbytable updates.
+     */
     public static void updateInstance(){
         if(instance == null){
             return;
@@ -96,7 +97,6 @@ public class LobbyView {
             }
         });
 
-
     }
 
     /**
@@ -122,6 +122,5 @@ public class LobbyView {
         }
 
     }
-
 
 }

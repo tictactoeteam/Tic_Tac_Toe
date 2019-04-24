@@ -6,6 +6,9 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
+/**
+ * Used to encrypt and decrypt our sensitive data.
+ */
 public class Crypto {
     private static final String ALGO = "AES";
 
@@ -49,6 +52,11 @@ public class Crypto {
         return null;
     }
 
+    /**
+     * Generates a trimmed 192-bit key.
+     * @param key
+     * @return
+     */
     private static Key generateKey(byte[] key) {
         byte[] trimmed = new byte[32];
 

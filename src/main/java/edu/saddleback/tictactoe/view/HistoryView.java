@@ -8,35 +8,34 @@ import com.pubnub.api.models.consumer.PNStatus;
 import com.pubnub.api.models.consumer.pubsub.PNMessageResult;
 import com.pubnub.api.models.consumer.pubsub.PNPresenceEventResult;
 import edu.saddleback.tictactoe.controller.ServerConnection;
-import javafx.beans.property.IntegerPropertyBase;
-import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
-
+/**
+ * Controller for the history scene, fills the table from the game database.
+ */
 public class HistoryView {
 
     private ServerConnection conn;
-
     @FXML
     private TableView<TableViewObject> moveTable;
     @FXML
     private ListView gameTable;
     @FXML
     private Button lobbyButton;
-
     private ArrayList<String> playerXNames;
     private ArrayList<String> playerONames;
     private ArrayList<ArrayList<Byte>> allGameMoves;
 
+    /**
+     * Initializes the history scene with the game data.
+     */
     public void initialize(){
 
         playerXNames = new ArrayList<>();
@@ -86,10 +85,7 @@ public class HistoryView {
             public void presence(PubNub pubnub, PNPresenceEventResult presence) {}
         });
 
-
         conn.getAllGamesMessage();
-
-        //FILL LIST WITH GAMEDAO getAllGames()
 
     }
 

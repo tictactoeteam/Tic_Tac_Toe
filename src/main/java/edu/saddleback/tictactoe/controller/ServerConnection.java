@@ -382,15 +382,12 @@ public class ServerConnection {
             p = "O";
         }
 
-
         System.out.println("PIECE USED: "+ p);
         data.addProperty("piece", p);
         data.addProperty("player1", player1);
         data.addProperty("player2", player2);
 
         msg.add("data", data);
-
-
 
         try{
             this.pubnub.publish()
@@ -427,12 +424,10 @@ public class ServerConnection {
                             }
                         }
 
-
                         LobbyView.updateInstance();
 
                     }
                 });
-
 
     }
 
@@ -583,5 +578,3 @@ public class ServerConnection {
     }
 
 }
-
-

@@ -5,7 +5,6 @@ import edu.saddleback.tictactoe.model.Board;
 import edu.saddleback.tictactoe.model.GamePiece;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 /**
@@ -13,8 +12,8 @@ import javafx.scene.layout.GridPane;
  * controller class that handles all game data, ui controls, and data read and write capabilities.
  */
 public class BoardView extends GridPane {
-    private GameController controller;
 
+    private GameController controller;
     private GridBox[][] grid;
     static int gridBoxIndex;
 

@@ -10,8 +10,8 @@ import javafx.scene.control.*;
  * generated. handles all possible user input errors.
  */
 public class LoginView {
-    private ServerConnection conn;
 
+    private ServerConnection conn;
     @FXML
     private Label errorText;
     @FXML
@@ -19,6 +19,9 @@ public class LoginView {
     @FXML
     private TextField passwordTextField;
 
+    /**
+     * Initializes connection to the server and holds the success login listener.
+     */
     public LoginView() {
 
         conn = ServerConnection.getInstance();
@@ -41,6 +44,10 @@ public class LoginView {
 
     }
 
+    /**
+     * Runs when a login attempt is made.
+     * @throws Exception
+     */
     public void onLoginClicked() throws Exception {
         if(!usernameTextField.getText().equals("") && !passwordTextField.getText().equals("")){
             conn.login(usernameTextField.getText(), passwordTextField.getText());
@@ -51,6 +58,9 @@ public class LoginView {
         }
     }
 
+    /**
+     * Runs when a create account attempt is made.
+     */
     public void onCreateAccountClicked(){
 
         String username = usernameTextField.getText();
