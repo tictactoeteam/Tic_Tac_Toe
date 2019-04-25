@@ -70,16 +70,7 @@ public class LobbyView {
     /**
      * Logs out of the server and goes back to the login page
      */
-    public void onLogoutClicked(){
-//
-        LobbyView.updateInstance();
-//        try {
-//            TicTacToeApplication.getCoordinator().showGameScene();
-//        }catch(Exception ex){
-//            System.out.println("Try something else");
-//        }
-
-    }
+    public void onLogoutClicked(){System.exit(0);}
 
     /**
      * Repopulates the listview with all current pending players connected to the server
@@ -132,6 +123,7 @@ public class LobbyView {
     public  void onMrBillClicked(){
 
         conn.challenge("Mr. Bill", conn.getAttemptedUsername());
+        conn.setVisibleInLobby(false);
 
     }
 

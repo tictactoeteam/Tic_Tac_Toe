@@ -66,7 +66,7 @@ public class GameController {
 
     public void resetGame() {
 
-        this.board.set(null);
+        this.getBoard().set(new Board());////////////////////////////PROBLEM IS COMING FROM HERE////////////////////////////////////////////////////////////////////////
         setWinnerName(null);
         setLoserName(null);
         ServerConnection.getInstance().setVisibleInLobby(true);

@@ -28,8 +28,8 @@ public class EndStateHandler implements MessageHandler {
             if((controller.getPlayer1Name().equals(winnerName) && controller.getPlayer2Name().equals(loserName)) ||
                 (controller.getPlayer1Name().equals(loserName) && controller.getPlayer2Name().equals(winnerName))) {
 
-                controller.setWinnerName(winnerName);
-                controller.setLoserName(loserName);
+                controller.setWinnerName(loserName);
+                controller.setLoserName(winnerName);
 
                 Platform.runLater(new Runnable() {
                     @Override

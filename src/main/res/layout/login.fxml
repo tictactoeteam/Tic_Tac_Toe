@@ -46,7 +46,7 @@
                   <Insets />
                </VBox.margin>
             </HBox>
-            <Label fx:id="errorText" textFill="RED" visible="false">
+            <Label fx:id="errorText" visible="false">
                <font>
                   <Font size="24.0" />
                </font>
