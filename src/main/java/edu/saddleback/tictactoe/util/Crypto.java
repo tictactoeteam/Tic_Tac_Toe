@@ -26,7 +26,7 @@ public class Crypto {
             byte[] encVal = c.doFinal(data.getBytes());
             return Base64.getEncoder().encodeToString(encVal);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("NO SERVER CONNECTION");
         }
         return null;
     }
