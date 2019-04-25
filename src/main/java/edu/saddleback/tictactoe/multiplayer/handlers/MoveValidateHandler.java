@@ -14,7 +14,7 @@ import edu.saddleback.tictactoe.multiplayer.Server;
 public class MoveValidateHandler implements MessageHandler {
 
     private Server server;
-    private AdvancedEvaluator winnerChecker;
+    private AdvancedEvaluator winnerChecker = new AdvancedEvaluator();
 
 
     public MoveValidateHandler(Server server){
@@ -28,7 +28,10 @@ public class MoveValidateHandler implements MessageHandler {
 
         try {
 
+            System.out.println(data.get("player1").getAsString());
+            System.out.println(data.get("player2").getAsString());
             Game game = server.findGame(data.get("player1").getAsString(), data.get("player2").getAsString());
+            System.out.println("Game was found!!!");
             Board board = game.getBoard();
 
             System.out.println("Board Before: " + board);
@@ -48,6 +51,7 @@ public class MoveValidateHandler implements MessageHandler {
             System.out.println("PIECE RECEIVED: " +  data.get("piece").getAsString());
 
             BoardMove move = new BoardMove(row, col, piece);
+            System.out.println("move initialized!");
             JsonObject msg = new JsonObject();
             JsonObject dt = new JsonObject();
             try {
