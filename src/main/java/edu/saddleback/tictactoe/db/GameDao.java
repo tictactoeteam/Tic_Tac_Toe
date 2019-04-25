@@ -26,7 +26,7 @@ public class GameDao {
      */
     public static Game getGameById(UUID id) throws SQLException {
         String statement = "SELECT g.id, g.moves, " +
-                "player_x, px.username AS player_x_username, player_o, po.username AS player_o_username" +
+                "player_x, px.username AS player_x_username, player_o, po.username AS player_o_username " +
                 "FROM " + GAMES_TABLE + " g " +
                 "INNER JOIN " + PlayerDao.PLAYER_TABLE + " px ON px.id = g.player_x " +
                 "INNER JOIN " + PlayerDao.PLAYER_TABLE + " po ON po.id = g.player_o" +
@@ -47,7 +47,7 @@ public class GameDao {
      */
     public static Game[] getAllGames() throws SQLException {
         String statement = "SELECT g.id, g.moves, " +
-                "player_x, px.username AS player_x_username, player_o, po.username AS player_o_username" +
+                "player_x, px.username AS player_x_username, player_o, po.username AS player_o_username " +
                 "FROM " + GAMES_TABLE + " g " +
                 "INNER JOIN " + PlayerDao.PLAYER_TABLE + " px ON px.id = g.player_x " +
                 "INNER JOIN " + PlayerDao.PLAYER_TABLE + " po ON po.id = g.player_o";
@@ -70,7 +70,7 @@ public class GameDao {
      * @throws SQLException
      */
     public static void insertGame(Game game) throws SQLException {
-        String statement = "INSERT INTO " + GAMES_TABLE + " (player_x, player_o, moves) VALUES (?, ?, ?)";
+        String statement = "INSERT INTO " + GAMES_TABLE + " (player_x, player_o, moves) VALUES (?::uuid, ?::uuid, ?)";
         PreparedStatement prepared = connection.prepareStatement(statement);
         prepared.setString(1, game.getPlayerX().getId().toString());
         prepared.setString(2, game.getPlayerO().getId().toString());
@@ -152,7 +152,13 @@ public class GameDao {
         playerO.setUsername(playerOName);
 
         UUID id = UUID.fromString(rs.getString("id"));
-        byte[] moves = (byte[]) rs.getArray("moves").getArray();
-        return new Game(id, playerX, playerO, moves);
+        Integer[] moves = (Integer[]) rs.getArray("moves").getArray();
+        byte[] casted = new byte[moves.length];
+
+        for (int i = 0; i < moves.length; i++) {
+            casted[i] = moves[i].byteValue();
+        }
+
+        return new Game(id, playerX, playerO, casted);
     }
 }

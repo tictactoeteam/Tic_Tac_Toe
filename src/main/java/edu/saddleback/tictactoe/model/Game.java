@@ -137,7 +137,11 @@ public class Game {
      * @return
      */
     public byte[] getMoves() {
-        return moves;
+        for (int i = 0; i < board.getHistory().length; i++) {
+            this.moves[i] = (byte) board.getHistory()[i];
+        }
+
+        return this.moves;
     }
 
     /**
