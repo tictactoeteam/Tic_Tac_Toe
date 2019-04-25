@@ -30,6 +30,20 @@ public class Board implements Serializable, Cloneable, Comparable<Board> {
         this.history = new short[9];
     }
 
+    public void reInitialize(){
+
+        board = new GamePiece[3][3];
+        turnNumber = 0;
+        for (int i = 0; i < 3; ++i){
+            for (int j = 0; j < 3; ++j){
+                board[i][j] = null;
+            }
+        }
+
+        history = new short[9];
+
+    }
+
     /**
      * Returns the game piece at the specified position
      * @param row the row of the game piece to return (0..2)
