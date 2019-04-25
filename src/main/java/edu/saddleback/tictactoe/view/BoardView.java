@@ -70,11 +70,6 @@ public class BoardView extends GridPane {
      */
     public void onUpdate(Board board) {
 
-        if(board == null){
-            board.reInitialize();
-        }
-
-
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
 

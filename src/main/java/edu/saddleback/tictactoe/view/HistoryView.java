@@ -41,7 +41,7 @@ public class HistoryView {
         playerXNames = new ArrayList<>();
         playerONames = new ArrayList<>();
         allGameMoves = new ArrayList<>();
-
+        TicTacToeApplication.setWindowSize(625,532);
         conn = ServerConnection.getInstance();
 
         conn.getPubNub().addListener(new SubscribeCallback() {
@@ -75,7 +75,7 @@ public class HistoryView {
 
                 ObservableList<String> items = FXCollections.observableArrayList();
                 for(int i = 0; i < playerXAr.size(); i++){
-                    items.setAll(playerXAr.get(i) + " verses " + playerOAr.get(i));
+                    items.setAll(playerXAr.get(i) + " versus " + playerOAr.get(i));
                 }
                 gameTable.setItems(items);
 
@@ -117,10 +117,10 @@ public class HistoryView {
 
             //Assigns the columns their data
             TableColumn<TableViewObject, Integer> moveNumberCol = new TableColumn("Move Number");
-            moveNumberCol.setMinWidth(100);
+            moveNumberCol.setMinWidth(150);
             moveNumberCol.setCellValueFactory(new PropertyValueFactory<>("moveNumberValue"));
             TableColumn<TableViewObject, Integer> moveDataCol = new TableColumn<>("Move Index");
-            moveDataCol.setMinWidth(100);
+            moveDataCol.setMinWidth(150);
             moveDataCol.setCellValueFactory(new PropertyValueFactory<>("moveIndexValue"));
             moveTable.getColumns().addAll(moveNumberCol, moveDataCol);
 
