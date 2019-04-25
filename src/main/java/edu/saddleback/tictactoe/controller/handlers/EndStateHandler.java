@@ -5,6 +5,7 @@ import com.pubnub.api.PubNub;
 import edu.saddleback.tictactoe.controller.GameController;
 import edu.saddleback.tictactoe.multiplayer.MessageHandler;
 import edu.saddleback.tictactoe.view.TicTacToeApplication;
+import javafx.application.Platform;
 
 public class EndStateHandler implements MessageHandler {
     private GameController controller;
@@ -29,11 +30,17 @@ public class EndStateHandler implements MessageHandler {
 
                 controller.setWinnerName(winnerName);
                 controller.setLoserName(loserName);
-                try {
-                    TicTacToeApplication.getCoordinator().showWinnerScene();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            TicTacToeApplication.getCoordinator().showWinnerScene();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
 
             }
 
@@ -48,11 +55,16 @@ public class EndStateHandler implements MessageHandler {
 
                 controller.setWinnerName("DRAW");
                 controller.setLoserName("DRAW");
-                try {
-                    TicTacToeApplication.getCoordinator().showWinnerScene();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            TicTacToeApplication.getCoordinator().showWinnerScene();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
 
             }
 

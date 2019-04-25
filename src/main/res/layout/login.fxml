@@ -8,39 +8,50 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="200.0" prefWidth="600.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.tictactoe.view.LoginView">
+<Pane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.saddleback.tictactoe.view.LoginView">
    <children>
-      <ImageView fitHeight="300.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="475.0" fitWidth="600.0" pickOnBounds="true">
          <image>
-            <Image url="@../images/tictactoe2.png" />
-         </image>
-      </ImageView>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <Image url="@../images/background.jpg" />
+         </image></ImageView>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="600.0" spacing="10.0">
          <children>
-            <Label text="Username: " />
-            <TextField fx:id="usernameTextField" alignment="TOP_LEFT" />
+            <ImageView fitHeight="300.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/tictactoe2.png" />
+               </image>
+            </ImageView>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Username: " />
+                  <TextField fx:id="usernameTextField" alignment="TOP_LEFT" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Password:  " />
+                  <PasswordField fx:id="passwordTextField" />
+               </children>
+            </HBox>
+            <HBox fx:id="loginButtonHBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <Button fx:id="loginButton" mnemonicParsing="false" onMouseClicked="#onLoginClicked" text="Login" />
+                  <Button fx:id="createAccountButton" mnemonicParsing="false" onMouseClicked="#onCreateAccountClicked" text="Create Account" />
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+            <Label fx:id="errorText" textFill="RED" visible="false">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
          </children>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <Label text="Password:  " />
-            <PasswordField fx:id="passwordTextField" />
-         </children></HBox>
-      <HBox fx:id="loginButtonHBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-         <children>
-            <Button fx:id="loginButton" mnemonicParsing="false" onMouseClicked="#onLoginClicked" text="Login" />
-            <Button fx:id="createAccountButton" mnemonicParsing="false" onMouseClicked="#onCreateAccountClicked" text="Create Account" />
-         </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-      </HBox>
-      <Label fx:id="errorText" textFill="RED" visible="false">
-         <font>
-            <Font size="24.0" />
-         </font></Label>
+      </VBox>
    </children>
-</VBox>
+</Pane>
