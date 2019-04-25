@@ -11,7 +11,11 @@ import edu.saddleback.tictactoe.util.Crypto;
 import java.math.BigInteger;
 import java.sql.SQLException;
 
+/**
+ * Handles all login messages and sends the correct responses.
+ */
 public class LoginHandler implements MessageHandler {
+
     private Server server;
 
     public LoginHandler(Server server) {
@@ -40,6 +44,7 @@ public class LoginHandler implements MessageHandler {
                 return;
             }
 
+            server.addUser(data.get("UUID").getAsString(), username);
             sendLoggedIn(pubnub, username);
         } catch (SQLException e) {
             e.printStackTrace();

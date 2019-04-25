@@ -1,7 +1,6 @@
 package edu.saddleback.tictactoe;
 
 import edu.saddleback.tictactoe.db.DbConnection;
-import edu.saddleback.tictactoe.multiplayer.BetterServer;
 import edu.saddleback.tictactoe.multiplayer.Server;
 import edu.saddleback.tictactoe.view.TicTacToeApplication;
 import javafx.application.Application;

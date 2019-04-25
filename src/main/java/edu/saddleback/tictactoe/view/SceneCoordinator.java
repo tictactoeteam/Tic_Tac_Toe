@@ -72,6 +72,18 @@ public class SceneCoordinator {
     }
 
     /**
+     * Fetches the history scene.
+     * @throws Exception
+     */
+    public void showHistoryScene() throws Exception{
+
+        URL url = new File("src/main/res/layout/history.fxml").toURL();
+        Parent layout = FXMLLoader.load(url);
+        this.window.setScene(new Scene(layout));
+
+    }
+
+    /**
      * Fetches the Winner scene.
      * @throws Exception
      */

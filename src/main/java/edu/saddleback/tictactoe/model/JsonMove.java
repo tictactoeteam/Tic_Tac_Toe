@@ -1,14 +1,23 @@
 package edu.saddleback.tictactoe.model;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 
+/**
+ * Represents a board move as a Json object
+ */
 public class JsonMove {
+
     private JsonObject theMove;
 
     private JsonMove(int row, int col){
         theMove = new JsonObject();
-        theMove.add("makeMove", new JsonPrimitive(col + row*3));
+
+        theMove.addProperty("type" , "move");
+        JsonObject data = new JsonObject();
+        data.addProperty("position", row*3+col);
+        data.addProperty("piece", "X");
+        theMove.add("data", data);
+
     }
 
     private JsonObject getTheMove(){
@@ -21,7 +30,7 @@ public class JsonMove {
 
 
     public static BoardMove convertToBoardMove(JsonObject moveResponse){
-        int position = moveResponse.get("data").getAsJsonObject().get("position").getAsInt();
+        int position = moveResponse.get("position").getAsInt();
         GamePiece piece;
         if (moveResponse.get("data").getAsJsonObject().get("player").getAsString() == "X")
             piece = GamePiece.X;
@@ -30,6 +39,8 @@ public class JsonMove {
 
         int row = position%3;
         int col = position/3;
+
+        System.out.println("Row: "+ row +"\nCol: " + col + "\nPiece: " + piece);
 
         return new BoardMove(row, col, piece);
     }

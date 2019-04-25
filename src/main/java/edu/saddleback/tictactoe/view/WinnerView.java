@@ -22,11 +22,18 @@ public class WinnerView{
         winnerText.setText(controller.generateWinMessage());
     }
 
+    /**
+     * Returns you to the lobby after a game is complete.
+     * @throws Exception
+     */
     public void onMainMenuClicked() throws Exception {
         TicTacToeApplication.getController().resetGame();
-        TicTacToeApplication.getCoordinator().showLoginScene();
+        TicTacToeApplication.getCoordinator().showLobbyScene();
     }
 
+    /**
+     * Closes the application.
+     */
     public void onQuitClicked() {
         System.exit(0);
     }

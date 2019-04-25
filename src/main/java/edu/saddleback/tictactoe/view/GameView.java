@@ -25,7 +25,7 @@ public class GameView{
     /**
      * Deletes the same file and closes the application.
      */
-    public void onResetClicked() throws Exception {
+    public void onResetClicked(){
         controller.resetGame();
     }
 
@@ -36,7 +36,10 @@ public class GameView{
     protected void initialize(){
 
         controller = TicTacToeApplication.getController();
+        player1Name.setText(controller.getPlayer1Name());
+        player2Name.setText(controller.getPlayer2Name());
 
     }
+
 
 }

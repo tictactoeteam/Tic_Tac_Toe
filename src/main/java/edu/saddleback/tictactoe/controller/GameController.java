@@ -1,12 +1,12 @@
 package edu.saddleback.tictactoe.controller;
 
-import com.google.gson.JsonObject;
-import com.sun.nio.sctp.SctpSocketOption;
+import edu.saddleback.tictactoe.controller.handlers.EndStateHandler;
+import edu.saddleback.tictactoe.controller.handlers.MoveHandler;
 import edu.saddleback.tictactoe.model.*;
+import edu.saddleback.tictactoe.multiplayer.MessageDelegator;
 import edu.saddleback.tictactoe.observable.Observable;
 import edu.saddleback.tictactoe.view.GridBox;
-
-import java.sql.SQLOutput;
+import java.util.UUID;
 
 /**
  * This class represents a controller for all data and ui functions for the game controller grid pane.
@@ -15,17 +15,32 @@ public class GameController {
 
     private Observable<Board> board;
 
+    private String player1Name;
+    private String player2Name;
+    private UUID playerID = UUID.randomUUID();
     private String winnerName = null;
     private String loserName = null;
+    private GamePiece myPiece;
+    private MessageDelegator delegator = new MessageDelegator();
 
+    //Getters and Setters
     public String getWinnerName(){return winnerName;}
     public String getLoserName(){return loserName;}
+    public String getPlayer1Name(){return player1Name;}
+    public String getPlayer2Name(){return player2Name;}
+    public void setPlayer1Name(String name){player1Name = name;}
+    public void setPlayer2Name(String name){player2Name = name;}
 
     /**
      * Reads game data if a file exists, otherwise initializes a new board.
      */
     public GameController() {
         this.board = new Observable<>();
+        this.board.set(new Board());
+        delegator.addHandler("moveResp", new MoveHandler(this));
+        delegator.addHandler("endState", new EndStateHandler(this));
+
+        ServerConnection.getInstance().getPubNub().addListener(this.delegator);
     }
 
     /**
@@ -41,8 +56,10 @@ public class GameController {
      * @param gridBox
      */
     public void onGridClicked(GridBox gridBox){
-        GamePiece piece = board.get().isXTurn() ? GamePiece.X : GamePiece.O;
-        BoardMove currentMove = new BoardMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
+//        GamePiece piece = board.get().isXTurn() ? GamePiece.X : GamePiece.O;
+//        BoardMove currentMove = new BoardMove(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), piece);
+
+        ServerConnection.getInstance().sendMessage(gridBox.getGridRowIndex(), gridBox.getGridColumnIndex(), myPiece, player1Name, player2Name);
     }
 
     public void resetGame() {
@@ -83,14 +100,34 @@ public class GameController {
     }
 
 
-    public void applyJsonMove(JsonObject move){
-        Board temp = this.board.get();
+    public void setMyPiece(GamePiece piece){
+        myPiece = piece;
+    }
+
+
+    public Observable<Board> getBoard(){
+        return board;
+    }
+
+
+    public void applyMove(BoardMove move){
         try {
-            JsonMove.convertToBoardMove(move).applyTo(temp);
-            this.board.set(temp);
+            board.set(move.applyTo(board.get()));
+
+            System.out.println(board.get());
         }catch(GridAlreadyChosenException ex){
-            System.out.println("This shouldn't happen!!!! Validation of the move on the server is faulty!!");
-            System.out.println("Or the conversion from Json to BoardMove is faulty-one or the other");
+            System.out.println("This shouldn't happen!!!");
         }
     }
+
+//    public void applyJsonMove(JsonObject move){
+//        Board temp = this.board.get();
+//        try {
+//            JsonMove.convertToBoardMove(move).applyTo(temp);
+//            this.board.set(temp);
+//        }catch(GridAlreadyChosenException ex){
+//            System.out.println("This shouldn't happen!!!! Validation of the move on the server is faulty!!");
+//            System.out.println("Or the conversion from Json to BoardMove is faulty-one or the other");
+//        }
+//    }
 }

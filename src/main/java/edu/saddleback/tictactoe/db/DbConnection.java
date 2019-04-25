@@ -2,15 +2,22 @@ package edu.saddleback.tictactoe.db;
 
 import edu.saddleback.tictactoe.db.migrations.Init;
 import edu.saddleback.tictactoe.db.migrations.Migration;
-
 import java.sql.*;
 import java.util.Properties;
 
+/**
+ * Represents the database connection on the server, runs the migrations to deal with postgres.
+ */
 public class DbConnection {
+
     private static String url = System.getenv("TTT_DB_URL");
     private static String username = System.getenv("TTT_DB_USER");
     private static String password = System.getenv("TTT_DB_PASS");
 
+    /**
+     * Returns a connection.
+     * @return
+     */
     public static Connection getConnection() {
         if (url == null || username == null || password == null) {
             System.err.println("Missing environment variables, set:");
@@ -36,6 +43,9 @@ public class DbConnection {
         return null;
     }
 
+    /**
+     * Runs Migration
+     */
     public static void runMigrations() {
         // ADD MIGRATIONS HERE
         Migration[] migrations = { new Init() };
@@ -67,6 +77,10 @@ public class DbConnection {
         }
     }
 
+    /**
+     * Finishes the migration.
+     * @return
+     */
     private static int lastMigration() {
         Connection connection = getConnection();
 

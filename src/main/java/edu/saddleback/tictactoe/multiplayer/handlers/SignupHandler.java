@@ -11,6 +11,9 @@ import edu.saddleback.tictactoe.util.Crypto;
 import java.math.BigInteger;
 import java.sql.SQLException;
 
+/**
+ * Handles the possible signup messages and responds.
+ */
 public class SignupHandler implements MessageHandler {
     private Server server;
 
@@ -37,8 +40,12 @@ public class SignupHandler implements MessageHandler {
             player = new Player();
             player.setUsername(username);
             player.setPassword(password);
+            //We need a way of setting the pubnub id to this setID method... see if we can get the pubnub id in this
+            //function of the cleint currently connected
+          //  player.setId();
             PlayerDao.insertPlayer(player);
             sendAccountCreated(pubnub, username);
+            server.addUser(data.get("UUID").getAsString(), username);
         }catch (SQLException e) {
             e.printStackTrace();
         }

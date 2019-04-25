@@ -10,8 +10,8 @@ import javafx.scene.control.*;
  * generated. handles all possible user input errors.
  */
 public class LoginView {
-    private ServerConnection conn;
 
+    private ServerConnection conn;
     @FXML
     private Label errorText;
     @FXML
@@ -19,7 +19,11 @@ public class LoginView {
     @FXML
     private TextField passwordTextField;
 
+    /**
+     * Initializes connection to the server and holds the success login listener.
+     */
     public LoginView() {
+
         conn = ServerConnection.getInstance();
         conn.getLoggedInObservable().subscribe((onLoginChanged) -> {
             if (onLoginChanged.equals(true)) {
@@ -37,18 +41,28 @@ public class LoginView {
                 });
             }
         });
+
     }
 
-    public void onLoginClicked(){
+    /**
+     * Runs when a login attempt is made.
+     * @throws Exception
+     */
+    public void onLoginClicked() throws Exception {
         if(!usernameTextField.getText().equals("") && !passwordTextField.getText().equals("")){
             conn.login(usernameTextField.getText(), passwordTextField.getText());
+
         }else{
             errorText.setText("***error-missing credentials***");
             errorText.setVisible(true);
         }
     }
 
+    /**
+     * Runs when a create account attempt is made.
+     */
     public void onCreateAccountClicked(){
+
         String username = usernameTextField.getText();
         if(!username.equals("") && !passwordTextField.getText().equals("")) {
             conn.signup(username, passwordTextField.getText());
