@@ -4,18 +4,16 @@ package edu.saddleback.tictactoe.model;
 public class EndStateException extends Exception {
     private String winner;
     private String loser;
+    private boolean isDraw;
 
-    public EndStateException(){
-        this(null, null);
-    }
-
-    public EndStateException(String winner, String loser){
+    public EndStateException(String winner, String loser, boolean isDraww){
         this.winner = winner;
         this.loser = loser;
+        this.isDraw = isDraww;
     }
 
     public boolean isDrawn(){
-        return (winner == null && loser == null);
+        return isDraw;
     }
 
     public String getWinner(){

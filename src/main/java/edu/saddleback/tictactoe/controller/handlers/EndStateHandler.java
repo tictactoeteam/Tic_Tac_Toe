@@ -10,18 +10,53 @@ public class EndStateHandler implements MessageHandler {
     private GameController controller;
 
     public EndStateHandler(GameController controller){
+
         this.controller = controller;
     }
 
     @Override
     public void handleMessage(JsonObject data, PubNub pubnub, String clientId) {
 
+        //True if Winner and Loser, false if draw
+        if (data.has("winner")) {
 
+            String winnerName = data.get("winner").getAsString();
+            String loserName = data.get("loser").getAsString();
 
-            // PLEASE SOMEONE DO SOMETHING WITH THIS!!! <3
-        //        // We have to make sure that the message is intended to you,
-        //        // The specification of the message is at MoveValidateHandler line 92-100, change it if you want
-        //        // ..... yeah, looks simple enough
+            //True if this is your game and player 1 won
+            if((controller.getPlayer1Name().equals(winnerName) && controller.getPlayer2Name().equals(loserName)) ||
+                (controller.getPlayer1Name().equals(loserName) && controller.getPlayer2Name().equals(winnerName))) {
+
+                controller.setWinnerName(winnerName);
+                controller.setLoserName(loserName);
+                try {
+                    TicTacToeApplication.getCoordinator().showWinnerScene();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }else{//Draw
+
+            String p1Name = data.get("player1").getAsString();
+            String p2Name = data.get("player2").getAsString();
+
+            //True if this is your game
+            if((controller.getPlayer1Name().equals(p1Name) && controller.getPlayer2Name().equals(p2Name)) ||
+                    (controller.getPlayer1Name().equals(p2Name) && controller.getPlayer2Name().equals(p1Name))){
+
+                controller.setWinnerName("DRAW");
+                controller.setLoserName("DRAW");
+                try {
+                    TicTacToeApplication.getCoordinator().showWinnerScene();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
 
     }
 }

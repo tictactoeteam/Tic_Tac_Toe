@@ -61,13 +61,13 @@ public class MoveValidateHandler implements MessageHandler {
                 }
 
                 if(winnerChecker.evaluate(board) > 0){
-                    throw new EndStateException(data.get("player1").getAsString(), data.get("player2").getAsString());
+                    throw new EndStateException(data.get("player1").getAsString(), data.get("player2").getAsString(), false);
                 }
                 if (winnerChecker.evaluate(board) < 0){
-                    throw new EndStateException(data.get("player2").getAsString(), data.get("player1").getAsString());
+                    throw new EndStateException(data.get("player2").getAsString(), data.get("player1").getAsString(), false);
                 }
                 if (board.getTurnNumber() == 9){
-                    throw new EndStateException();
+                    throw new EndStateException(data.get("player1").getAsString(), data.get("player2").getAsString(), true);
                 }
 
                 move.applyTo(board);
@@ -93,12 +93,15 @@ public class MoveValidateHandler implements MessageHandler {
                 msg.add("data", new JsonObject());
             }
             catch(EndStateException ex){
-                if (ex.isDrawn()){
-                    msg.addProperty("type", "draw");
+
+                if (ex.isDrawn()){//Draw
+                    msg.addProperty("type", "endState");
+                    dt.addProperty("player1", ex.getWinner());
+                    dt.addProperty("player2", ex.getLoser());
                     msg.add("data", dt);
                 }
-                else{
-                    msg.addProperty("type", "winLos");
+                else{//Win/Loss
+                    msg.addProperty("type", "endState");
                     dt.addProperty("winner", ex.getWinner());
                     dt.addProperty("loser", ex.getLoser());
                     msg.add("data", dt);
