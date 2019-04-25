@@ -40,6 +40,10 @@ public class PeopleLeavingHandler implements MessageHandler {
         }catch(SQLException ex){
             ex.printStackTrace();
         }
+
+        JsonObject msg = new JsonObject();
+        JsonObject dt = new JsonObject();
+
         server.removeGame(game);
         System.out.println("REMOVAL OF THE GAME!");
 
