@@ -146,6 +146,7 @@ public class Server {
         this.delegator.addHandler("challenge", new ChallengeHandler(this));
         this.delegator.addHandler("serverPub", new PeopleLeavingHandler(this));
         this.delegator.addHandler("challengeAccepted", new MrBillGameStartsHandler(this));
+        this.delegator.addHandler("moveResp", new MrBillMoveHandler(this));
         this.delegator.addHandler("getAllGames", new GameDaoHandler());
         pubnub.subscribe().channels(Arrays.asList("main")).withPresence().execute();
     }

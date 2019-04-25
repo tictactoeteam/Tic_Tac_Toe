@@ -3,7 +3,8 @@ package edu.saddleback.tictactoe.view;
 import edu.saddleback.tictactoe.controller.ServerConnection;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 /**
  * This object interacts with the login page, handles all error checking, and establishes which type of game is to be

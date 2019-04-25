@@ -69,6 +69,7 @@ public class BoardView extends GridPane {
      * @param board
      */
     public void onUpdate(Board board) {
+
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
 
@@ -79,8 +80,6 @@ public class BoardView extends GridPane {
                     image = new Image("file:src/main/res/images/o.png");
                 else
                     image = new Image("file:src/main/res/images/blank.png");
-
-
 
                 grid[i][j].getBackgroundImageView().setImage(image);
 

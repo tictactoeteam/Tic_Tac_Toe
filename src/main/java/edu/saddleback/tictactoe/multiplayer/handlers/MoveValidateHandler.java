@@ -3,6 +3,8 @@ package edu.saddleback.tictactoe.multiplayer.handlers;
 import com.google.gson.JsonObject;
 import com.pubnub.api.PubNub;
 import com.pubnub.api.PubNubException;
+import edu.saddleback.tictactoe.db.GameDao;
+import edu.saddleback.tictactoe.db.PlayerDao;
 import edu.saddleback.tictactoe.decision.AdvancedEvaluator;
 import edu.saddleback.tictactoe.model.*;
 import edu.saddleback.tictactoe.multiplayer.MessageHandler;
@@ -61,13 +63,13 @@ public class MoveValidateHandler implements MessageHandler {
                 }
 
                 if(winnerChecker.evaluate(board) > 0){
-                    throw new EndStateException(data.get("player1").getAsString(), data.get("player2").getAsString());
+                    throw new EndStateException(data.get("player1").getAsString(), data.get("player2").getAsString(), false);
                 }
                 if (winnerChecker.evaluate(board) < 0){
-                    throw new EndStateException(data.get("player2").getAsString(), data.get("player1").getAsString());
+                    throw new EndStateException(data.get("player2").getAsString(), data.get("player1").getAsString(), false);
                 }
                 if (board.getTurnNumber() == 9){
-                    throw new EndStateException();
+                    throw new EndStateException(data.get("player1").getAsString(), data.get("player2").getAsString(), true);
                 }
 
                 move.applyTo(board);
@@ -93,12 +95,28 @@ public class MoveValidateHandler implements MessageHandler {
                 msg.add("data", new JsonObject());
             }
             catch(EndStateException ex){
-                if (ex.isDrawn()){
-                    msg.addProperty("type", "draw");
+
+                Game toDeletion = server.findGame(data.get("player1").getAsString(), data.get("player2").getAsString());
+                
+                try {
+                    String playerX = toDeletion.getPlayerX().getUsername();
+                    toDeletion.getPlayerX().setId(PlayerDao.getPlayerByUsername(playerX).getId());
+                    String playerO = toDeletion.getPlayerO().getUsername();
+                    toDeletion.getPlayerO().setId(PlayerDao.getPlayerByUsername(playerO).getId());
+                    GameDao.insertGame(toDeletion);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+                server.removeGame(toDeletion);
+
+                if (ex.isDrawn()){//Draw
+                    msg.addProperty("type", "endState");
+                    dt.addProperty("player1", ex.getWinner());
+                    dt.addProperty("player2", ex.getLoser());
                     msg.add("data", dt);
                 }
-                else{
-                    msg.addProperty("type", "winLos");
+                else{//Win/Loss
+                    msg.addProperty("type", "endState");
                     dt.addProperty("winner", ex.getWinner());
                     dt.addProperty("loser", ex.getLoser());
                     msg.add("data", dt);

@@ -19,6 +19,7 @@ public class WinnerView{
     @FXML
     protected void initialize(){
         controller = TicTacToeApplication.getController();
+        TicTacToeApplication.setWindowSize(600, 400);
         winnerText.setText(controller.generateWinMessage());
     }
 

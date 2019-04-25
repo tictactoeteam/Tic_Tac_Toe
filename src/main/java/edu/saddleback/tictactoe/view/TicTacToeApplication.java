@@ -27,12 +27,12 @@ public class TicTacToeApplication extends Application {
 
     /**
      * Allows for the window sizes to be changes.
-     * @param weidth
+     * @param width
      * @param height
      */
-    public static void setWindowSize(double weidth, double height){
+    public static void setWindowSize(double width, double height){
 
-        Window.setWidth(weidth);
+        Window.setWidth(width);
         Window.setHeight(height);
     }
 

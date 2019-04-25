@@ -360,6 +360,8 @@ public class ServerConnection {
 
     }
 
+    public void setVisibleInLobby(boolean bool){visibleInLobby = bool;}
+
     /**
      * Returns loggedIn Observable boolean.
      * @return

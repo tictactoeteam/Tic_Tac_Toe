@@ -34,7 +34,7 @@ public class GameView{
      */
     @FXML
     protected void initialize(){
-
+        TicTacToeApplication.setWindowSize(600, 475);
         controller = TicTacToeApplication.getController();
         player1Name.setText(controller.getPlayer1Name());
         player2Name.setText(controller.getPlayer2Name());

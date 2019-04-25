@@ -6,6 +6,8 @@ import edu.saddleback.tictactoe.model.*;
 import edu.saddleback.tictactoe.multiplayer.MessageDelegator;
 import edu.saddleback.tictactoe.observable.Observable;
 import edu.saddleback.tictactoe.view.GridBox;
+import edu.saddleback.tictactoe.view.TicTacToeApplication;
+
 import java.util.UUID;
 
 /**
@@ -30,6 +32,8 @@ public class GameController {
     public String getPlayer2Name(){return player2Name;}
     public void setPlayer1Name(String name){player1Name = name;}
     public void setPlayer2Name(String name){player2Name = name;}
+    public void setWinnerName(String name){winnerName = name;}
+    public void setLoserName(String name){loserName = name;}
 
     /**
      * Reads game data if a file exists, otherwise initializes a new board.
@@ -63,7 +67,13 @@ public class GameController {
     }
 
     public void resetGame() {
-        this.board.set(null);
+
+        this.getBoard().set(null);
+        //ServerConnection.getInstance().getPubNub().unsubscribeAll();
+        setWinnerName(null);
+        setLoserName(null);
+        ServerConnection.getInstance().setVisibleInLobby(true);
+
     }
 
     /**
@@ -99,16 +109,13 @@ public class GameController {
         this.board.set(board);
     }
 
-
     public void setMyPiece(GamePiece piece){
         myPiece = piece;
     }
 
-
     public Observable<Board> getBoard(){
         return board;
     }
-
 
     public void applyMove(BoardMove move){
         try {
@@ -120,14 +127,4 @@ public class GameController {
         }
     }
 
-//    public void applyJsonMove(JsonObject move){
-//        Board temp = this.board.get();
-//        try {
-//            JsonMove.convertToBoardMove(move).applyTo(temp);
-//            this.board.set(temp);
-//        }catch(GridAlreadyChosenException ex){
-//            System.out.println("This shouldn't happen!!!! Validation of the move on the server is faulty!!");
-//            System.out.println("Or the conversion from Json to BoardMove is faulty-one or the other");
-//        }
-//    }
 }

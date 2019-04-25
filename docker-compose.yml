@@ -12,7 +12,6 @@ services:
           - "6969:6969"
         depends_on:
           - "postgres"
-          - "express"
         env_file:
           - .env
 
@@ -21,7 +20,3 @@ services:
         ports:
           - "5432:5432"
 
-    express:
-        image: typokign/bitgo-express
-        env_file:
-          - .env
