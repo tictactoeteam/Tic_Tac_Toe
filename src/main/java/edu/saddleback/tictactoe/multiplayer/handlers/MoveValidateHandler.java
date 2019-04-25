@@ -3,6 +3,7 @@ package edu.saddleback.tictactoe.multiplayer.handlers;
 import com.google.gson.JsonObject;
 import com.pubnub.api.PubNub;
 import com.pubnub.api.PubNubException;
+import edu.saddleback.tictactoe.db.GameDao;
 import edu.saddleback.tictactoe.decision.AdvancedEvaluator;
 import edu.saddleback.tictactoe.model.*;
 import edu.saddleback.tictactoe.multiplayer.MessageHandler;
@@ -93,6 +94,17 @@ public class MoveValidateHandler implements MessageHandler {
                 msg.add("data", new JsonObject());
             }
             catch(EndStateException ex){
+                Game toDeletion = server.findGame(data.get("player1").getAsString(), data.get("player2").getAsString());
+
+
+                try {
+                    GameDao.insertGame(toDeletion);
+                }catch(Exception e){
+                    ex.printStackTrace();
+                }
+                server.removeGame(toDeletion);
+
+
                 if (ex.isDrawn()){
                     msg.addProperty("type", "draw");
                     msg.add("data", dt);
