@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.pubnub.api.PubNub;
 import com.pubnub.api.PubNubException;
 import edu.saddleback.tictactoe.db.GameDao;
+import edu.saddleback.tictactoe.db.PlayerDao;
 import edu.saddleback.tictactoe.decision.AdvancedEvaluator;
 import edu.saddleback.tictactoe.model.*;
 import edu.saddleback.tictactoe.multiplayer.MessageHandler;
@@ -98,9 +99,13 @@ public class MoveValidateHandler implements MessageHandler {
                 Game toDeletion = server.findGame(data.get("player1").getAsString(), data.get("player2").getAsString());
                 
                 try {
+                    String playerX = toDeletion.getPlayerX().getUsername();
+                    toDeletion.getPlayerX().setId(PlayerDao.getPlayerByUsername(playerX).getId());
+                    String playerO = toDeletion.getPlayerO().getUsername();
+                    toDeletion.getPlayerO().setId(PlayerDao.getPlayerByUsername(playerO).getId());
                     GameDao.insertGame(toDeletion);
                 }catch(Exception e){
-                    ex.printStackTrace();
+                    e.printStackTrace();
                 }
                 server.removeGame(toDeletion);
 
