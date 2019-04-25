@@ -58,6 +58,8 @@ public class Server {
         //Not sure if we want easy mode Mr.Bill always so... he's always hard sorry you cannot defeat him
         this.mrBill = new Minimax(new AdvancedEvaluator(), root);
 
+        System.out.println(mrBill.bestMove(root));
+
     }
 
     public void addUser(String uuid, String username){
@@ -143,13 +145,19 @@ public class Server {
         this.delegator.addHandler("move", new MoveValidateHandler(this));
         this.delegator.addHandler("challenge", new ChallengeHandler(this));
         this.delegator.addHandler("serverPub", new PeopleLeavingHandler(this));
+        this.delegator.addHandler("challengeAccepted", new MrBillGameStartsHandler(this));
         this.delegator.addHandler("getAllGames", new GameDaoHandler());
         pubnub.subscribe().channels(Arrays.asList("main")).withPresence().execute();
     }
 
     public BoardMove MrBillMakesMove(Game game) {
+
+        System.out.println("MRBILL Makes a move!!");
         Board board1 = game.getBoard();
         Board board2 = mrBill.bestMove(Node.findNode(board1, root));
+
+        System.out.println(">>>>> Board Before: " + board1);
+        System.out.println(">>>>> Board After: " + board2);
 
         return BoardMove.fromTwoBoards(board1, board2);
     }

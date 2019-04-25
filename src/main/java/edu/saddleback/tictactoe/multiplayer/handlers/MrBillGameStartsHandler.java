@@ -2,6 +2,7 @@ package edu.saddleback.tictactoe.multiplayer.handlers;
 
 import com.google.gson.JsonObject;
 import com.pubnub.api.PubNub;
+import com.pubnub.api.PubNubException;
 import edu.saddleback.tictactoe.model.BoardMove;
 import edu.saddleback.tictactoe.multiplayer.MessageHandler;
 import edu.saddleback.tictactoe.multiplayer.Server;
@@ -33,6 +34,17 @@ public class MrBillGameStartsHandler implements MessageHandler {
         dt.addProperty("player2", data.get("player2Username").getAsString());
         dt.addProperty("piece", "X");
 
+        msg.add("data", dt);
+
+        try{
+            pubnub.publish()
+                    .channel("main")
+                    .message(msg)
+                    .sync();
+
+        }catch(PubNubException ex){
+            ex.printStackTrace();
+        }
 
 
     }
