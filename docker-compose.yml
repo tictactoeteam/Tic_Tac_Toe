@@ -12,7 +12,6 @@ services:
           - "6969:6969"
         depends_on:
           - "postgres"
-          - "express"
         env_file:
           - .env
 
