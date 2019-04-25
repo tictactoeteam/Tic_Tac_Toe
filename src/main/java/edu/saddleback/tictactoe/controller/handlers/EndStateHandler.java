@@ -19,9 +19,9 @@ public class EndStateHandler implements MessageHandler {
 
 
             // PLEASE SOMEONE DO SOMETHING WITH THIS!!! <3
-        // We have to make sure that the message is intended to you,
-        // The specification of the message is at MoveValidateHandler line 92-100, change it if you want
-        // ..... yeah, looks simple enough
+        //        // We have to make sure that the message is intended to you,
+        //        // The specification of the message is at MoveValidateHandler line 92-100, change it if you want
+        //        // ..... yeah, looks simple enough
 
     }
 }

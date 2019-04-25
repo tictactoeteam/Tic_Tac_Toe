@@ -6,6 +6,8 @@ import com.sauljohnson.mayo.DiffieHellmanKeyGenerator;
 import edu.saddleback.tictactoe.decision.AdvancedEvaluator;
 import edu.saddleback.tictactoe.decision.Minimax;
 import edu.saddleback.tictactoe.decision.Node;
+import edu.saddleback.tictactoe.model.Board;
+import edu.saddleback.tictactoe.model.BoardMove;
 import edu.saddleback.tictactoe.model.Game;
 import edu.saddleback.tictactoe.multiplayer.handlers.*;
 import java.math.BigInteger;
@@ -31,7 +33,7 @@ public class Server {
     private HashMap<String, String> users;
 
     private Minimax mrBill;
-    private Node root;
+    private Node root = new Node();
 
 
     /**
@@ -51,7 +53,7 @@ public class Server {
         this.publicKey = DiffieHellmanKeyGenerator.generatePublicKey(this.privateKey);
         this.sharedSecrets = new HashMap<>();
 
-        this.root.generateTree(root);
+        Node.generateTree(root);
 
         //Not sure if we want easy mode Mr.Bill always so... he's always hard sorry you cannot defeat him
         this.mrBill = new Minimax(new AdvancedEvaluator(), root);
@@ -98,7 +100,7 @@ public class Server {
     }
 
     public void createMrBillGame(String player1){
-        gamesPlayed.add(new Game(player1, this.mrBill));
+        gamesPlayed.add(new Game("Mr Bill", player1));
     }
 
     public void removeGame(Game game){
@@ -143,5 +145,12 @@ public class Server {
         this.delegator.addHandler("serverPub", new PeopleLeavingHandler(this));
         this.delegator.addHandler("getAllGames", new GameDaoHandler());
         pubnub.subscribe().channels(Arrays.asList("main")).withPresence().execute();
+    }
+
+    public BoardMove MrBillMakesMove(Game game) {
+        Board board1 = game.getBoard();
+        Board board2 = mrBill.bestMove(Node.findNode(board1, root));
+
+        return BoardMove.fromTwoBoards(board1, board2);
     }
 }

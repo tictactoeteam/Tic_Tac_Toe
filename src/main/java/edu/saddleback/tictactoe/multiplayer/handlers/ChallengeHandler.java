@@ -26,7 +26,11 @@ public class ChallengeHandler implements MessageHandler {
         String p2 = Crypto.decrypt(data.get("player2Username").getAsString(), server.getSharedSecret(clientId));
 
         JsonObject msg = new JsonObject();
-        if (server.findGame(p1) != null || server.findGame(p2) != null) {
+        if (p1.equals("Mr. Bill")){
+            server.createGame(p1, p2);
+            msg.addProperty("type", "challengeAccepted");
+        }
+         else if (server.findGame(p1) != null || server.findGame(p2) != null) {
             msg.addProperty("type", "challengeDenied");
         }else {
             server.createGame(p1, p2);
