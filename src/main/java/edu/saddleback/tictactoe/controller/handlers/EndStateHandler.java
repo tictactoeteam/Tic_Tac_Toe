@@ -26,7 +26,9 @@ public class EndStateHandler implements MessageHandler {
 
             //True if this is your game and player 1 won
             if((controller.getPlayer1Name().equals(winnerName) && controller.getPlayer2Name().equals(loserName)) ||
-                (controller.getPlayer1Name().equals(loserName) && controller.getPlayer2Name().equals(winnerName))) {
+                (controller.getPlayer1Name().equals(loserName) && controller.getPlayer2Name().equals(winnerName)) ||
+                    (controller.getPlayer1Name().equals("Mr. Bill") && controller.getPlayer2Name().equals(winnerName)) ||
+                    (controller.getPlayer1Name().equals("Mr. Bill") && controller.getPlayer2Name().equals(loserName))){
 
                 controller.setWinnerName(loserName);
                 controller.setLoserName(winnerName);

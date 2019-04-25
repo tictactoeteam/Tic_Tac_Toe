@@ -25,7 +25,6 @@
             </Text>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="32.0">
                <children>
-                  <Button mnemonicParsing="false" onMouseClicked="#onMainMenuClicked" text="Lobby" />
                   <Button mnemonicParsing="false" onMouseClicked="#onQuitClicked" text="Quit Game" />
                </children>
             </HBox>

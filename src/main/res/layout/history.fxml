@@ -20,7 +20,7 @@
       </ImageView>
       <VBox alignment="CENTER">
           <children>
-              <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="468.0" prefWidth="600.0" spacing="10.0">
+              <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="468.0" prefWidth="600.0" spacing="75.0">
                   <children>
                       <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="468.0" prefWidth="144.0">
                           <children>
@@ -34,7 +34,7 @@
                       </VBox>
                       <VBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="367.0" prefWidth="151.0">
                           <children>
-                              <TableView fx:id="moveTable" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="368.0" prefWidth="151.0" />
+                              <TableView fx:id="moveTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="368.0" prefWidth="202.0" />
                           </children>
                       </VBox>
                   </children>

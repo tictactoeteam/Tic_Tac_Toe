@@ -6,6 +6,8 @@ import edu.saddleback.tictactoe.model.*;
 import edu.saddleback.tictactoe.multiplayer.MessageDelegator;
 import edu.saddleback.tictactoe.observable.Observable;
 import edu.saddleback.tictactoe.view.GridBox;
+import edu.saddleback.tictactoe.view.TicTacToeApplication;
+
 import java.util.UUID;
 
 /**
@@ -67,6 +69,7 @@ public class GameController {
     public void resetGame() {
 
         this.getBoard().set(null);
+        //ServerConnection.getInstance().getPubNub().unsubscribeAll();
         setWinnerName(null);
         setLoserName(null);
         ServerConnection.getInstance().setVisibleInLobby(true);
