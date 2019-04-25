@@ -3,6 +3,9 @@ package edu.saddleback.tictactoe.multiplayer;
 import com.pubnub.api.PNConfiguration;
 import com.pubnub.api.PubNub;
 import com.sauljohnson.mayo.DiffieHellmanKeyGenerator;
+import edu.saddleback.tictactoe.decision.AdvancedEvaluator;
+import edu.saddleback.tictactoe.decision.Minimax;
+import edu.saddleback.tictactoe.decision.Node;
 import edu.saddleback.tictactoe.model.Game;
 import edu.saddleback.tictactoe.multiplayer.handlers.*;
 import java.math.BigInteger;
@@ -27,6 +30,10 @@ public class Server {
 
     private HashMap<String, String> users;
 
+    private Minimax mrBill;
+    private Node root;
+
+
     /**
      * Constructor
      */
@@ -43,6 +50,12 @@ public class Server {
         this.privateKey = DiffieHellmanKeyGenerator.generatePrivateKey();
         this.publicKey = DiffieHellmanKeyGenerator.generatePublicKey(this.privateKey);
         this.sharedSecrets = new HashMap<>();
+
+        this.root.generateTree(root);
+
+        //Not sure if we want easy mode Mr.Bill always so... he's always hard sorry you cannot defeat him
+        this.mrBill = new Minimax(new AdvancedEvaluator(), root);
+
     }
 
     public void addUser(String uuid, String username){
@@ -84,6 +97,10 @@ public class Server {
         gamesPlayed.add(new Game(player1,player2));
     }
 
+    public void createMrBillGame(String player1){
+        gamesPlayed.add(new Game(player1, this.mrBill));
+    }
+
     public void removeGame(Game game){
         gamesPlayed.remove(game);
     }
@@ -97,7 +114,7 @@ public class Server {
     public Game findGame(String player1, String player2){
         for (Game game : gamesPlayed){
             if (game.getPlayerX().getUsername().equals(player1) && game.getPlayerO().getUsername().equals(player2)
-            ||  game.getPlayerO().getUsername().equals(player1) && game.getPlayerX().getUsername().equals(player2)){
+                    ||  game.getPlayerO().getUsername().equals(player1) && game.getPlayerX().getUsername().equals(player2)){
                 return game;
             }
         }

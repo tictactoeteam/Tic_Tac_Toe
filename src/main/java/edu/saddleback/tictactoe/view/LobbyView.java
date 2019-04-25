@@ -131,7 +131,7 @@ public class LobbyView {
      */
     public  void onMrBillClicked(){
 
-        //PUT ALL THE CRAP IN HERE
+        conn.challenge("Mr. Bill", conn.getAttemptedUsername());
 
     }
 

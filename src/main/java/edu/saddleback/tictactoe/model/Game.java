@@ -1,5 +1,7 @@
 package edu.saddleback.tictactoe.model;
 
+import edu.saddleback.tictactoe.decision.Minimax;
+
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
@@ -43,6 +45,7 @@ public class Game {
      * @param moves
      */
     public Game(UUID id, String playerX, String playerO, byte[] moves) {
+
         this.id = id;
         this.playerX = playerX;
         this.playerO = playerO;
@@ -61,6 +64,16 @@ public class Game {
      */
     public Game(String playerX, String playerO) {
         this(UUID.randomUUID(), playerX, playerO, new byte[9]);
+    }
+
+    /**
+     * Mr Bill Constructor
+     * Instantitaes a game instance of Mr.Bill. Takes in only
+     * one player, which by default is assigned to O.
+     * @param playerO
+     */
+    public Game(String playerO, Minimax mrBill){
+        this(UUID.randomUUID(), "Mr. Bill", playerO, new byte[9]);
     }
 
     /**
